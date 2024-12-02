@@ -24,7 +24,7 @@ const SectionBecomeAnAuthor: FC<SectionBecomeAnAuthorProps> = ({
 					Why to choose us?
 				</h2>
 				<span className="mt-6 block text-neutral-500 dark:text-neutral-400">
-					'Homestays of India' is dedicated to support authentic family run homestays across India. We aim to provide travelers a unique culturally immersive experience and the locals on alternate source of income while preserving their heritage, culture and tradition.
+					Homestays of India is dedicated to support authentic family run homestays across India. We aim to provide travelers a unique culturally immersive experience and the locals on alternate source of income while preserving their heritage, culture and tradition.
 				</span>
 				<ButtonPrimary className="mt-6 sm:mt-11">
 					Become an author
