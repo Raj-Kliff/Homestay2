@@ -1,39 +1,39 @@
-"use client";
+'use client'
 
-import React, { FC, useEffect, useState } from "react";
-import { StaySearchFormFields } from "../type";
-import StaySearchForm from "./(stay-search-form)/StaySearchForm";
-import ExperiencesSearchForm from "./(experiences-search-form)/ExperiencesSearchForm";
-import RentalCarSearchForm from "./(car-search-form)/RentalCarSearchForm";
-import FlightSearchForm from "./(flight-search-form)/FlightSearchForm";
+import React, { FC, useEffect, useState } from 'react'
+import { StaySearchFormFields } from '../type'
+import StaySearchForm from './(stay-search-form)/StaySearchForm'
+import ExperiencesSearchForm from './(experiences-search-form)/ExperiencesSearchForm'
+import RentalCarSearchForm from './(car-search-form)/RentalCarSearchForm'
+import FlightSearchForm from './(flight-search-form)/FlightSearchForm'
 
-export type SearchTab = "Stays" | "Experiences" | "Cars" | "Flights";
+export type SearchTab = 'Stays' | 'Experiences' | 'Cars' | 'Flights'
 
 export interface HeroSearchFormSmallProps {
-  className?: string;
-  defaultTab?: SearchTab;
-  onTabChange?: (tab: SearchTab) => void;
-  defaultFieldFocus?: StaySearchFormFields;
+	className?: string
+	defaultTab?: SearchTab
+	onTabChange?: (tab: SearchTab) => void
+	defaultFieldFocus?: StaySearchFormFields
 }
-const TABS: SearchTab[] = ["Stays", "Experiences", "Cars", "Flights"];
+const TABS: SearchTab[] = ['Stays', 'Experiences', 'Cars', 'Flights']
 
 const HeroSearchFormSmall: FC<HeroSearchFormSmallProps> = ({
-  className = "",
-  defaultTab = "Stays",
-  onTabChange,
-  defaultFieldFocus,
+	className = '',
+	defaultTab = 'Stays',
+	onTabChange,
+	defaultFieldFocus,
 }) => {
-  const [tabActive, setTabActive] = useState<SearchTab>(defaultTab);
+	const [tabActive, setTabActive] = useState<SearchTab>(defaultTab)
 
-  useEffect(() => {
-    setTabActive(defaultTab);
-  }, [defaultTab]);
+	useEffect(() => {
+		setTabActive(defaultTab)
+	}, [defaultTab])
 
-  const renderTab = () => {
-    return (
-      <>
-        <ul className="h-[88px] flex justify-center space-x-5 sm:space-x-9 invisible">
-          {TABS.map((tab) => {
+	const renderTab = () => {
+		return (
+			<>
+				<ul className="flex h-[88px] justify-center space-x-5 sm:space-x-9">
+					{/* {TABS.map((tab) => {
             const active = tab === tabActive;
             return (
               <li
@@ -56,37 +56,46 @@ const HeroSearchFormSmall: FC<HeroSearchFormSmallProps> = ({
                 </div>
               </li>
             );
-          })}
-        </ul>
-      </>
-    );
-  };
+          })} */}
 
-  const renderForm = () => {
-    switch (tabActive) {
-      case "Stays":
-        return <StaySearchForm defaultFieldFocus={defaultFieldFocus} />;
-      case "Experiences":
-        return <ExperiencesSearchForm />;
-      case "Cars":
-        return <RentalCarSearchForm />;
-      case "Flights":
-        return <FlightSearchForm />;
+					<li
+						className={`text-neutral-500 relative flex flex-shrink-0 cursor-pointer items-center text-base dark:text-neutral-300`}
+					>
+						<div className="relative select-none text-left text-white dark:text-neutral-400">
+							<span>Find Your Perfect Homestay With Homestays Now!</span>
+							<span className="absolute top-full mr-2 mt-1 block h-0.5 w-full rounded-full bg-white dark:bg-neutral-100" />
+						</div>
+					</li>
+				</ul>
+			</>
+		)
+	}
 
-      default:
-        return null;
-    }
-  };
+	const renderForm = () => {
+		switch (tabActive) {
+			case 'Stays':
+				return <StaySearchForm defaultFieldFocus={defaultFieldFocus} />
+			case 'Experiences':
+				return <ExperiencesSearchForm />
+			case 'Cars':
+				return <RentalCarSearchForm />
+			case 'Flights':
+				return <FlightSearchForm />
 
-  return (
-    <div
-      className={`nc-HeroSearchFormSmall ${className}`}
-      data-nc-id="HeroSearchFormSmall"
-    >
-      {renderTab()}
-      <div className="mt-2">{renderForm()}</div>
-    </div>
-  );
-};
+			default:
+				return null
+		}
+	}
 
-export default HeroSearchFormSmall;
+	return (
+		<div
+			className={`nc-HeroSearchFormSmall ${className}`}
+			data-nc-id="HeroSearchFormSmall"
+		>
+			{renderTab()}
+			<div className="mt-2">{renderForm()}</div>
+		</div>
+	)
+}
+
+export default HeroSearchFormSmall

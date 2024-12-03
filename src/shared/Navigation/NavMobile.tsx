@@ -131,7 +131,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
 			<ul className="flex flex-col space-y-1 px-2 py-6">
 				{data.map(_renderItem)}
 			</ul>
-			<div className="flex items-center justify-between px-5 py-6">
+			{/* <div className="flex items-center justify-between px-5 py-6">
 				<a
 					className="inline-block"
 					href="https://themeforest.net/item/chisfis-online-booking-nextjs-template/43399526"
@@ -145,7 +145,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
 					className="flex"
 					panelClassName="z-10 w-screen max-w-[280px] px-4 mb-3 right-3 bottom-full sm:px-0"
 				/>
-			</div>
+			</div> */}
 		</div>
 	)
 }

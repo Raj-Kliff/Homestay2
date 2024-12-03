@@ -19,6 +19,7 @@ import { useTimeoutFn } from 'react-use'
 import StaySearchForm from './(stay-search-form)/StaySearchForm'
 import CarsSearchForm from './(car-search-form)/CarsSearchForm'
 import FlightSearchForm from './(flight-search-form)/FlightSearchForm'
+import Logo from '@/shared/Logo'
 
 const HeroSearchForm2Mobile = () => {
 	const [showModal, setShowModal] = useState(false)
@@ -37,22 +38,24 @@ const HeroSearchForm2Mobile = () => {
 
 	const renderButtonOpenModal = () => {
 		return (
+			<div className='flex gap-3 items-center'>
+			<Logo />
 			<button
 				onClick={openModal}
 				className="relative flex w-full items-center rounded-full border border-neutral-200 px-4 py-2 pr-11 shadow-lg dark:border-neutral-600"
 			>
-				<MagnifyingGlassIcon className="h-5 w-5 flex-shrink-0" />
+				<MagnifyingGlassIcon className="h-5 w-5 flex-shrink-0 text-white dark:text-neutral-400" />
 
 				<div className="ml-3 flex-1 overflow-hidden text-left">
-					<span className="block text-sm font-medium">Where to?</span>
-					<span className="mt-0.5 block text-xs font-light text-neutral-500 dark:text-neutral-400">
+					<span className="block text-sm font-medium text-white dark:text-neutral-400">Where to?</span>
+					<span className="mt-0.5 block text-white text-xs font-light dark:text-neutral-400">
 						<span className="line-clamp-1">
 							Anywhere • Any week • Add guests
 						</span>
 					</span>
 				</div>
 
-				<span className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 transform items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-600 dark:text-neutral-300">
+				<span className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 transform items-center justify-center rounded-full border border-neutral-200 text-white dark:text-neutral-400 dark:border-neutral-600 dark:text-neutral-300">
 					<svg
 						viewBox="0 0 16 16"
 						aria-hidden="true"
@@ -65,6 +68,7 @@ const HeroSearchForm2Mobile = () => {
 					</svg>
 				</span>
 			</button>
+			</div>
 		)
 	}
 

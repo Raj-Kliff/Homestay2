@@ -36,7 +36,8 @@ const NAV: NavItem[] = [
   },
   {
     name: "Log in",
-    link: "/account",
+    // link: "/account",
+    link: "/login",
     icon: UserCircleIcon,
   },
   {

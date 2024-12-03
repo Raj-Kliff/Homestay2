@@ -10,20 +10,20 @@ export interface Statistic {
 const FOUNDER_DEMO: Statistic[] = [
   {
     id: "1",
-    heading: "10 million",
+    heading: "VDEA Entrepreneur of the Year – 2024",
     subHeading:
-      "Articles have been public around the world (as of Sept. 30, 2021)",
+      "Shailza Sood Dasgupta (Co-founder, HOI) is presented with Vijayalakshmi Das Entrepreneur of the year award organised by SATYA Micro Finance. She was recognized for her acumen in business and empowering other women through her entrepreneurial journey.&nbsp;",
   },
   {
     id: "2",
-    heading: "100,000",
-    subHeading: "Registered users account (as of Sept. 30, 2021)",
+    heading: "National Women Excellence Award – 2020",
+    subHeading: "Shailza Sood Dasgupta (Co-founder, HOI) is felicitated with the prestigious National Women Excellence Award 2020 organized by Indo European Chamber of Small and Medium Enterprises (IECSME). Shailza was chosen for her remarkable work in rural India and empowering women by developing homestays.",
   },
   {
     id: "3",
-    heading: "220+",
+    heading: "National Business Leadership Award",
     subHeading:
-      "Countries and regions have our presence (as of Sept. 30, 2021)",
+      "The team is presented National Business Leadership Award 2019 for the exemplary work in the field of Travel and Tourism. It is an acknowledgment of the quality and the authenticity of the homestay experience that the team strive to bring to every single customer from all over the world.",
   },
 ];
 
@@ -35,16 +35,16 @@ const SectionStatistic: FC<SectionStatisticProps> = ({ className = "" }) => {
   return (
     <div className={`nc-SectionStatistic relative ${className}`}>
       <Heading
-        desc=" We’re impartial and independent, and every day we create distinctive,
-          world-class programmes and content"
+        desc=""
+        // className="text-[#e66c1b] mb-10"
       >
-        🚀 Fast Facts
+        🏆 Awards and Accolades
       </Heading>
-      <div className="grid md:grid-cols-2 gap-6 lg:grid-cols-3 xl:gap-8">
+      <div className="grid gap-8">
         {FOUNDER_DEMO.map((item) => (
           <div
             key={item.id}
-            className="p-6 bg-neutral-50 dark:bg-neutral-800 rounded-2xl dark:border-neutral-800"
+            className="p-6 bg-neutral-50 dark:bg-neutral-800 rounded-2xl dark:border-neutral-800 shadow"
           >
             <h3 className="text-2xl font-semibold leading-none text-neutral-900 md:text-3xl dark:text-neutral-200">
               {item.heading}
