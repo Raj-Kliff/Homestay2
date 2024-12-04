@@ -32,7 +32,7 @@ const HeroSearchFormSmall: FC<HeroSearchFormSmallProps> = ({
 	const renderTab = () => {
 		return (
 			<>
-				<ul className="flex h-[88px] justify-center space-x-5 sm:space-x-9">
+				<ul className="flex h-[65px] justify-center space-x-5 sm:space-x-9">
 					{/* {TABS.map((tab) => {
             const active = tab === tabActive;
             return (
@@ -93,7 +93,7 @@ const HeroSearchFormSmall: FC<HeroSearchFormSmallProps> = ({
 			data-nc-id="HeroSearchFormSmall"
 		>
 			{renderTab()}
-			<div className="mt-2">{renderForm()}</div>
+			<div className="mt-0">{renderForm()}</div>
 		</div>
 	)
 }

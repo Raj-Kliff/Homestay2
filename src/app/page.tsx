@@ -204,7 +204,7 @@ function PageHome() {
 
 				{/* <SectionVideos /> */}
 
-				<div className="relative pt-8 pb-1" style={{marginTop:'2rem'}}>
+				<div className="relative pt-8 pb-0" style={{marginTop:'2rem'}}>
 					<BackgroundSection />
 					<SectionClientSay />
 				</div>

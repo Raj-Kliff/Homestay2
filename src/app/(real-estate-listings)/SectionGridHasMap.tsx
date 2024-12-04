@@ -22,11 +22,11 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
 
 	return (
 		<div>
-			<div className="relative flex min-h-screen">
+			<div className="relative flex min-h-screen mt-[2rem]">
 				{/* CARDSSSS */}
 				<div className="min-h-screen w-full flex-shrink-0 xl:w-[780px] xl:px-8 2xl:w-[880px]">
 					<Heading2
-						heading="Experiences in Tokyo"
+						heading="Experiences in India"
 						subHeading={
 							<span className="mt-3 block text-neutral-500 dark:text-neutral-400">
 								233 experiences

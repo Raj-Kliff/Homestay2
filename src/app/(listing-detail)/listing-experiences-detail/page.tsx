@@ -60,7 +60,7 @@ const ListingExperiencesDetailPage: FC<
 					<span>·</span>
 					<div className="flex items-center">
 						<MapPinIcon className="h-5 w-5" />
-						<span className="ml-1"> Tokyo, Jappan</span>
+						<span className="ml-1"> Goa, India</span>
 					</div>
 				</div>
 

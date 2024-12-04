@@ -120,7 +120,7 @@ const SectionClientSay: FC<SectionClientSayProps> = ({
 			<Heading desc="Let's see what people think of Chisfis" isCenter>
 				Good news from far away
 			</Heading>
-			<div className="relative mx-auto max-w-2xl md:mb-16">
+			<div className="relative mx-auto max-w-2xl md:mb-16 pb-[35px]">
 				{/* {renderBg()} */}
 				<Image className="mx-auto" src={clientSayMain} alt="" />
 				<div className={`relative mt-12 lg:mt-16`}>

@@ -20,9 +20,9 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   data = DEMO_DATA,
 }) => {
   return (
-    <div className={`nc-SectionGridFilterCard ${className}`}>
+    <div className={`nc-SectionGridFilterCard mt-[2rem] ${className}`}>
       <Heading2
-        heading="Experiences in Tokyo"
+        heading="Experiences in India"
         subHeading={
           <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
             233 experiences
