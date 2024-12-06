@@ -11,7 +11,7 @@ const Logo: React.FC<LogoProps> = ({ className = 'w-24' }) => {
 	return (
 		<Link
 			href="/"
-			className={`ttnc-logo text-primary-600 inline-block focus:outline-none focus:ring-0 ${className}`}
+			className={`ttnc-logo text-primary-600 inline-block focus:outline-none focus:ring-0 w-[8rem]`}
 		>
 			<img src="https://www.homestaysofindia.com/wp-content/uploads/2024/07/Logo-homestay.png" alt='' />
 			{/* <LogoSvgLight />

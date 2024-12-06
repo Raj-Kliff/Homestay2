@@ -10,7 +10,8 @@ import { PathName } from "@/routers/types";
 import MenuBar from "@/shared/MenuBar";
 import isInViewport from "@/utils/isInViewport";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
 
 let WIN_PREV_POSITION = 0;
 if (typeof window !== "undefined") {
@@ -50,12 +51,19 @@ const FooterNav = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const router = useRouter()
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", handleEvent);
+      document.addEventListener("click", handleClickOutside);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", handleEvent);
+        document.removeEventListener("click", handleClickOutside);
+      }
+    };
   }, []);
 
   const handleEvent = () => {
@@ -87,6 +95,12 @@ const FooterNav = () => {
     }
 
     WIN_PREV_POSITION = currentScrollPos;
+  };
+
+  const handleClickOutside = (event:any) => {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
+      setIsModalOpen(false);
+    }
   };
 
   const renderItem = (item: NavItem, index: number) => {
@@ -151,28 +165,28 @@ const FooterNav = () => {
         transition-transform duration-300 ease-in-out"
       >
         <div className="w-full max-w-lg flex justify-around mx-auto text-sm text-center ">
-          {/* MENU */}
           {NAV.map(renderItem)}
         </div>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-neutral-800 p-6 rounded shadow-lg">
+        <div className="fixed inset-0 flex items-end z-50">
+          <div className="absolute inset-0 bg-black opacity-50" onClick={() => setIsModalOpen(false)}></div>
+          <div className="bg-white dark:bg-neutral-800 p-6 w-full rounded-t shadow-lg relative z-10">
             <h2 className="text-lg font-bold mb-4">Select Login Type</h2>
             <div className="space-y-2">
-              <a href="/login"
-                onClick={() => console.log("Client Login")}
-                className="w-full mr-2 py-2 px-4 bg-blue-600 text-white rounded"
+              <button
+                onClick={() => router.push('/login')}
+                className="w-full py-2 px-4 bg-[#ff9900] text-white rounded"
               >
                 Guest Login
-              </a>
-              <a href="/login"
-                onClick={() => console.log("Host Login")}
-                className="w-full py-2 px-4 bg-green-600 text-white rounded"
+              </button>
+              <button
+                onClick={() => router.push('/login')}
+                className="w-full py-2 px-4 bg-gray-700 text-white rounded"
               >
                 Host Login
-              </a>
+              </button>
             </div>
             <button
               onClick={() => setIsModalOpen(false)}

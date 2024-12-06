@@ -161,7 +161,7 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 							: ''
 					}`}
 				></div>
-				<div className="relative flex h-[78px] px-4 lg:container ">
+				<div className="relative flex h-[85px] px-4 lg:container ">
 					<div className="flex flex-1 justify-between">
 						{/* Logo (lg+) */}
 						<div className="relative z-10 hidden flex-1 items-center md:flex">
@@ -197,7 +197,7 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 					</div>
 				</div>
 			</header>
-			<div className='flex justify-center sticky top-[4.85rem] z-20 bg-white border-b dark:bg-neutral-900 dark:border-b dark:border-neutral-600'>
+			<div className='flex justify-center sticky top-[5.3rem] z-20 bg-white border-b dark:bg-neutral-900 dark:border-b dark:border-neutral-600'>
 				<Navigation/>
 			</div>
 		</>
