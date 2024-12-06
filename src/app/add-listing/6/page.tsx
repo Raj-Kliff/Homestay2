@@ -17,7 +17,7 @@ const PageAddListing6: FC<PageAddListing6Props> = () => {
 				</span>
 			</div>
 
-			<Textarea placeholder="..." rows={14} />
+			<Textarea placeholder="..." rows={10} />
 		</>
 	)
 }

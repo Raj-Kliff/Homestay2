@@ -161,7 +161,7 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 							: ''
 					}`}
 				></div>
-				<div className="relative flex h-[68px] px-4 lg:container ">
+				<div className="relative flex h-[78px] px-4 lg:container ">
 					<div className="flex flex-1 justify-between">
 						{/* Logo (lg+) */}
 						<div className="relative z-10 hidden flex-1 items-center md:flex">
@@ -185,7 +185,7 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 									href={'/add-listing/1'}
 									className="hidden items-center bg-gray-600 hover:bg-gray-700 self-center rounded-full px-4 py-2 text-sm font-medium text-white hover:border-neutral-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 dark:border-neutral-700 dark:text-neutral-300 xl:inline-flex"
 								>
-									List your property
+									List my homestay
 								</Link>
 
 								{/* <NotifyDropdown /> */}
@@ -197,7 +197,7 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 					</div>
 				</div>
 			</header>
-			<div className='flex justify-center sticky top-[4.25rem] z-20 bg-white border-b dark:bg-neutral-900 dark:border-b dark:border-neutral-600'>
+			<div className='flex justify-center sticky top-[4.85rem] z-20 bg-white border-b dark:bg-neutral-900 dark:border-b dark:border-neutral-600'>
 				<Navigation/>
 			</div>
 		</>

@@ -24,9 +24,9 @@ const PageAddListing9: FC<PageAddListing9Props> = () => {
           space more often.`}
 				</span>
 			</div>
-			<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+			{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 			{/* FORM */}
-			<div className="space-y-7">
+			<div className="space-y-2" style={{marginTop:'0rem'}}>
 				{/* ITEM */}
 				<NcInputNumber label="Nights min" defaultValue={1} />
 				<NcInputNumber label="Nights max" defaultValue={99} />

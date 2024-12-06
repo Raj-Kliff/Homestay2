@@ -28,21 +28,21 @@ const DEMO_DATA = [
 		clientName: 'Tiana Abie',
 		clientAddress: 'Malaysia',
 		content:
-			'This place is exactly like the picture posted on Chisfis. Great service, we had a great stay!',
+			'This place is exactly like the picture posted on Homestays. Great service, we had a great stay!',
 	},
 	{
 		id: 2,
 		clientName: 'Lennie Swiffan',
 		clientAddress: 'London',
 		content:
-			'This place is exactly like the picture posted on Chisfis. Great service, we had a great stay!',
+			'This place is exactly like the picture posted on Homestays. Great service, we had a great stay!',
 	},
 	{
 		id: 3,
 		clientName: 'Berta Emili',
 		clientAddress: 'Tokyo',
 		content:
-			'This place is exactly like the picture posted on Chisfis. Great service, we had a great stay!',
+			'This place is exactly like the picture posted on Homestays. Great service, we had a great stay!',
 	},
 ]
 
@@ -117,12 +117,12 @@ const SectionClientSay: FC<SectionClientSayProps> = ({
 
 	return (
 		<div className={`nc-SectionClientSay relative ${className}`}>
-			<Heading desc="Let's see what people think of Chisfis" isCenter>
-				Good news from far away
+			<Heading desc="Let's see what people think of Homestays" isCenter>
+				Testimonials
 			</Heading>
 			<div className="relative mx-auto max-w-2xl md:mb-16 pb-[35px]">
 				{/* {renderBg()} */}
-				<Image className="mx-auto" src={clientSayMain} alt="" />
+				{/* <Image className="mx-auto" src={clientSayMain} alt="" /> */}
 				<div className={`relative mt-12 lg:mt-16`}>
 					<Image
 						className="absolute right-full top-1 -mr-16 opacity-50 md:opacity-100 lg:mr-3"

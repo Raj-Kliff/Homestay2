@@ -125,8 +125,8 @@ const GuestsInput: FC<GuestsInputProps> = ({
 								defaultValue={guestChildrenInputValue}
 								onChange={(value) => handleChangeData(value, 'guestChildren')}
 								max={4}
-								label="Children"
-								desc="Ages 2–12"
+								label="Child"
+								desc="Ages 0–6"
 							/>
 
 							<NcInputNumber
@@ -134,8 +134,8 @@ const GuestsInput: FC<GuestsInputProps> = ({
 								defaultValue={guestInfantsInputValue}
 								onChange={(value) => handleChangeData(value, 'guestInfants')}
 								max={4}
-								label="Infants"
-								desc="Ages 0–2"
+								label="Child"
+								desc="Ages 7–12"
 							/>
 						</PopoverPanel>
 					</Transition>

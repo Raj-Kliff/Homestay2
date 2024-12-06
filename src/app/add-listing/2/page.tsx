@@ -15,9 +15,9 @@ const PageAddListing2: FC<PageAddListing2Props> = () => {
 	return (
 		<>
 			<h2 className="text-2xl font-semibold">Your place location</h2>
-			<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+			{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 			{/* FORM */}
-			<div className="space-y-8">
+			<div className="space-y-2" style={{marginTop:'1rem'}}>
 				<ButtonSecondary>
 					<MapPinIcon className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
 					<span className="ml-3">Use current location</span>

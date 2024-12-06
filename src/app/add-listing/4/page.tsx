@@ -7,18 +7,18 @@ const PageAddListing4: FC<PageAddListing4Props> = () => {
 	return (
 		<>
 			<div>
-				<h2 className="text-2xl font-semibold">Amenities </h2>
+				<h2 className="text-2xl font-semibold" style={{marginTop:'0rem'}}>Amenities </h2>
 				<span className="mt-2 block text-neutral-500 dark:text-neutral-400">
 					Many customers have searched for accommodation based on amenities
 					criteria
 				</span>
 			</div>
-			<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+			{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 			{/* FORM */}
-			<div className="space-y-8">
+			<div className="space-y-4">
 				{/* ITEM */}
-				<div>
-					<label className="text-lg font-semibold" htmlFor="">
+				<div style={{marginTop:'-1rem'}}>
+					<label className="text-lg font-semibold" htmlFor="" >
 						General amenities
 					</label>
 					<div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

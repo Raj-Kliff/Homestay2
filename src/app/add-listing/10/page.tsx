@@ -18,13 +18,13 @@ const PageAddListing10: FC<PageAddListing10Props> = () => {
 					be reviewed for publication
 				</span>
 			</div>
-			<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+			{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 			{/* FORM */}
 			<div>
-				<h3 className="text-lg font-semibold">This is your listing</h3>
+				<h3 className="text-lg font-semibold" style={{marginTop:'-1rem'}}>This is your listing</h3>
 				<div className="max-w-xs">
 					<StayCard
-						className="mt-8"
+						className="mt-4"
 						data={{ ...DEMO_STAY_LISTINGS[0], reviewStart: 0 }}
 					/>
 				</div>

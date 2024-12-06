@@ -74,7 +74,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					<span>·</span>
 					<div className="flex items-center">
 						<MapPinIcon className="h-5 w-5" />
-						<span className="ml-1"> Tokyo, Jappan</span>
+						<span className="ml-1"> Goa, Delhi</span>
 					</div>
 				</div>
 
@@ -552,7 +552,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
 				{/* CONTENT */}
-				<div>
+				{/* <div>
 					<h4 className="text-lg font-semibold">Cancellation policy</h4>
 					<span className="mt-3 block text-neutral-500 dark:text-neutral-400">
 						Refund 50% of the booking value when customers cancel the room
@@ -562,10 +562,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						refund of the total amount paid (minus the service fee).
 					</span>
 				</div>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" /> */}
 
 				{/* CONTENT */}
-				<div>
+				{/* <div>
 					<h4 className="text-lg font-semibold">Check-in time</h4>
 					<div className="mt-3 max-w-md text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
 						<div className="flex justify-between space-x-10 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
@@ -578,7 +578,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						</div>
 					</div>
 				</div>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" /> */}
 
 				{/* CONTENT */}
 				<div>
@@ -704,7 +704,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					{renderSection1()}
 					{renderSection2()}
 					{renderSection3()}
-					{renderSection4()}
+					{/* {renderSection4()} */}
 					<SectionDateRange />
 					{renderSection5()}
 					{renderSection6()}

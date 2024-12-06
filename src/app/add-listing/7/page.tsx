@@ -13,10 +13,10 @@ const PageAddListing7: FC<PageAddListing7Props> = () => {
 				</span>
 			</div>
 
-			<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+			{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 			{/* FORM */}
-			<div className="space-y-8">
-				<div>
+			<div className="space-y-2">
+				<div style={{marginTop:'-1rem'}}>
 					<span className="text-lg font-semibold">Cover image</span>
 					<div className="mt-5">
 						<div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-neutral-300 px-6 pb-6 pt-5 dark:border-neutral-600">

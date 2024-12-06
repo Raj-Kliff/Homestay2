@@ -16,25 +16,24 @@ const PageAddListing8: FC<PageAddListing8Props> = () => {
             cancellation policy.`}
 				</span>
 			</div>
-			<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+			{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 			{/* FORM */}
-			<div className="space-y-8">
+			<div className="space-y-2" style={{marginTop:'0rem'}}>
 				{/* ITEM */}
 				<FormItem label="Currency">
 					<Select>
-						<option value="USD">USD</option>
-						<option value="VND">VND</option>
-						<option value="EURRO">EURRO</option>
+						<option value="USD">INR</option>
+						<option value="VND">USD</option>
 					</Select>
 				</FormItem>
 				<FormItem label="Base price  (Monday -Thuday)">
 					<div className="relative">
 						<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span className="text-gray-500">$</span>
+							<span className="text-gray-500">₹</span>
 						</div>
 						<Input className="!pl-8 !pr-10" placeholder="0.00" />
 						<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-							<span className="text-gray-500">USD</span>
+							<span className="text-gray-500">INR</span>
 						</div>
 					</div>
 				</FormItem>
@@ -42,11 +41,11 @@ const PageAddListing8: FC<PageAddListing8Props> = () => {
 				<FormItem label="Base price  (Friday-Sunday)">
 					<div className="relative">
 						<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<span className="text-gray-500">$</span>
+							<span className="text-gray-500">₹</span>
 						</div>
 						<Input className="!pl-8 !pr-10" placeholder="0.00" />
 						<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-							<span className="text-gray-500">USD</span>
+							<span className="text-gray-500">INR</span>
 						</div>
 					</div>
 				</FormItem>

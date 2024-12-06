@@ -64,40 +64,111 @@ const megaMenuDemo: MegamenuItem[] = [
 const demoChildMenus: NavItemType[] = [
 	{
 		id: ncNanoId(),
-		href: '/',
-		name: 'Online booking',
+		href: '/listing-stay',
+		name: 'Arunachal Pradesh',
 	},
 	{
 		id: ncNanoId(),
-		href: '/home-2',
-		name: 'Real estate',
-		isNew: true,
+		href: '/listing-stay',
+		name: 'Haryana',
+		// isNew: true,
 	},
 	{
 		id: ncNanoId(),
-		href: '/home-3',
-		name: 'Home 3',
-		isNew: true,
+		href: '/listing-stay',
+		name: 'Himachal',
+		// isNew: true,
 	},
 	{
 		id: ncNanoId(),
-		href: '/',
-		name: 'Coming soon',
+		href: '/listing-stay',
+		name: 'Goa',
 	},
 	{
 		id: ncNanoId(),
-		href: '/',
-		name: 'Coming soon',
+		href: '/listing-stay',
+		name: 'Jammu & Kashmir',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Karnataka',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Kerala',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Maharashtra',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Meghalaya',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Puducherry',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Punjab',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Sikkim',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Tamil Nadu',
+	},
+	{
+		id: ncNanoId(),
+		href: '/listing-stay',
+		name: 'Uttrakhand',
 	},
 ]
 
 const otherPageChildMenus: NavItemType[] = [
-	{ id: ncNanoId(), href: '/add-listing/1' as Route, name: '+ Add listing' },
-	{ id: ncNanoId(), href: '/blog', name: 'Blog page' },
-	{ id: ncNanoId(), href: '/blog/single' as Route, name: 'Blog single' },
-	{ id: ncNanoId(), href: '/about', name: 'About' },
-	{ id: ncNanoId(), href: '/contact', name: 'Contact us' },
-	{ id: ncNanoId(), href: '/login', name: 'Login/Signup' },
+	// { id: ncNanoId(), href: '/add-listing/1' as Route, name: '+ Add listing' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Assam' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Gujrat' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Himachal' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Karnataka' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Kerala' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Maharashtra' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Odisha' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Puhjab' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Sikkim' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Rajasthan' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Tamil Nadu' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Uttrakhand' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Uttar Pradesh' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'West Bengal' },
+]
+
+const workationPageChildMenus: NavItemType[] = [
+	// { id: ncNanoId(), href: '/add-listing/1' as Route, name: '+ Add listing' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Assam' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Goa' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Haryana' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Himachal' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Kashmir' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Kerala' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Ladakh' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Meghalaya' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Rajasthan' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Sikkim' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Tamil Nadu' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'Uttrakhand' },
+	{ id: ncNanoId(), href: '/listing-stay', name: 'West Bengal' },
 ]
 
 const templatesChildrenMenus: NavItemType[] = [
@@ -200,43 +271,94 @@ export const NAVIGATION_DEMO: NavItemType[] = [
 			{
 				id: ncNanoId(),
 				href: '/listing-stay',
-				name: 'Stay listings',
+				name: 'North India',
 				type: 'dropdown',
 				children: [
-					{ id: ncNanoId(), href: '/listing-stay', name: 'Stay page' },
-					{
-						id: ncNanoId(),
-						href: '/listing-stay-map',
-						name: 'Stay page (map)',
-					},
-					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Stay Detail' },
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Chandigarh' },
+					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Delhi' },
+					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Haryana' },
+				],
+			},
+			{
+				id: ncNanoId(),
+				href: '/listing-stay',
+				name: 'South India',
+				type: 'dropdown',
+				children: [
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Andaman & Nicobar' },
+					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Tamil Nadu' },
+					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Kerala' },
+				],
+			},
+			{
+				id: ncNanoId(),
+				href: '/listing-stay',
+				name: 'East India',
+				type: 'dropdown',
+				children: [
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Bihar' },
+					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Odisha' },
+					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'West Bengal' },
+				],
+			},
+			{
+				id: ncNanoId(),
+				href: '/listing-stay',
+				name: 'West India',
+				type: 'dropdown',
+				children: [
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Goa' },
+					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Gujrat' },
+					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Maharashtra' },
+				],
+			},
+			{
+				id: ncNanoId(),
+				href: '/listing-stay',
+				name: 'North East India',
+				type: 'dropdown',
+				children: [
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Assam' },
+					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Arunachal Pradesh' },
+					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Manipur' },
+				],
+			},
+			{
+				id: ncNanoId(),
+				href: '/listing-stay',
+				name: 'Central India',
+				type: 'dropdown',
+				children: [
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Chhattishgarh' },
+					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Madhya Pradesh' },
+					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Uttar Pradesh' },
 				],
 			},
 
 			//
-			{
-				id: ncNanoId(),
-				href: '/listing-experiences',
-				name: 'Experiences listings',
-				type: 'dropdown',
-				children: [
-					{
-						id: ncNanoId(),
-						href: '/listing-experiences',
-						name: 'Experiences page',
-					},
-					{
-						id: ncNanoId(),
-						href: '/listing-experiences-map',
-						name: 'Experiences page (map)',
-					},
-					{
-						id: ncNanoId(),
-						href: '/listing-experiences-detail',
-						name: 'Experiences Detail',
-					},
-				],
-			},
+			// {
+			// 	id: ncNanoId(),
+			// 	href: '/listing-experiences',
+			// 	name: 'Experiences listings',
+			// 	type: 'dropdown',
+			// 	children: [
+			// 		{
+			// 			id: ncNanoId(),
+			// 			href: '/listing-experiences',
+			// 			name: 'Experiences page',
+			// 		},
+			// 		{
+			// 			id: ncNanoId(),
+			// 			href: '/listing-experiences-map',
+			// 			name: 'Experiences page (map)',
+			// 		},
+			// 		{
+			// 			id: ncNanoId(),
+			// 			href: '/listing-experiences-detail',
+			// 			name: 'Experiences Detail',
+			// 		},
+			// 	],
+			// },
 
 			//
 			// {
@@ -283,8 +405,8 @@ export const NAVIGATION_DEMO: NavItemType[] = [
 		href: '/listing-stay',
 		// name: 'Templates',
 		name: 'Farmstay',
-		// type: 'dropdown',
-		// children: templatesChildrenMenus,
+		type: 'dropdown',
+		children: otherPageChildMenus,
 	},
 
 	{
@@ -292,8 +414,10 @@ export const NAVIGATION_DEMO: NavItemType[] = [
 		href: '/listing-stay',
 		// name: 'Other pages',
 		name: 'Second Home',
-		type: 'megaMenu',
-		megaMenu: megaMenuDemo,
+		type: 'dropdown',
+		children: demoChildMenus,
+		// type: 'megaMenu',
+		// megaMenu: megaMenuDemo,
 	},
 	{
 		id: ncNanoId(),
@@ -301,15 +425,15 @@ export const NAVIGATION_DEMO: NavItemType[] = [
 		// name: 'Other pages',
 		name: 'Workation',
 		type: 'dropdown',
-		children: otherPageChildMenus,
+		children: workationPageChildMenus,
 	},
 	{
 		id: ncNanoId(),
 		href: '/listing-stay',
 		// name: 'Other pages',
 		name: 'HOI Trips',
-		type: 'dropdown',
-		children: otherPageChildMenus,
+		// type: 'dropdown',
+		// children: templatesChildrenMenus,
 	},
 	{
 		id: ncNanoId(),

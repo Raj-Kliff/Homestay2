@@ -91,21 +91,21 @@ const navigation: {
 
 export default function Footer2() {
 	return (
-		<footer className="border-t border-neutral-200 dark:border-neutral-700 -mt-[5rem]">
-			<div className="mx-auto max-w-7xl px-6 pb-2 pt-16 sm:pt-24 lg:px-8 lg:pt-8">
+		<footer className="border-t border-neutral-200 dark:border-neutral-700 -mt-[5rem] bg-[#454545]">
+			<div className="mx-auto max-w-7xl px-6 pb-2 pt-16 sm:pt-14 lg:px-8 lg:pt-4">
 				<div className="xl:grid xl:grid-cols-3 xl:gap-8">
-					<div className="space-y-8">
+					<div className="space-y-2">
 						<Logo className="w-[8rem]" />
 						{/* <p className="text-balance text-sm/6 text-gray-600 dark:text-neutral-400">
 							Making the world a better place through constructing elegant
 							hierarchies.
 						</p> */}
-						<div className="flex flex-col gap-6 gap-x-6">
+						<div className="flex flex-col gap-2 gap-x-6">
 							{navigation.social.map((item) => (
 								<a
 									key={item.name}
 									href={item.href}
-									className="text-gray-600 hover:text-gray-800 dark:text-neutral-400 flex gap-2"
+									className="text-white hover:text-gray-800 dark:text-neutral-400 flex gap-2"
 								>
 									<item.icon aria-hidden="true" className="size-6" />
 									<span className="">{item.name}</span>
@@ -116,15 +116,15 @@ export default function Footer2() {
 					<div className="mt-4 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
 						<div className="md:grid md:grid-cols-2 md:gap-8">
 							<div>
-								<h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+								<h3 className="text-sm/6 font-semibold text-white dark:text-neutral-300">
 									Guest
 								</h3>
-								<ul role="list" className="mt-6 space-y-4">
+								<ul role="list" className="mt-3 space-y-1">
 									{navigation.solutions.map((item) => (
 										<li key={item.name}>
 											<a
 												href={item.href}
-												className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400"
+												className="text-sm/6 text-white hover:text-gray-900 dark:text-neutral-400"
 											>
 												{item.name}
 											</a>
@@ -133,15 +133,15 @@ export default function Footer2() {
 								</ul>
 							</div>
 							<div className="mt-10 md:mt-0">
-								<h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+								<h3 className="text-sm/6 font-semibold text-white dark:text-neutral-300">
 									Host
 								</h3>
-								<ul role="list" className="mt-6 space-y-4">
+								<ul role="list" className="mt-3 space-y-1">
 									{navigation.support.map((item) => (
 										<li key={item.name}>
 											<a
 												href={item.href}
-												className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400"
+												className="text-sm/6 text-white hover:text-gray-900 dark:text-neutral-400"
 											>
 												{item.name}
 											</a>
@@ -152,15 +152,15 @@ export default function Footer2() {
 						</div>
 						<div className="md:grid md:grid-cols-2 md:gap-8">
 							<div>
-								<h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+								<h3 className="text-sm/6 font-semibold text-white dark:text-neutral-300">
 									Community
 								</h3>
-								<ul role="list" className="mt-6 space-y-4">
+								<ul role="list" className="mt-3 space-y-1">
 									{navigation.company.map((item) => (
 										<li key={item.name}>
 											<a
 												href={item.href}
-												className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400"
+												className="text-sm/6 text-white hover:text-gray-900 dark:text-neutral-400"
 											>
 												{item.name}
 											</a>
@@ -169,15 +169,15 @@ export default function Footer2() {
 								</ul>
 							</div>
 							<div className="mt-10 md:mt-0">
-								<h3 className="text-sm/6 font-semibold text-gray-900 dark:text-neutral-300">
+								<h3 className="text-sm/6 font-semibold text-white dark:text-neutral-300">
 									Company
 								</h3>
-								<ul role="list" className="mt-6 space-y-4">
+								<ul role="list" className="mt-3 space-y-1">
 									{navigation.legal.map((item) => (
 										<li key={item.name}>
 											<a
 												href={item.href}
-												className="text-sm/6 text-gray-600 hover:text-gray-900 dark:text-neutral-400"
+												className="text-sm/6 text-white hover:text-gray-900 dark:text-neutral-400"
 											>
 												{item.name}
 											</a>
@@ -188,8 +188,8 @@ export default function Footer2() {
 						</div>
 					</div>
 				</div>
-				<div className="mt-16 border-t border-gray-900/10 py-2 pb-0 dark:border-gray-700 sm:mt-20 lg:mt-6">
-					<p className="text-sm/6 text-center text-gray-600 dark:text-neutral-400">
+				<div className="mt-8 border-t border-gray-900/10 py-1 pb-0 dark:border-gray-700 sm:mt-20 lg:mt-4">
+					<p className="text-sm/6 text-center text-white dark:text-neutral-400">
 						&copy; Copyright 2024 Reserved by Homestaysofindia
 					</p>
 				</div>

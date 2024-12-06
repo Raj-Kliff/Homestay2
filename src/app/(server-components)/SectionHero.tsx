@@ -15,12 +15,11 @@ const SectionHero: FC<SectionHeroProps> = ({ className = '' }) => {
 		>
 			<div className="flex flex-col lg:flex-row lg:items-center">
 				<div className="flex flex-shrink-0 flex-col items-start space-y-8 pb-14 sm:space-y-10 lg:mr-10 lg:w-1/2 lg:pb-64 xl:mr-0 xl:pr-14">
-					<h2 className="text-4xl font-bold !leading-[114%] md:text-5xl xl:text-7xl">
-						Homestays experiences
+					<h2 className="text-3xl font-bold !leading-[114%] md:text-4xl xl:text-6xl">
+						Welcome to Authentic Indian Hospitality
 					</h2>
 					<span className="text-base text-neutral-500 dark:text-neutral-400 md:text-lg">
-						Accompanying us, you have a trip full of experiences. With Homestays,
-						booking accommodation, Farmstays, Workation
+						HOI is dedicated to promote homestay culture and sustainable travel in India. We work towards developing local community while preserving their heritage, culture and traditions and provide travelers a unique travel experience.
 					</span>
 					{/* <ButtonPrimary href="/listing-stay-map" sizeClass="px-5 py-4 sm:px-7">
 						Start your Homestays
