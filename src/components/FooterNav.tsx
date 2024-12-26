@@ -26,8 +26,8 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   {
-    name: "Explore",
-    link: "/",
+    name: "List My Homestay",
+    link: "/add-listing/1",
     icon: MagnifyingGlassIcon,
   },
   {
@@ -43,6 +43,7 @@ const NAV: NavItem[] = [
   },
   {
     name: "Menu",
+    link: "#",
     icon: MenuBar,
   },
 ];
