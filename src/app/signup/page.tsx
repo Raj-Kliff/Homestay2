@@ -42,17 +42,16 @@ const registerSocials = [
 const PageSignUp: FC<PageSignUpProps> = ({}) => {
 
 	const [countryCodesList, setCountryCodesList] = useState<CountryCode[]>([]);
-	const [configData, setConfigData] = useState();
+	const [configData, setConfigData] = useState<any>(null);
 	const [registerSocial, setRegisterSocial] = useState();
-
+	
 	const fetchConfigData = async() => {
-		try {
-
-			const {data} = await axios.get('https://homestay.kliffhost.in/api/register-config',{
+		try { 
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/register-config`, {
 				headers: {
-					"x-api-key": '8a6dfc93-e244-40e5-9474-f86a5d3696ff'
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
 				},
-			})
+			});
 			if(data.status == 'success'){
 				setConfigData(data)
 			}
@@ -67,9 +66,12 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 	  }
 
 	useEffect(()=>{
+		console.log("useEffect triggered");
 		fetchConfigData()
 	},[])
 
+
+	// country code 
     useEffect(() => {
         // Get the custom list of country codes
         const countryCodesObject = countryCodes.customList('countryCode', '[{countryCode}] {countryNameEn}: +{countryCallingCode}');
@@ -157,26 +159,28 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 					</div>
 					{/* FORM */}
 					<form className="grid grid-cols-1 gap-6" action="#" method="post">
-						<label className="block">
-							<span className="text-neutral-800 dark:text-neutral-200">
-								First Name
-							</span>
-							<Input
-								type="text"
-								placeholder="First Name"
-								className="mt-1"
-							/>
-						</label>
-						<label className="block">
-							<span className="text-neutral-800 dark:text-neutral-200">
-								Last Name
-							</span>
-							<Input
-								type="text"
-								placeholder="Last Name"
-								className="mt-1"
-							/>
-						</label>
+						<div className='flex gap-3'>
+							<label className="block">
+								<span className="text-neutral-800 dark:text-neutral-200">
+									First Name
+								</span>
+								<Input
+									type="text"
+									placeholder="First Name"
+									className="mt-1"
+								/>
+							</label>
+							<label className="block">
+								<span className="text-neutral-800 dark:text-neutral-200">
+									Last Name
+								</span>
+								<Input
+									type="text"
+									placeholder="Last Name"
+									className="mt-1"
+								/>
+							</label>
+						</div>
 						<label className="block">
 							<span className="text-neutral-800 dark:text-neutral-200">
 								Email
@@ -192,14 +196,16 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 								Phone
 							</span>
 							<div className='flex items-center gap-2'>
-								<Select className='w-[5.9rem]'>
-									<option value="+91">+91 IN</option>
-									{countryCodesList.map((country) => (
-										<option key={country.code} value={country.callingCode}>
-											{country.callingCode} {country.code}
-										</option>
-									))}
-								</Select>
+								<div className='w-[6.5rem]'>
+									<Select>
+										<option value="+91">+91 IN</option>
+										{countryCodesList.map((country) => (
+											<option key={country.code} value={country.callingCode}>
+												{country.callingCode} {country.code}
+											</option>
+										))}
+									</Select>
+								</div>
 								<Input
 									type="number"
 									placeholder="Phone"

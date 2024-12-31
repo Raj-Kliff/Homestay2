@@ -9,18 +9,18 @@ export interface CardCategory3Props {
 	taxonomy: any
 }
 
-const CardCategory3: FC<CardCategory3Props> = ({
+const CustomCard: FC<CardCategory3Props> = ({
 	className = '',
 	taxonomy,
 }) => {
-	const { count, name, href = '/', thumbnail, image, image_url } = taxonomy
+	const { name, image, image_url } = taxonomy
 	return (
-		<Link href={name} className={`nc-CardCategory3 flex flex-col ${className}`}>
+		<Link href={image} className={`nc-CardCategory3 flex flex-col ${className}`}>
 			<div
 				className={`group aspect-h-5 aspect-w-5 relative h-0 w-full flex-shrink-0 overflow-hidden rounded-2xl sm:aspect-h-6`}
 			>
 				<Image
-					src={ image_url || thumbnail || ''}
+					src={image_url || ''}
 					className="h-full w-full rounded-2xl object-cover"
 					alt="places"
 					fill
@@ -34,14 +34,14 @@ const CardCategory3: FC<CardCategory3Props> = ({
 				>
 					{name}
 				</h2>
-				<span
+				{/* <span
 					className={`mt-1.5 block text-sm text-neutral-600 dark:text-neutral-400`}
 				>
-					{count && (convertNumbThousand(count || 0))} {count && ("properties")}
-				</span>
+					{convertNumbThousand(count || 0)} properties
+				</span> */}
 			</div>
 		</Link>
 	)
 }
 
-export default CardCategory3
+export default CustomCard

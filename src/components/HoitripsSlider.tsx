@@ -146,7 +146,7 @@ const HoitripsSlider: FC<SectionSliderNewCategoriesProps> = ({
 	})
 
 	const renderCard = (item: TaxonomyType) => {
-		console.warn(item);
+		
 		switch (categoryCardType) {
 			case 'card3':
 				return <CardCategory3 taxonomy={item} />

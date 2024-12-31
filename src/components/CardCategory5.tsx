@@ -6,14 +6,14 @@ import Image from 'next/image'
 
 export interface CardCategory5Props {
 	className?: string
-	taxonomy: TaxonomyType
+	taxonomy: any
 }
 
 const CardCategory5: FC<CardCategory5Props> = ({
 	className = '',
 	taxonomy,
 }) => {
-	const { count, name, href = '/', thumbnail } = taxonomy
+	const { count, name, href = '/', thumbnail, image_url, description } = taxonomy
 	return (
 		<Link
 			href={href}
@@ -26,7 +26,7 @@ const CardCategory5: FC<CardCategory5Props> = ({
 				<Image
 					fill
 					alt=""
-					src={thumbnail || ''}
+					src={image_url || thumbnail || ''}
 					className="h-full w-full rounded-2xl object-cover"
 					sizes="(max-width: 400px) 100vw, 400px"
 				/>
@@ -38,6 +38,7 @@ const CardCategory5: FC<CardCategory5Props> = ({
 				>
 					{name}
 				</h2>
+				<p>{description}</p>
 				<span
 					className={`mt-2 block text-sm text-neutral-600 dark:text-neutral-400`}
 				>

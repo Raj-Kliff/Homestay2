@@ -18,7 +18,7 @@ export interface SectionSliderNewCategoriesProps {
 	itemClassName?: string
 	heading?: string
 	subHeading?: string
-	categories?: TaxonomyType[]
+	categories?: any
 	categoryCardType?: 'card3' | 'card4' | 'card5'
 	itemPerRow?: 4 | 5
 	sliderStyle?: 'style1' | 'style2'
@@ -145,8 +145,8 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
 		trackMouse: true,
 	})
 
-	const renderCard = (item: TaxonomyType) => {
-		console.warn(item);
+	const renderCard = (item: any) => {
+		
 		switch (categoryCardType) {
 			case 'card3':
 				return <CardCategory3 taxonomy={item} />
@@ -179,7 +179,7 @@ const SectionSliderNewCategories: FC<SectionSliderNewCategoriesProps> = ({
 							className="relative -mx-2 whitespace-nowrap xl:-mx-4"
 						>
 							<AnimatePresence initial={false} custom={direction}>
-								{categories.map((item, indx) => (
+								{categories.map((item:any, indx:any) => (
 									<motion.li
 										className={`relative inline-block px-2 xl:px-4 ${itemClassName}`}
 										custom={direction}

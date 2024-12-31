@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useState,useEffect } from 'react'
 import SectionHero from '@/app/(server-components)/SectionHero'
 import BgGlassmorphism from '@/components/BgGlassmorphism'
 import { TaxonomyType } from '@/data/types'
@@ -14,8 +15,9 @@ import SectionBecomeAnAuthor from '@/components/SectionBecomeAnAuthor'
 import SectionVideos from '@/components/SectionVideos'
 import SectionClientSay from '@/components/SectionClientSay'
 import HoitripsSlider from '@/components/HoitripsSlider'
+import axios from 'axios'
 
-const DEMO_CATS: TaxonomyType[] = [
+const DEMO_CATS: any = [
 	{
 		id: '1',
 		href: '/listing-stay-map',
@@ -148,6 +150,65 @@ const DEMO_CATS_2: TaxonomyType[] = [
 ]
 
 function PageHome() {
+	const [popularDestinations, setPopularDestinations] = useState([])
+	const [homestayType, setHomeStayType] = useState([])
+	const [testimonials, setTestimonials] = useState([])
+
+	const fetchPopularDestinations = async () => {
+			
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/top-destinations?items=`,{
+			  headers: {
+				  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+			  },
+		  })
+		  if (data.status === 'success') {
+			  setPopularDestinations(data.data.starting_cities)
+		  }
+		} catch (error) {
+		  console.error(error)
+		}
+	  }
+
+	const fetchHomestayType = async () => {
+			
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-types?items=`,{
+			  headers: {
+				  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+			  },
+		  })
+		  if (data.status === 'success') {
+			setHomeStayType(data.data.property_types)
+		  }
+		} catch (error) {
+		  console.error(error)
+		}
+	  }
+
+	  const fetchTestimonials = async () => {
+				
+			try {
+			  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/testimonials?items=`,{
+				  headers: {
+					  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+				  },
+			  })
+			  if (data.status === 'success') {
+				setTestimonials(data.data.testimonials)
+			  }
+			} catch (error) {
+			  console.error(error)
+			}
+		  }
+
+
+	useEffect(() => {
+		fetchPopularDestinations()
+		fetchHomestayType()
+		fetchTestimonials()
+	}, []) 
+
 	return (
 		<main className="nc-PageHome relative overflow-hidden">
 			{/* GLASSMOPHIN */}
@@ -158,7 +219,8 @@ function PageHome() {
 				<SectionHero className="pt-10 lg:pb-16 lg:pt-16 lg:-mb-[9rem]" />
 
 				{/* SECTION 1 */}
-				<SectionSliderNewCategories categories={DEMO_CATS} />
+				<SectionSliderNewCategories categories={popularDestinations} />
+				{/* <SectionSliderNewCategories categories={DEMO_CATS} /> */}
 
 
 				{/* <SectionOurFeatures /> */}
@@ -200,6 +262,7 @@ function PageHome() {
 					subHeading="Explore houses based on 10 types of stays"
 					categoryCardType="card5"
 					itemPerRow={5}
+					categories={homestayType}
 				/>
 
 				{/* <SectionVideos /> */}
