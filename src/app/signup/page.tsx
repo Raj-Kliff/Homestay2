@@ -44,7 +44,66 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 	const [countryCodesList, setCountryCodesList] = useState<CountryCode[]>([]);
 	const [configData, setConfigData] = useState<any>(null);
 	const [registerSocial, setRegisterSocial] = useState();
+
+	const [formData, setFormData] = useState({
+		first_name: '',
+		last_name: '',
+		email: '',
+		password: '',
+		dob: '',
+		phone: '',
+		carrier_code: '91',
+		formatted_phone:'919540225345'
+	  });
+
+	  const combineCountryCodeAndPhoneNumber = () => {
+		const { carrier_code, phone } = formData;
+
+		const cleanedPhone = phone.replace(/\D/g, '');
+
+		const formattedPhone = `${carrier_code} ${cleanedPhone}`;
+	  
+		setFormData((prevData) => ({
+		  ...prevData,
+		  formatted_phone: formattedPhone
+		}));
+	  };
+	  
+
+	  // Handle register form field changes
+	  const handleChange = (e:any) => {
+		const { name, value } = e.target;
+	  
+		setFormData((prevData) => {
+		  const updatedData = { ...prevData, [name]: value };
+	  
+		  // If the updated field is either phone or carrier_code, combine them
+		  if (name === 'phone' || name === 'carrier_code') {
+			combineCountryCodeAndPhoneNumber();
+		  }
+	  
+		  return updatedData;
+		});
+	  };
+	  
+
+	// Handle register form submission
+	const handleSubmit = async (e:any) => {
+		e.preventDefault();
 	
+		try {
+		  const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`,formData,{
+			headers: {
+				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+			},
+		});
+		  console.log('Success:', data);
+		} catch (error) {
+		  console.error('Error submitting form:', error);
+		}
+	  };
+	
+	//   handle register config 
 	const fetchConfigData = async() => {
 		try { 
 			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/register-config`, {
@@ -158,7 +217,7 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 						<div className="absolute left-0 top-1/2 w-full -translate-y-1/2 transform border border-neutral-100 dark:border-neutral-800"></div>
 					</div>
 					{/* FORM */}
-					<form className="grid grid-cols-1 gap-6" action="#" method="post">
+					<form className="grid grid-cols-1 gap-6" action="#" method="post" onSubmit={handleSubmit}>
 						<div className='flex gap-3'>
 							<label className="block">
 								<span className="text-neutral-800 dark:text-neutral-200">
@@ -168,6 +227,9 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 									type="text"
 									placeholder="First Name"
 									className="mt-1"
+									name="first_name"
+									value={formData.first_name}
+									onChange={handleChange}
 								/>
 							</label>
 							<label className="block">
@@ -178,6 +240,9 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 									type="text"
 									placeholder="Last Name"
 									className="mt-1"
+									name='last_name'
+									value={formData.last_name}
+									onChange={handleChange}
 								/>
 							</label>
 						</div>
@@ -189,6 +254,9 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 								type="email"
 								placeholder="Email"
 								className="mt-1"
+								name='email'
+								value={formData.email}
+								onChange={handleChange}
 							/>
 						</label>
 						<label className="block">
@@ -197,7 +265,7 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 							</span>
 							<div className='flex items-center gap-2'>
 								<div className='w-[6.5rem]'>
-									<Select>
+									<Select name="carrier_code" onChange={handleChange} value={formData.carrier_code}>
 										<option value="+91">+91 IN</option>
 										{countryCodesList.map((country) => (
 											<option key={country.code} value={country.callingCode}>
@@ -210,6 +278,9 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 									type="number"
 									placeholder="Phone"
 									className="mt-1 w-full flex-1"
+									name='phone'
+									value={formData.phone}
+									onChange={handleChange}
 								/>
 							</div>
 						</label>
@@ -217,13 +288,24 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 							<span className="flex items-center justify-between text-neutral-800 dark:text-neutral-200">
 								Password
 							</span>
-							<Input type="password" className="mt-1" />
+							<Input type="password"
+							 className="mt-1"
+							 name="password"
+							 value={formData.password}
+							 onChange={handleChange}
+							  />
 						</label>
 						<label className="block">
 							<span className="flex items-center justify-between text-neutral-800 dark:text-neutral-200">
 								Birthday
 							</span>
-							<Input type="date" className="mt-1" />
+							<Input 
+							type="date" 
+							className="mt-1"
+							name='dob'
+							value={formData.dob}
+							onChange={handleChange}
+							 />
 						</label>
 						{
 							configData?.data?.reCaptchaEnable && (

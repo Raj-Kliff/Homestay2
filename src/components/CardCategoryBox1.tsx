@@ -7,14 +7,14 @@ import Image from 'next/image'
 
 export interface CardCategoryBox1Props {
 	className?: string
-	taxonomy: TaxonomyType
+	taxonomy: any
 }
 
 const CardCategoryBox1: FC<CardCategoryBox1Props> = ({
 	className = '',
 	taxonomy,
 }) => {
-	const { count, name, thumbnail, href = '/' } = taxonomy
+	const { count, name, thumbnail, href = '/',city,image } = taxonomy
 	return (
 		<Link
 			href={href}
@@ -28,7 +28,7 @@ const CardCategoryBox1: FC<CardCategoryBox1Props> = ({
 
 			<div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-full">
 				<Image
-					src={thumbnail || ''}
+					src={image || thumbnail || ''}
 					fill
 					alt=""
 					sizes="(max-width: 400px) 100vw, 400px"
@@ -36,7 +36,7 @@ const CardCategoryBox1: FC<CardCategoryBox1Props> = ({
 			</div>
 			<div className="ml-4 flex-grow overflow-hidden">
 				<h2 className="text-base font-medium">
-					<span className="line-clamp-1">{name}</span>
+					<span className="line-clamp-1">{city}</span>
 				</h2>
 				<span
 					className={`mt-2 block text-sm text-neutral-500 dark:text-neutral-400`}

@@ -153,11 +153,14 @@ function PageHome() {
 	const [popularDestinations, setPopularDestinations] = useState([])
 	const [homestayType, setHomeStayType] = useState([])
 	const [testimonials, setTestimonials] = useState([])
+	const [nearbyPlaces, setNearbyPlaces] = useState([])
+	const [staysSuggestion, setStaysSuggestion] = useState([])
+	const [featuredPlaces, setFeaturedPlaces] = useState([])
 
 	const fetchPopularDestinations = async () => {
 			
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/top-destinations?items=`,{
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/top-destinations?items=10`,{
 			  headers: {
 				  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
 			  },
@@ -186,28 +189,80 @@ function PageHome() {
 		}
 	  }
 
-	  const fetchTestimonials = async () => {
+	const fetchTestimonials = async () => {
+			
+		try {
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/testimonials?items=`,{
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+				},
+			})
+			if (data.status === 'success') {
+			setTestimonials(data.data.testimonials)
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	const fetchExploreNearBy = async () => {
+			
+		try {
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=28.7041&longitude=77.1025&radius=200&items=10`,{
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+				},
+			})
+			if (data.status === 'success') {
+			setNearbyPlaces(data.data.places)
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	const fetchStaysSuggestion = async () => {
+			
+		try {
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/recommended-properties?items`,{
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+				},
+			})
+			if (data.status === 'success') {
+			setStaysSuggestion(data.data.properties)
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	const fetchFeaturedPlaces = async () => {
 				
 			try {
-			  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/testimonials?items=`,{
+			  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/featured-properties?items&type_items`,{
 				  headers: {
 					  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
 				  },
 			  })
 			  if (data.status === 'success') {
-				setTestimonials(data.data.testimonials)
+				setFeaturedPlaces(data.data.properties)
 			  }
 			} catch (error) {
 			  console.error(error)
 			}
-		  }
+	}
 
 
 	useEffect(() => {
 		fetchPopularDestinations()
 		fetchHomestayType()
 		fetchTestimonials()
+		fetchExploreNearBy()
+		fetchStaysSuggestion()
+		fetchFeaturedPlaces()
 	}, []) 
+
 
 	return (
 		<main className="nc-PageHome relative overflow-hidden">
@@ -225,7 +280,8 @@ function PageHome() {
 
 				{/* <SectionOurFeatures /> */}
 
-				<SectionGridFeaturePlaces cardType="card2" />
+				{/* <SectionGridFeaturePlaces cardType="card2" stayListings={featuredPlaces} /> */}
+				<SectionGridFeaturePlaces cardType="card2"  />
 
 				{/* <SectionHowItWork /> */}
 
@@ -234,7 +290,7 @@ function PageHome() {
 				<div className="relative pt-1 pb-8" style={{marginTop:'2rem'}}>
 					<BackgroundSection className="bg-orange-50 dark:bg-black/20" />
 					<SectionSliderNewCategories
-						categories={DEMO_CATS_2}
+						categories={staysSuggestion}
 						categoryCardType="card4"
 						itemPerRow={4}
 						heading="Suggestions for Stays"
@@ -250,7 +306,7 @@ function PageHome() {
 					<SectionGridAuthorBox />
 				</div> */}
 
-				<SectionGridCategoryBox />
+				<SectionGridCategoryBox categories={nearbyPlaces} />
 
 				<div className="relative py-8" style={{marginTop:'4rem'}}>
 					<BackgroundSection />

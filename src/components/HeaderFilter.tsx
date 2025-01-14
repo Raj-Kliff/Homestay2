@@ -12,6 +12,7 @@ export interface HeaderFilterProps {
   tabs: string[];
   heading: ReactNode;
   subHeading?: ReactNode;
+  setCurrentActiveTab: any;
   onClickTab?: (item: string) => void;
 }
 
@@ -20,6 +21,7 @@ const HeaderFilter: FC<HeaderFilterProps> = ({
   tabs,
   subHeading = "",
   heading = "Latest Articles 🎈",
+  setCurrentActiveTab = "",
   onClickTab = () => {},
 }) => {
   const [tabActiveState, setTabActiveState] = useState(tabActive);
@@ -31,6 +33,7 @@ const HeaderFilter: FC<HeaderFilterProps> = ({
   const handleClickTab = (item: string) => {
     onClickTab(item);
     setTabActiveState(item);
+    setCurrentActiveTab(item)
   };
 
   return (

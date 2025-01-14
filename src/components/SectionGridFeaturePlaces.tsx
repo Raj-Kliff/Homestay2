@@ -1,4 +1,5 @@
-import React, { FC, ReactNode } from 'react'
+'use client'
+import React, { FC, ReactNode, useState } from 'react'
 import { DEMO_STAY_LISTINGS } from '@/data/listings'
 import { StayDataType } from '@/data/types'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -11,7 +12,7 @@ const DEMO_DATA: StayDataType[] = DEMO_STAY_LISTINGS.filter((_, i) => i < 8)
 
 //
 export interface SectionGridFeaturePlacesProps {
-	stayListings?: StayDataType[]
+	stayListings?: any //StayDataType[]
 	gridClass?: string
 	heading?: ReactNode
 	subHeading?: ReactNode
@@ -27,10 +28,19 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	subHeading = 'Popular places to stay that Homestays recommends for you',
 	headingIsCenter,
 	// tabs = ['New York', 'Tokyo', 'Paris', 'London'],
-	tabs = ['Homestays', 'Farmstay', 'Second Home', 'Workstation'],
+	tabs = ['All','Homestays', 'Farmstay', 'Second Home', 'Workstation'],
 	cardType = 'card2',
 }) => {
-	const renderCard = (stay: StayDataType) => {
+
+	const [currentActiveTab, setCurrentActiveTab] = useState('All')
+
+	function filterListingByTab(tab:any) {
+		return stayListings.filter((item:any) => item.name === tab);
+	}
+
+	const filteredProducts = currentActiveTab != "All" ? filterListingByTab(currentActiveTab) : stayListings;
+
+	const renderCard = (stay: any) => {
 		let CardName = StayCard
 		switch (cardType) {
 			case 'card1':
@@ -50,15 +60,18 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	return (
 		<div className="nc-SectionGridFeaturePlaces relative" style={{marginTop:'4rem'}}>
 			<HeaderFilter
-				tabActive={'Homestays'}
+				tabActive={'All'}
 				subHeading={subHeading}
 				tabs={tabs}
 				heading={heading}
+				setCurrentActiveTab={setCurrentActiveTab}
 			/>
 			<div
 				className={`grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4 ${gridClass}`}
 			>
-				{stayListings.map((stay) => renderCard(stay))}
+				{/* {filteredProducts.map((stay:any) => renderCard(stay))} */}
+				{stayListings.map((stay:any) => renderCard(stay))}
+
 			</div>
 			{/* <div className="mt-16 flex items-center justify-center">
 				<ButtonPrimary loading>Show me more</ButtonPrimary>

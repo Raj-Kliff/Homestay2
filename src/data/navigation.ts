@@ -429,7 +429,7 @@ export const NAVIGATION_DEMO: NavItemType[] = [
 	},
 	{
 		id: ncNanoId(),
-		href: '/listing-stay',
+		href: '/listing-experiences-detail',
 		// name: 'Other pages',
 		name: 'HOI Trips',
 		// type: 'dropdown',

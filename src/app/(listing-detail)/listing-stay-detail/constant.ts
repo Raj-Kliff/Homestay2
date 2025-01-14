@@ -71,3 +71,35 @@ export const imageGallery: ListingGalleryImage[] = [...PHOTOS].map(
 		}
 	},
 )
+
+
+export const Activities_demos: {
+	name: string
+}[] = [
+	{ name: 'Bird Watching'},
+	{ name: 'Reading'},
+	{ name: 'City/Village Walk'},
+	{ name: 'Forest Walk'},
+	{ name: 'Yoga & Meditation'},
+	{ name: 'Adventure Sports'},
+]
+
+export const Local_attraction_demos: {
+	name: string
+}[] = [
+	{ name: 'Ghandowaa Village (1.8km)'},
+	{ name: 'Dev Barnag Temple (2.5km)'},
+	{ name: 'Nau Mata Bhagwati'},
+	{ name: 'Temple (14km)'},
+	{ name: 'Panarsa (28km)'},
+]
+
+export const Excursions_attraction_demos: {
+	name: string
+}[] = [
+	{ name: 'Aut (35km)'},
+	{ name: 'Banjar (48km)'},
+	{ name: 'Pandoh (56km)'},
+	{ name: 'Jibhi (65km)'},
+	{ name: 'Mandi (70km)'},
+]

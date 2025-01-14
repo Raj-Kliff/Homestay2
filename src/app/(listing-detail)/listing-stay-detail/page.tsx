@@ -26,7 +26,7 @@ import Input from '@/shared/Input'
 import LikeSaveBtns from '@/components/LikeSaveBtns'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { Amenities_demos, PHOTOS } from './constant'
+import { Amenities_demos, PHOTOS, Activities_demos, Local_attraction_demos, Excursions_attraction_demos } from './constant'
 import StayDatesRangeInput from './StayDatesRangeInput'
 import GuestsInput from './GuestsInput'
 import SectionDateRange from '../SectionDateRange'
@@ -58,14 +58,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		return (
 			<div className="listingSection__wrap !space-y-6">
 				{/* 1 */}
-				<div className="flex items-center justify-between">
+				{/* <div className="flex items-center justify-between">
 					<Badge name="Wooden house" />
 					<LikeSaveBtns />
-				</div>
+				</div> */}
 
 				{/* 2 */}
 				<h2 className="text-2xl font-semibold sm:text-3xl lg:text-4xl">
-					Beach House in Collingwood
+					Snowy Mist Homestay-Aut
 				</h2>
 
 				{/* 3 */}
@@ -74,7 +74,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					<span>·</span>
 					<div className="flex items-center">
 						<MapPinIcon className="h-5 w-5" />
-						<span className="ml-1"> Goa, Delhi</span>
+						<span className="ml-1">  Village Shikari, Panarsa Khanahal Road Aut.</span>
 					</div>
 				</div>
 
@@ -84,7 +84,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					<span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
 						Hosted by{' '}
 						<span className="font-medium text-neutral-900 dark:text-neutral-200">
-							Kevin Francis
+							Tek Singh
 						</span>
 					</span>
 				</div>
@@ -94,10 +94,45 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* 6 */}
 				<div className="flex items-center justify-between space-x-8 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start xl:space-x-12">
+				<div className="flex items-center space-x-3">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							width={24}
+							height={24}
+							color={'currentColor'}
+							fill={'none'}
+							className="h-6 w-6"
+						>
+							<path
+								d="M3 22H21"
+								stroke="currentColor"
+								strokeWidth="1.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							/>
+							<path
+								d="M4 22V6C4 2.69067 4.78933 2 8.57143 2H15.4286C19.2107 2 20 2.69067 20 6V22"
+								stroke="currentColor"
+								strokeWidth="1.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							/>
+							<path
+								d="M13.92 11.7592V9.85424C13.92 8.8324 13.0604 8.00403 12 8.00403C10.9396 8.00403 10.08 8.8324 10.08 9.85424V11.7592M15 14.0843C15 15.6952 13.6462 17.004 12 17.004C10.3538 17.004 9 15.6952 9 14.0843C9 12.374 10.3538 11.0739 12 11.0739C13.6462 11.0739 15 12.374 15 14.0843Z"
+								stroke="currentColor"
+								strokeWidth="1.5"
+								strokeLinecap="round"
+							/>
+						</svg>
+						<span className=" ">
+							<span className="hidden sm:inline-block">No. of rooms: </span> 4
+						</span>
+					</div>
 					<div className="flex items-center space-x-3">
 						<UsersIcon className="h-6 w-6" />
 						<span className="">
-							6 <span className="hidden sm:inline-block">guests</span>
+							<span className="hidden sm:inline-block">Total Capacity:</span> 6
 						</span>
 					</div>
 					<div className="flex items-center space-x-3">
@@ -187,41 +222,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 							3 <span className="hidden sm:inline-block">baths</span>
 						</span>
 					</div>
-					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							width={24}
-							height={24}
-							color={'currentColor'}
-							fill={'none'}
-							className="h-6 w-6"
-						>
-							<path
-								d="M3 22H21"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M4 22V6C4 2.69067 4.78933 2 8.57143 2H15.4286C19.2107 2 20 2.69067 20 6V22"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M13.92 11.7592V9.85424C13.92 8.8324 13.0604 8.00403 12 8.00403C10.9396 8.00403 10.08 8.8324 10.08 9.85424V11.7592M15 14.0843C15 15.6952 13.6462 17.004 12 17.004C10.3538 17.004 9 15.6952 9 14.0843C9 12.374 10.3538 11.0739 12 11.0739C13.6462 11.0739 15 12.374 15 14.0843Z"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-						</svg>
-						<span className=" ">
-							2 <span className="hidden sm:inline-block">bedrooms</span>
-						</span>
-					</div>
+					
 				</div>
 			</div>
 		)
@@ -231,35 +232,28 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		return (
 			<div className="listingSection__wrap">
 				<h2 className="text-2xl font-semibold">Stay information</h2>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+				{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 				<div className="text-neutral-600 dark:text-neutral-300">
 					<span>
-						Providing lake views, The Symphony 9 Tam Coc in Ninh Binh provides
-						accommodation, an outdoor swimming pool, a bar, a shared lounge, a
-						garden and barbecue facilities. Complimentary WiFi is provided.
+						This homestay is located in a tiny village Shikari in Himachal known for its lush green valley and the snow capped mountain views. Parashar lake is just 7 km from here. 
+						This place is ideal if you want to experience local pahadi cuisine, festivals, art and craft, folk music &amp; dance, and ancient temples.&nbsp;
 					</span>
 					<br />
 					<br />
 					<span>
-						There is a private bathroom with bidet in all units, along with a
-						hairdryer and free toiletries.
-					</span>
-					<br /> <br />
-					<span>
-						The Symphony 9 Tam Coc offers a terrace. Both a bicycle rental
-						service and a car rental service are available at the accommodation,
-						while cycling can be enjoyed nearby.
+					This charming homestay is on top of the mountain that&nbsp; spans over the ground floor which&nbsp; provides four spacious&nbsp; rooms with attached &amp; common bathrooms. All rooms are available at the ground floor with two classic rooms with a common bathroom (outside the room) &amp; two family rooms with an attached bathroom. Rooms are equipped with a traditional outlook with amenities like wooden almirah &amp; window sitting . The focal point of the rooms are the traditional style windows covering the landscape of the high rise&nbsp; lush green valley called Deodar tree, the amazing landscape view is definitely going to escape you from your busy schedule to the less formal life of Pahadi &amp; during winter it is all&nbsp; surrounded with the snow capped huge mountains of deodar tree will drive you through the fantasy world of harry potter. 
 					</span>
 				</div>
 			</div>
 		)
 	}
 
+	// amenities 
 	const renderSection3 = () => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
-					<h2 className="text-2xl font-semibold">Amenities </h2>
+					<h2 className="text-2xl font-semibold">Facilities </h2>
 					<span className="mt-2 block text-neutral-500 dark:text-neutral-400">
 						{` About the property's amenities and services`}
 					</span>
@@ -405,9 +399,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* desc */}
 				<span className="block text-neutral-600 dark:text-neutral-300">
-					Providing lake views, The Symphony 9 Tam Coc in Ninh Binh provides
-					accommodation, an outdoor swimming pool, a bar, a shared lounge, a
-					garden and barbecue facilities...
+				You will be hosted by Tek Singh  who is the owner of this house and running this homestay since 2021. He lives 500m from the homestay & he is full time available there to ensure a warm and welcoming stay for the guests. 
 				</span>
 
 				{/* info */}
@@ -520,10 +512,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			<div className="listingSection__wrap">
 				{/* HEADING */}
 				<div>
-					<h2 className="text-2xl font-semibold">Location</h2>
-					<span className="mt-2 block text-neutral-500 dark:text-neutral-400">
-						San Diego, CA, United States of America (SAN-San Diego Intl.)
-					</span>
+					<h2 className="text-2xl font-semibold">How to reach</h2>
+					<div className="text-neutral-600 dark:text-neutral-300">
+						<span className="mt-5 block text-neutral-500 dark:text-neutral-400">
+							If you are coming from Delhi towards Manali, after around 5 kms from Aut take Panarsa-Khanahal Road. The homestay is about 28km on Nau Mata Bhagwati road till homestay. The nearest airport is in Bhuntar which is 42 km but has limited flights. The best way to reach is via Delhi. Take the Himachal Tourism (HPTDC) overnight Volvo bus to Kullu. Get off at Aut from where you can take a taxi for the homestay.&nbsp;
+						</span>
+					</div>
 				</div>
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
@@ -598,6 +592,109 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
+	const renderSection9 = () => {
+		return (
+			<div className="listingSection__wrap">
+				<h2 className="text-2xl font-semibold">Child Policy</h2>
+
+				{/* CONTENT */}
+				<div>
+					<div className="prose sm:prose">
+						<ul className="mt-3 space-y-2 text-neutral-500 dark:text-neutral-400">
+							<li>
+								Up to 6 years: Complimentary (no extra bed)
+							</li>
+							<li>7-12 years.: 50% (with extra bed)</li>
+						</ul>
+					</div>
+					<br />
+					<i className="block text-neutral-600 dark:text-neutral-300">
+						What you pay for a homestay, brings a direct socio-economic benefit to locals. Be proud by not asking for a discount.
+					</i>
+				</div>
+			</div>
+		)
+	}
+
+	const renderSection10 = () => {
+		return (
+			<div className="listingSection__wrap">
+				<h2 className="text-2xl font-semibold">Foods</h2>
+
+				{/* CONTENT */}
+				<div>
+					<span className="block text-neutral-600 dark:text-neutral-300">
+						Host serves simple yet delicious traditional homemade food. You can enjoy mandiyali dham, kullvi siddu, makke ki roti &amp; sarason ka saag, patrodu, Himachali rajmah with rice etc. Non-vegetarian dish can also be prepared on prior notice of two to three hours.&nbsp;
+					</span>
+				</div>
+			</div>
+		)
+	}
+
+	const renderSection11 = () => {
+		return (
+			<div className="listingSection__wrap">
+				<div>
+					<h2 className="text-2xl font-semibold">Activities </h2>
+				</div>
+				{/* 6 */}
+				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
+					{Activities_demos.filter((_, i) => i < 12).map((item) => (
+						<div key={item.name} className="flex items-center space-x-3">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+							<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+							</svg>
+							<span className=" ">{item.name}</span>
+						</div>
+					))}
+				</div>
+			</div>
+		)
+	}
+
+	const renderSection12 = () => {
+		return (
+			<div className="listingSection__wrap">
+				<div>
+					<h2 className="text-2xl font-semibold">Local Attractions </h2>
+				</div>
+				{/* 6 */}
+				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
+					{Local_attraction_demos.filter((_, i) => i < 12).map((item) => (
+						<div key={item.name} className="flex items-center space-x-3">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+							<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+							</svg>
+							<span className=" ">{item.name}</span>
+						</div>
+					))}
+				</div>
+			</div>
+		)
+	}
+
+
+	const renderSection13 = () => {
+		return (
+			<div className="listingSection__wrap">
+				<div>
+					<h2 className="text-2xl font-semibold">Excursions </h2>
+				</div>
+				{/* 6 */}
+				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
+					{Excursions_attraction_demos.filter((_, i) => i < 12).map((item) => (
+						<div key={item.name} className="flex items-center space-x-3">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+							<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+							</svg>
+							<span className=" ">{item.name}</span>
+						</div>
+					))}
+				</div>
+			</div>
+		)
+	}
+
 	const renderSidebar = () => {
 		return (
 			<div className="listingSectionSidebar__wrap shadow-xl">
@@ -645,7 +742,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	return (
 		<div className="nc-ListingStayDetailPage">
 			{/*  HEADER */}
-			<header className="rounded-md sm:rounded-xl">
+			<header className="rounded-md sm:rounded-xl mt-3">
 				<div className="relative grid grid-cols-3 gap-1 sm:grid-cols-4 sm:gap-2">
 					<div
 						className="relative col-span-2 row-span-3 cursor-pointer overflow-hidden rounded-md sm:row-span-2 sm:rounded-xl"
@@ -703,12 +800,17 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1()}
 					{renderSection2()}
+					{renderSection7()}
+					{renderSection9()}
 					{renderSection3()}
 					{/* {renderSection4()} */}
 					<SectionDateRange />
+					{renderSection10()}
+					{renderSection11()}
+					{renderSection12()}
+					{renderSection13()}
 					{renderSection5()}
 					{renderSection6()}
-					{renderSection7()}
 					{renderSection8()}
 				</div>
 

@@ -14,17 +14,16 @@ const PageAddListing1: FC<PageAddListing1Props> = () => {
 			<div className="space-y-0" style={{marginTop:'1rem'}}>
 				{/* ITEM */}
 				<FormItem
-					label="Choose a property type"
+					label="Type of House"
 					desc="Hotel: Professional hospitality businesses that usually have a unique style or theme defining their brand and decor"
 				>
 					<Select>
-						<option value="Hotel">Hotel</option>
-						<option value="Cottage">Cottage</option>
-						<option value="Villa">Villa</option>
-						<option value="Cabin">Cabin</option>
-						<option value="Farm stay">Farm stay</option>
-						<option value="Houseboat">Houseboat</option>
-						<option value="Lighthouse">Lighthouse</option>
+						<option value="Homestay">Homestay - A private house offering accommodation to guests, where the host is staying at the property.</option>
+						<option value="Farmstay">Farmstay - Independent house within a working farm with lots of green open spaces.</option>
+						<option value="Villa">Independent Villa/ Cottage - A standalone property with caretaker that guest can book as entire home or individual rooms.
+						</option>
+						<option value="Apartment">Apartment - A whole floor to the guest.
+						</option>
 					</Select>
 				</FormItem>
 				<FormItem
@@ -33,7 +32,7 @@ const PageAddListing1: FC<PageAddListing1Props> = () => {
 				>
 					<Input placeholder="Places name" />
 				</FormItem>
-				<FormItem
+				{/* <FormItem
 					label="Rental form"
 					desc="Entire place: Guests have the whole place to themselves—there's a private entrance and no shared spaces. A bedroom, bathroom, and kitchen are usually included."
 				>
@@ -42,7 +41,7 @@ const PageAddListing1: FC<PageAddListing1Props> = () => {
 						<option value="Private room">Private room</option>
 						<option value="Share room">Share room</option>
 					</Select>
-				</FormItem>
+				</FormItem> */}
 			</div>
 		</>
 	)

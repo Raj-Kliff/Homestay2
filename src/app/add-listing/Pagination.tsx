@@ -23,9 +23,15 @@ const Pagination = () => {
 	const nextBtnText = index > 9 ? 'Publish listing' : 'Continue'
 
 	return (
-		<div className="flex justify-end space-x-5">
-			<ButtonSecondary href={backtHref}>Go back</ButtonSecondary>
-			<ButtonPrimary href={nextHref}>{nextBtnText || 'Continue'}</ButtonPrimary>
+		<div className='flex justify-between items-center flex-wrap'>
+			<div className="flex justify-end space-x-5">
+				<ButtonSecondary >Skip</ButtonSecondary>
+				<ButtonPrimary>Save and exit</ButtonPrimary>
+			</div>
+			<div className="flex justify-start space-x-5">
+				<ButtonSecondary href={backtHref}>Go back</ButtonSecondary>
+				<ButtonPrimary href={nextHref}>{nextBtnText || 'Continue'}</ButtonPrimary>
+			</div>
 		</div>
 	)
 }

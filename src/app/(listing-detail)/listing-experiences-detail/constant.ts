@@ -22,11 +22,18 @@ export const PHOTOS: string[] = [
 ];
 
 export const includes_demo = [
-  { name: "Set Menu Lunch on boat" },
-  { name: "Express Bus From Hanoi To Halong and Return" },
-  { name: "Mineral Water On Express Bus" },
-  { name: "Kayak or Bamboo Boat. Life Jacket." },
-  { name: "Halong Bay Entrance Ticket" },
+  { name: "5 Night/6 Day Accommodation " },
+  { name: "Breakfast & Dinner" },
+  { name: "Private car with a trained local driver" },
+  { name: "Required Permits and Permissions" },
+  { name: "Applicable Taxes" },
+];
+
+export const excludes_demo = [
+  { name: "Expenses incurred due to anything beyond our control like natural disaster, political insurgencies etc." },
+  { name: "Monuments Entrances Fee" },
+  { name: "Personal expenses like laundry, tips to the staff and driver etc. Any extra meal, soft drink or beverage ordered." },
+  { name: "Anything not mentioned in inclusions" },
 ];
 
 export const imageGallery: ListingGalleryImage[] = [...PHOTOS].map(
