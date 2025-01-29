@@ -19,7 +19,7 @@ import SocialsList from '@/shared/SocialsList'
 export interface AuthorPageProps {}
 
 const AuthorPage: FC<AuthorPageProps> = ({}) => {
-	let [categories] = useState(['Stays', 'Experiences', 'Car for rent'])
+	let [categories] = useState(['Stays', 'Experiences'])
 
 	const renderSidebar = () => {
 		return (

@@ -16,6 +16,9 @@ import SectionVideos from '@/components/SectionVideos'
 import SectionClientSay from '@/components/SectionClientSay'
 import HoitripsSlider from '@/components/HoitripsSlider'
 import axios from 'axios'
+import SkeletonLoader from '@/components/skeleton/SkeletonLoader'
+import SkeletonLoader2 from '@/components/skeleton/SkeletonLoader2'
+import SkeletonLoader3 from '@/components/skeleton/SkeletonLoader3'
 
 const DEMO_CATS: any = [
 	{
@@ -150,186 +153,184 @@ const DEMO_CATS_2: TaxonomyType[] = [
 ]
 
 function PageHome() {
-	const [popularDestinations, setPopularDestinations] = useState([])
-	const [homestayType, setHomeStayType] = useState([])
-	const [testimonials, setTestimonials] = useState([])
-	const [nearbyPlaces, setNearbyPlaces] = useState([])
-	const [staysSuggestion, setStaysSuggestion] = useState([])
-	const [featuredPlaces, setFeaturedPlaces] = useState([])
-
+	const [popularDestinations, setPopularDestinations] = useState([]);
+	const [homestayType, setHomeStayType] = useState([]);
+	const [testimonials, setTestimonials] = useState([]);
+	const [nearbyPlaces, setNearbyPlaces] = useState([]);
+	const [staysSuggestion, setStaysSuggestion] = useState([]);
+	const [featuredPlaces, setFeaturedPlaces] = useState([]);
+	const [isLoading, setIsLoading] = useState(true); 
+  
 	const fetchPopularDestinations = async () => {
-			
-		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/top-destinations?items=10`,{
-			  headers: {
-				  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-			  },
-		  })
-		  if (data.status === 'success') {
-			  setPopularDestinations(data.data.starting_cities)
-		  }
-		} catch (error) {
-		  console.error(error)
+	  try {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/top-destinations?items=10`, {
+		  headers: {
+			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		  },
+		});
+		if (data.status === 'success') {
+		  setPopularDestinations(data.data.starting_cities);
 		}
+	  } catch (error) {
+		console.error(error);
 	  }
-
+	};
+  
 	const fetchHomestayType = async () => {
-			
-		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-types?items=`,{
-			  headers: {
-				  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-			  },
-		  })
-		  if (data.status === 'success') {
-			setHomeStayType(data.data.property_types)
-		  }
-		} catch (error) {
-		  console.error(error)
+	  try {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-types?items=`, {
+		  headers: {
+			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		  },
+		});
+		if (data.status === 'success') {
+		  setHomeStayType(data.data.property_types);
 		}
+	  } catch (error) {
+		console.error(error);
 	  }
-
+	};
+  
 	const fetchTestimonials = async () => {
-			
-		try {
-			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/testimonials?items=`,{
-				headers: {
-					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-				},
-			})
-			if (data.status === 'success') {
-			setTestimonials(data.data.testimonials)
-			}
-		} catch (error) {
-			console.error(error)
+	  try {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/testimonials?items=`, {
+		  headers: {
+			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		  },
+		});
+		if (data.status === 'success') {
+		  setTestimonials(data.data.testimonials);
 		}
-	}
-
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
 	const fetchExploreNearBy = async () => {
-			
-		try {
-			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=28.7041&longitude=77.1025&radius=200&items=10`,{
-				headers: {
-					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-				},
-			})
-			if (data.status === 'success') {
-			setNearbyPlaces(data.data.places)
-			}
-		} catch (error) {
-			console.error(error)
+	  try {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=28.7041&longitude=77.1025&radius=200&items=10`, {
+		  headers: {
+			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		  },
+		});
+		if (data.status === 'success') {
+		  setNearbyPlaces(data.data.places);
 		}
-	}
-
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
 	const fetchStaysSuggestion = async () => {
-			
-		try {
-			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/recommended-properties?items`,{
-				headers: {
-					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-				},
-			})
-			if (data.status === 'success') {
-			setStaysSuggestion(data.data.properties)
-			}
-		} catch (error) {
-			console.error(error)
+	  try {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/recommended-properties?items`, {
+		  headers: {
+			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		  },
+		});
+		if (data.status === 'success') {
+		  setStaysSuggestion(data.data.properties);
 		}
-	}
-
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
 	const fetchFeaturedPlaces = async () => {
-				
-			try {
-			  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/featured-properties?items&type_items`,{
-				  headers: {
-					  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-				  },
-			  })
-			  if (data.status === 'success') {
-				setFeaturedPlaces(data.data.properties)
-			  }
-			} catch (error) {
-			  console.error(error)
-			}
-	}
-
-
+	  try {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/featured-properties?items&type_items`, {
+		  headers: {
+			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		  },
+		});
+		if (data.status === 'success') {
+		  setFeaturedPlaces(data.data.properties);
+		}
+	  } catch (error) {
+		console.error(error);
+	  }
+	};
+  
+	// Fetch all data and set isLoading to false when done
 	useEffect(() => {
-		fetchPopularDestinations()
-		fetchHomestayType()
-		fetchTestimonials()
-		fetchExploreNearBy()
-		fetchStaysSuggestion()
-		fetchFeaturedPlaces()
-	}, []) 
-
-
+	  const fetchData = async () => {
+		await Promise.all([
+		  fetchPopularDestinations(),
+		  fetchHomestayType(),
+		  fetchTestimonials(),
+		  fetchExploreNearBy(),
+		  fetchStaysSuggestion(),
+		  fetchFeaturedPlaces(),
+		]);
+		setIsLoading(false);
+	  };
+	  fetchData();
+	}, []);
+  
 	return (
-		<main className="nc-PageHome relative overflow-hidden">
-			{/* GLASSMOPHIN */}
-			<BgGlassmorphism />
-
-			<div className="container relative mb-24 space-y-24 lg:mb-28 lg:space-y-28">
-				{/* SECTION HERO */}
-				<SectionHero className="pt-10 lg:pb-16 lg:pt-16 lg:-mb-[9rem]" />
-
-				{/* SECTION 1 */}
-				<SectionSliderNewCategories categories={popularDestinations} />
-				{/* <SectionSliderNewCategories categories={DEMO_CATS} /> */}
-
-
-				{/* <SectionOurFeatures /> */}
-
-				{/* <SectionGridFeaturePlaces cardType="card2" stayListings={featuredPlaces} /> */}
-				<SectionGridFeaturePlaces cardType="card2"  />
-
-				{/* <SectionHowItWork /> */}
-
-				<HoitripsSlider/>
-
-				<div className="relative pt-1 pb-8" style={{marginTop:'2rem'}}>
-					<BackgroundSection className="bg-orange-50 dark:bg-black/20" />
-					<SectionSliderNewCategories
-						categories={staysSuggestion}
-						categoryCardType="card4"
-						itemPerRow={4}
-						heading="Suggestions for Stays"
-						subHeading="Popular places to stay that Homestays recommends"
-						sliderStyle="style2"
-					/>
-				</div>
-
-				{/* <SectionSubscribe2 /> */}
-
-				{/* <div className="relative py-16">
-					<BackgroundSection className="bg-orange-50 dark:bg-black dark:bg-opacity-20" />
-					<SectionGridAuthorBox />
-				</div> */}
-
-				<SectionGridCategoryBox categories={nearbyPlaces} />
-
-				<div className="relative py-8" style={{marginTop:'4rem'}}>
-					<BackgroundSection />
-					<SectionBecomeAnAuthor />
-				</div>
-
-				<SectionSliderNewCategories
-					heading="Explore more types of stays"
-					subHeading="Explore houses based on 10 types of stays"
-					categoryCardType="card5"
-					itemPerRow={5}
-					categories={homestayType}
-				/>
-
-				{/* <SectionVideos /> */}
-
-				<div className="relative pt-8 pb-0" style={{marginTop:'2rem'}}>
-					<BackgroundSection />
-					<SectionClientSay />
-				</div>
+	  <main className="nc-PageHome relative overflow-hidden">
+		{/* GLASSMOPHIN */}
+		<BgGlassmorphism />
+  
+		<div className="container relative mb-24 space-y-24 lg:mb-28 lg:space-y-28">
+		  {/* SECTION HERO */}
+		  {isLoading ? (
+			<SkeletonLoader className="h-[500px] mt-3 rounded-lg" />
+		  ) : (
+			<SectionHero className="pt-10 lg:pb-16 lg:pt-16 lg:-mb-[9rem]" />
+		  )}
+  
+		  {/* SECTION 1 */}
+		  {isLoading ? (
+			<SkeletonLoader2 className="h-[300px] rounded-lg" />
+		  ) : (
+			<SectionSliderNewCategories categories={popularDestinations} />
+		  )}
+  
+		  {/* Featured Places */}
+		  {isLoading ? (
+			<SkeletonLoader3 className="h-[300px] rounded-lg" />
+		  ) : (
+			<SectionGridFeaturePlaces cardType="card2" stayListings={featuredPlaces} />
+		  )}
+  
+		  {/* Stays Suggestions */}
+		  <div className="relative pt-1 pb-8" style={{ marginTop: '2rem' }}>
+			<BackgroundSection className="bg-orange-50 dark:bg-black/20" />
+			{isLoading ? (
+			  <SkeletonLoader2 className="h-[400px] rounded-lg" />
+			) : (
+			  <SectionSliderNewCategories
+				categories={staysSuggestion}
+				categoryCardType="card4"
+				itemPerRow={4}
+				heading="Suggestions for Stays"
+				subHeading="Popular places to stay that Homestays recommends"
+				sliderStyle="style2"
+			  />
+			)}
+		  </div>
+  
+		  {/* Nearby Places */}
+		  {isLoading ? (
+			<SkeletonLoader2 className="h-[200px] rounded-lg" />
+		  ) : (
+			<SectionGridCategoryBox categories={nearbyPlaces} />
+		  )}
+  
+		  {/* Testimonials */}
+		  {isLoading ? (
+			<SkeletonLoader className="h-[200px] rounded-lg" />
+		  ) : (
+			<div className="relative pt-8 pb-0" style={{ marginTop: '2rem' }}>
+			  <BackgroundSection />
+			  <SectionClientSay data={testimonials} />
 			</div>
-		</main>
-	)
-}
-
-export default PageHome
+		  )}
+		</div>
+	  </main>
+	);
+  }
+  
+  export default PageHome;
+  

@@ -27,11 +27,11 @@ import LikeSaveBtns from '@/components/LikeSaveBtns'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { Amenities_demos, PHOTOS, Activities_demos, Local_attraction_demos, Excursions_attraction_demos } from './constant'
-import StayDatesRangeInput from './StayDatesRangeInput'
-import GuestsInput from './GuestsInput'
-import SectionDateRange from '../SectionDateRange'
 import { Route } from 'next'
 import axios from 'axios'
+import GuestsInput from './GuestInput'
+import StayDatesRangeInput from './StayDateRangeInput'
+import SectionDateRange from '../../SectionDateRange'
 
 export interface ListingStayDetailPageProps {}
 
@@ -42,6 +42,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 	const thisPathname = usePathname()
 	const router = useRouter()
+
 
 	function closeModalAmenities() {
 		setIsOpenModalAmenities(false)
@@ -61,7 +62,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 	const fetchListingDetails = async () => {
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property${thisPathname}`, {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api${thisPathname}`, {
 			headers: {
 			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 			},
@@ -78,9 +79,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		fetchListingDetails()
 	},[])
 
-	console.log(listingDetail)
+	
 
-	const renderSection1 = () => {
+	const renderSection1 = ({result}) => {
 		return (
 			<div className="listingSection__wrap !space-y-6">
 				{/* 1 */}
@@ -91,26 +92,26 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* 2 */}
 				<h2 className="text-2xl font-semibold sm:text-3xl lg:text-4xl">
-					Snowy Mist Homestay-Aut
+					{result?.name}
 				</h2>
 
 				{/* 3 */}
 				<div className="flex items-center space-x-4">
-					<StartRating />
+					<StartRating reviewCount={result?.reviews_count} point={result?.avg_rating} />
 					<span>·</span>
 					<div className="flex items-center">
 						<MapPinIcon className="h-5 w-5" />
-						<span className="ml-1">  Village Shikari, Panarsa Khanahal Road Aut.</span>
+						<span className="ml-1">  {result?.property_address?.address_line_1}</span>
 					</div>
 				</div>
 
 				{/* 4 */}
 				<div className="flex items-center">
-					<Avatar hasChecked sizeClass="h-10 w-10" radius="rounded-full" />
+					<Avatar imgUrl={result?.users?.profile_src} hasChecked sizeClass="h-10 w-10" radius="rounded-full" />
 					<span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
 						Hosted by{' '}
 						<span className="font-medium text-neutral-900 dark:text-neutral-200">
-							Tek Singh
+							{result?.host_name}
 						</span>
 					</span>
 				</div>
@@ -152,15 +153,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 							/>
 						</svg>
 						<span className=" ">
-							<span className="hidden sm:inline-block">No. of rooms: </span> 4
+							<span className="hidden sm:inline-block">No. of rooms: </span> {result?.bedrooms}
 						</span>
 					</div>
-					<div className="flex items-center space-x-3">
+					{/* <div className="flex items-center space-x-3">
 						<UsersIcon className="h-6 w-6" />
 						<span className="">
 							<span className="hidden sm:inline-block">Total Capacity:</span> 6
 						</span>
-					</div>
+					</div> */}
 					<div className="flex items-center space-x-3">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +200,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 							/>
 						</svg>
 						<span className=" ">
-							6 <span className="hidden sm:inline-block">beds</span>
+							{result?.beds} <span className="hidden sm:inline-block">beds</span>
 						</span>
 					</div>
 					<div className="flex items-center space-x-3">
@@ -245,7 +246,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 							/>
 						</svg>
 						<span className=" ">
-							3 <span className="hidden sm:inline-block">baths</span>
+							{result?.bathrooms} <span className="hidden sm:inline-block">baths</span>
 						</span>
 					</div>
 					
@@ -275,7 +276,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 	// amenities 
-	const renderSection3 = () => {
+	const renderSection3 = ({amenities}) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -287,10 +288,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
 				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
-					{Amenities_demos.filter((_, i) => i < 12).map((item) => (
-						<div key={item.name} className="flex items-center space-x-3">
-							<item.icon className="h-6 w-6" />
-							<span className=" ">{item.name}</span>
+					{amenities?.filter((_:any, i:any) => i < 12).map((item:any) => (
+						<div key={item.id} className="flex items-center space-x-3">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+							    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+							</svg>
+							<span className=" ">{item.title}</span>
 						</div>
 					))}
 				</div>
@@ -299,15 +302,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200"></div>
 				<div>
 					<ButtonSecondary onClick={openModalAmenities}>
-						View more 20 amenities
+						View more amenities
 					</ButtonSecondary>
 				</div>
-				{renderModalAmenities()}
+				{renderModalAmenities({amenities})}
 			</div>
 		)
 	}
 
-	const renderModalAmenities = () => {
+	const renderModalAmenities = ({amenities}) => {
 		return (
 			<Dialog
 				open={isOpenModalAmenities}
@@ -336,13 +339,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						</div>
 
 						<div className="hiddenScrollbar flex-1 divide-y divide-neutral-200 overflow-y-auto px-8 text-neutral-700 dark:divide-neutral-700 dark:text-neutral-300">
-							{Amenities_demos.filter((_, i) => i < 1212).map((item) => (
+							{amenities?.filter((_:any, i:any) => i < 1212).map((item:any) => (
 								<div
-									key={item.name}
+									key={item.id}
 									className="flex items-center space-x-5 py-2.5 sm:py-4 lg:space-x-8 lg:py-5"
 								>
 									<item.icon className="h-6 w-6" />
-									<span>{item.name}</span>
+									<span>{item.title}</span>
 								</div>
 							))}
 						</div>
@@ -396,7 +399,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection5 = () => {
+	const renderSection5 = ({result}) => {
 		return (
 			<div className="listingSection__wrap">
 				{/* HEADING */}
@@ -413,7 +416,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					/>
 					<div>
 						<a className="block text-xl font-medium" href="##">
-							Kevin Francis
+							{result?.users?.first_name} {result?.users?.last_name}
 						</a>
 						<div className="mt-1.5 flex items-center text-sm text-neutral-500 dark:text-neutral-400">
 							<StartRating />
@@ -431,56 +434,29 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				{/* info */}
 				<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
 					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={1.5}
-								d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-							/>
-						</svg>
-						<span>Joined in March 2016</span>
-					</div>
-					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={1.5}
-								d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-							/>
-						</svg>
-						<span>Response rate - 100%</span>
-					</div>
-					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={1.5}
-								d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="icon icon-tabler icon-tabler-mail"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                        <polyline points="3 7 12 13 21 7" />
+                        </svg>
 
-						<span>Fast response - within a few hours</span>
+						<span>{result?.users?.email}</span>
+					</div>
+					<div className="flex items-center space-x-3">
+                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+
+						<span>{result?.users?.phone}</span>
 					</div>
 				</div>
 
@@ -764,7 +740,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			</div>
 		)
 	}
+    
 
+    const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
+   
 	return (
 		<div className="nc-ListingStayDetailPage">
 			{/*  HEADER */}
@@ -777,13 +756,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						<Image
 							fill
 							className="rounded-md object-cover sm:rounded-xl"
-							src={PHOTOS[0]}
+							src={result?.cover_photo}
 							alt=""
 							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
 						/>
 						<div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 transition-opacity hover:opacity-100"></div>
 					</div>
-					{PHOTOS.filter((_, i) => i >= 1 && i < 5).map((item, index) => (
+					{result?.property_photos?.filter((_:any, i:any) => i >= 1 && i < 5).map((item:any, index:any) => (
 						<div
 							key={index}
 							className={`relative overflow-hidden rounded-md sm:rounded-xl ${
@@ -794,7 +773,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 								<Image
 									fill
 									className="rounded-md object-cover sm:rounded-xl"
-									src={item || ''}
+									src={item.image_url || ''}
 									alt=""
 									sizes="400px"
 								/>
@@ -824,18 +803,18 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			<main className="relative z-10 mt-11 flex flex-col lg:flex-row">
 				{/* CONTENT */}
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
-					{renderSection1()}
+					{renderSection1({result})}
 					{renderSection2()}
 					{renderSection7()}
 					{renderSection9()}
-					{renderSection3()}
+					{renderSection3({amenities})}
 					{/* {renderSection4()} */}
 					<SectionDateRange />
 					{renderSection10()}
 					{renderSection11()}
 					{renderSection12()}
 					{renderSection13()}
-					{renderSection5()}
+					{renderSection5({result})}
 					{renderSection6()}
 					{renderSection8()}
 				</div>

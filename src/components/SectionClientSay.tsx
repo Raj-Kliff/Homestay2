@@ -19,7 +19,7 @@ import { variants } from '@/utils/animationVariants'
 
 export interface SectionClientSayProps {
 	className?: string
-	data?: typeof DEMO_DATA
+	data?: any //typeof DEMO_DATA
 }
 
 const DEMO_DATA = [
@@ -157,21 +157,21 @@ const SectionClientSay: FC<SectionClientSayProps> = ({
 								>
 									<>
 										<span className="block text-2xl">
-											{currentItem.content}
+											{currentItem?.description}
 										</span>
 										<span className="mt-8 block text-2xl font-semibold">
-											{currentItem.clientName}
+											{currentItem?.name}
 										</span>
 										<div className="mt-2 flex items-center space-x-2 text-lg text-neutral-400">
-											<MapPinIcon className="h-5 w-5" />
-											<span>{currentItem.clientAddress}</span>
+											{/* <MapPinIcon className="h-5 w-5" /> */}
+											<span>{currentItem?.designation}</span>
 										</div>
 									</>
 								</motion.div>
 							</AnimatePresence>
 
 							<div className="mt-10 flex items-center justify-center space-x-2">
-								{data.map((item, i) => (
+								{data.map((item:any, i:any) => (
 									<button
 										className={`h-2 w-2 rounded-full ${
 											i === index ? 'bg-black/70' : 'bg-black/10'

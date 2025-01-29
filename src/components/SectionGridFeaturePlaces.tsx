@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { DEMO_STAY_LISTINGS } from '@/data/listings'
 import { StayDataType } from '@/data/types'
 import ButtonPrimary from '@/shared/ButtonPrimary'
@@ -28,7 +28,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	subHeading = 'Popular places to stay that Homestays recommends for you',
 	headingIsCenter,
 	// tabs = ['New York', 'Tokyo', 'Paris', 'London'],
-	tabs = ['All','Homestays', 'Farmstay', 'Second Home', 'Workstation'],
+	tabs = ['All','Homestay', 'Farmstay', 'Second Home', 'Workstation'],
 	cardType = 'card2',
 }) => {
 
@@ -38,8 +38,18 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 		return stayListings.filter((item:any) => item.name === tab);
 	}
 
-	const filteredProducts = currentActiveTab != "All" ? filterListingByTab(currentActiveTab) : stayListings;
+	// const [mergedProperties, setMergedProperties] = useState<any[]>([])
 
+	// useEffect(()=>{
+
+	// const allProperties = stayListings.flatMap((item:any) => item.properties);
+	// setMergedProperties(allProperties)
+	// },[])
+
+ 
+	
+	const filteredProducts = currentActiveTab != "All" ? filterListingByTab(currentActiveTab).slice(0, 8) : stayListings.slice(0, 8);
+	console.warn('currentActiveTab ::',currentActiveTab);
 	const renderCard = (stay: any) => {
 		let CardName = StayCard
 		switch (cardType) {
@@ -69,8 +79,9 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 			<div
 				className={`grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4 ${gridClass}`}
 			>
-				{/* {filteredProducts.map((stay:any) => renderCard(stay))} */}
-				{stayListings.map((stay:any) => renderCard(stay))}
+
+				{filteredProducts.map((stay:any) => renderCard(stay))}
+				{/* {stayListings.map((stay:any) => renderCard(stay))} */}
 
 			</div>
 			{/* <div className="mt-16 flex items-center justify-center">
