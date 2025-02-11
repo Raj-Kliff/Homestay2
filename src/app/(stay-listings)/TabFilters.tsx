@@ -239,7 +239,7 @@ const TabFilters = () => {
 									<Combobox value={selectedLocation} onChange={setSelectedLocation} onClose={() => setQuery('')}>
 										<ComboboxInput
 											aria-label="Assignee"
-											displayValue={(location) => location?.name}
+											// displayValue={(location) => location?.name }
 											onChange={(event) => setQuery(event.target.value)}
 											className="w-[90%] rounded-lg border border-gray-300"
 										/>

@@ -54,7 +54,7 @@ const FooterNav = () => {
   const pathname = usePathname();
   const router = useRouter()
 
-  const showHideHeaderMenu = () => {
+  const showHideHeaderMenu = useCallback(() => {
     let currentScrollPos = window.pageYOffset;
     if (!containerRef.current) return;
 
@@ -77,7 +77,7 @@ const FooterNav = () => {
     }
 
     WIN_PREV_POSITION = currentScrollPos;
-  };
+  },[]) 
 
   const handleEvent = useCallback(() => {
     if (typeof window !== "undefined") {

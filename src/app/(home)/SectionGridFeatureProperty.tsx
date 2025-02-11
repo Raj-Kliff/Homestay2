@@ -32,10 +32,11 @@ const SectionGridFeatureProperty: FC<SectionGridFeaturePropertyProps> = ({
   return (
     <div className="nc-SectionGridFeatureProperty relative">
       <HeaderFilter
-        tabActive={"New York"}
+        tabActive={"Homestay"}
         subHeading={subHeading}
         tabs={tabs}
         heading={heading}
+        setCurrentActiveTab=""
       />
       <div
         className={`grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-1 xl:grid-cols-2 ${gridClass}`}

@@ -715,8 +715,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
     
 
-    const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
-    const {description} = listingDescription && listingDescription != undefined ?  listingDescription : {}
+    // const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
+    // const {description} = listingDescription && listingDescription != undefined ?  listingDescription : {}
+
+	const { result, amenities } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
+	const { description } = listingDescription ?? {}; // Same approach for listingDescription
+
    
 	return (
 		<div className="nc-ListingStayDetailPage">
