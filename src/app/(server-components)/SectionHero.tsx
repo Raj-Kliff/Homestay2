@@ -7,13 +7,14 @@ import Image from 'next/image'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import axios from 'axios'
 
+
 export interface SectionHeroProps {
 	className?: string
 }
 
 const SectionHero: FC<SectionHeroProps> = ({ className = '' }) => {
 
-	const [bannerData, setBannerData] = useState()
+	const [bannerData, setBannerData] = useState<any>({})
 
 	const fetchBannerData = async() => {
 		try {
@@ -26,12 +27,9 @@ const SectionHero: FC<SectionHeroProps> = ({ className = '' }) => {
 			if(data.status === 'success'){
 				setBannerData(data.data.banner)
 			}
-			if(bannerData){
-				console.log(bannerData)
-			}
-			
+
 		} catch (error) {
-			
+			console.error('Error fetching banner data:', error);
 		}
 	}
 
@@ -57,7 +55,7 @@ const SectionHero: FC<SectionHeroProps> = ({ className = '' }) => {
 					</ButtonPrimary> */}
 				</div>
 				<div className="flex-grow -mt-[3rem]">
-					<Image className="w-full" src={bannerData?.image_url} width={100} height={100} alt="hero" priority />
+					<Image className="w-full" src={bannerData?.image_url || '/heroRight.webp'} width={1000} height={1000} alt="hero" priority />
 				</div>
 			</div>
 

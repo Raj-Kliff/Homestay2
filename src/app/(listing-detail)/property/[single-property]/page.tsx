@@ -32,6 +32,7 @@ import axios from 'axios'
 import GuestsInput from './GuestInput'
 import StayDatesRangeInput from './StayDateRangeInput'
 import SectionDateRange from '../../SectionDateRange'
+import GoogleMapComponent from '@/components/GoogleMapComponent'
 
 export interface ListingStayDetailPageProps {}
 
@@ -39,8 +40,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	//
 
 	let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false)
+	const [listingDetail, setListingDetail] = useState<any>({})
 
 	const thisPathname = usePathname()
+	let endPoint = thisPathname.split('/').pop();
 	const router = useRouter()
 
 
@@ -57,12 +60,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 	// ---------------
-	const [listingDetail, setListingDetail] = useState()
+	// const [listingDetail, setListingDetail] = useState<any>({})
+	const [listingDescription, setListingDescription] = useState<any>()
 
-
+	// propety list 
 	const fetchListingDetails = async () => {
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api${thisPathname}`, {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${endPoint}`, {
 			headers: {
 			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 			},
@@ -75,13 +79,30 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		}
 	  };
 
+	// propety list description
+	const fetchListingDescription = async () => {
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-details/${endPoint}`, {
+			headers: {
+			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+			},
+		  });
+		  if (data.status === 'success') {
+			setListingDescription(data.data);
+		  }
+		} catch (error) {
+		  console.error(error);
+		}
+	  };
+
 	useEffect(()=>{
 		fetchListingDetails()
+		fetchListingDescription()
 	},[])
 
-	
+	console.log('listing::',listingDescription)
 
-	const renderSection1 = ({result}) => {
+	const renderSection1 = ({result}:any) => {
 		return (
 			<div className="listingSection__wrap !space-y-6">
 				{/* 1 */}
@@ -156,12 +177,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 							<span className="hidden sm:inline-block">No. of rooms: </span> {result?.bedrooms}
 						</span>
 					</div>
-					{/* <div className="flex items-center space-x-3">
+					<div className="flex items-center space-x-3">
 						<UsersIcon className="h-6 w-6" />
 						<span className="">
-							<span className="hidden sm:inline-block">Total Capacity:</span> 6
+							<span className="hidden sm:inline-block">Total Capacity:</span> {listingDetail?.guests}
 						</span>
-					</div> */}
+					</div>
 					<div className="flex items-center space-x-3">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -255,20 +276,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection2 = () => {
+	const renderSection2 = ({description}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				<h2 className="text-2xl font-semibold">Stay information</h2>
 				{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 				<div className="text-neutral-600 dark:text-neutral-300">
 					<span>
-						This homestay is located in a tiny village Shikari in Himachal known for its lush green valley and the snow capped mountain views. Parashar lake is just 7 km from here. 
-						This place is ideal if you want to experience local pahadi cuisine, festivals, art and craft, folk music &amp; dance, and ancient temples.&nbsp;
-					</span>
-					<br />
-					<br />
-					<span>
-					This charming homestay is on top of the mountain that&nbsp; spans over the ground floor which&nbsp; provides four spacious&nbsp; rooms with attached &amp; common bathrooms. All rooms are available at the ground floor with two classic rooms with a common bathroom (outside the room) &amp; two family rooms with an attached bathroom. Rooms are equipped with a traditional outlook with amenities like wooden almirah &amp; window sitting . The focal point of the rooms are the traditional style windows covering the landscape of the high rise&nbsp; lush green valley called Deodar tree, the amazing landscape view is definitely going to escape you from your busy schedule to the less formal life of Pahadi &amp; during winter it is all&nbsp; surrounded with the snow capped huge mountains of deodar tree will drive you through the fantasy world of harry potter. 
+						{description?.summary}
 					</span>
 				</div>
 			</div>
@@ -276,7 +291,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 	// amenities 
-	const renderSection3 = ({amenities}) => {
+	const renderSection3 = ({amenities}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -302,15 +317,19 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200"></div>
 				<div>
 					<ButtonSecondary onClick={openModalAmenities}>
+					{/* <ButtonSecondary onClick={() => { 
+						openModalAmenities();
+						renderModalAmenities(listingDetail?.amenities); 
+					}}> */}
 						View more amenities
 					</ButtonSecondary>
 				</div>
-				{renderModalAmenities({amenities})}
+				{renderModalAmenities()}
 			</div>
 		)
 	}
 
-	const renderModalAmenities = ({amenities}) => {
+	const renderModalAmenities = () => {
 		return (
 			<Dialog
 				open={isOpenModalAmenities}
@@ -339,13 +358,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						</div>
 
 						<div className="hiddenScrollbar flex-1 divide-y divide-neutral-200 overflow-y-auto px-8 text-neutral-700 dark:divide-neutral-700 dark:text-neutral-300">
-							{amenities?.filter((_:any, i:any) => i < 1212).map((item:any) => (
+							{listingDetail?.amenities?.map((item:any) => (
 								<div
-									key={item.id}
+									key={item?.id}
 									className="flex items-center space-x-5 py-2.5 sm:py-4 lg:space-x-8 lg:py-5"
 								>
 									<item.icon className="h-6 w-6" />
-									<span>{item.title}</span>
+									<span>{item?.title}</span>
 								</div>
 							))}
 						</div>
@@ -399,7 +418,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection5 = ({result}) => {
+	const renderSection5 = ({result}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				{/* HEADING */}
@@ -427,9 +446,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				</div>
 
 				{/* desc */}
-				<span className="block text-neutral-600 dark:text-neutral-300">
+				{/* <span className="block text-neutral-600 dark:text-neutral-300">
 				You will be hosted by Tek Singh  who is the owner of this house and running this homestay since 2021. He lives 500m from the homestay & he is full time available there to ensure a warm and welcoming stay for the guests. 
-				</span>
+				</span> */}
 
 				{/* info */}
 				<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
@@ -509,7 +528,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection7 = () => {
+	const renderSection7 = ({result}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				{/* HEADING */}
@@ -517,7 +536,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					<h2 className="text-2xl font-semibold">How to reach</h2>
 					<div className="text-neutral-600 dark:text-neutral-300">
 						<span className="mt-5 block text-neutral-500 dark:text-neutral-400">
-							If you are coming from Delhi towards Manali, after around 5 kms from Aut take Panarsa-Khanahal Road. The homestay is about 28km on Nau Mata Bhagwati road till homestay. The nearest airport is in Bhuntar which is 42 km but has limited flights. The best way to reach is via Delhi. Take the Himachal Tourism (HPTDC) overnight Volvo bus to Kullu. Get off at Aut from where you can take a taxi for the homestay.&nbsp;
+							{description?.place_is_great_for}
 						</span>
 					</div>
 				</div>
@@ -526,14 +545,16 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				{/* MAP */}
 				<div className="aspect-h-5 aspect-w-5 z-0 rounded-xl ring-1 ring-black/10 sm:aspect-h-3">
 					<div className="z-0 overflow-hidden rounded-xl">
-						<iframe
+						{/* <iframe
 							width="100%"
 							height="100%"
 							loading="lazy"
 							allowFullScreen
 							referrerPolicy="no-referrer-when-downgrade"
 							src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAGVJfZMAKYfZ71nzL_v5i3LjTTWnCYwTY&q=Eiffel+Tower,Paris+France"
-						></iframe>
+						></iframe> */}
+
+						<GoogleMapComponent latitude={result?.property_address?.latitude || 0.0} longitude={result?.property_address?.longitude || 0.0} />
 					</div>
 				</div>
 			</div>
@@ -548,47 +569,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
 				{/* CONTENT */}
-				{/* <div>
-					<h4 className="text-lg font-semibold">Cancellation policy</h4>
-					<span className="mt-3 block text-neutral-500 dark:text-neutral-400">
-						Refund 50% of the booking value when customers cancel the room
-						within 48 hours after successful booking and 14 days before the
-						check-in time. <br />
-						Then, cancel the room 14 days before the check-in time, get a 50%
-						refund of the total amount paid (minus the service fee).
-					</span>
-				</div>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" /> */}
-
-				{/* CONTENT */}
-				{/* <div>
-					<h4 className="text-lg font-semibold">Check-in time</h4>
-					<div className="mt-3 max-w-md text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
-						<div className="flex justify-between space-x-10 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
-							<span>Check-in</span>
-							<span>08:00 am - 12:00 am</span>
-						</div>
-						<div className="flex justify-between space-x-10 p-3">
-							<span>Check-out</span>
-							<span>02:00 pm - 04:00 pm</span>
-						</div>
-					</div>
-				</div>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700" /> */}
-
-				{/* CONTENT */}
 				<div>
-					<h4 className="text-lg font-semibold">Special Note</h4>
-					<div className="prose sm:prose">
-						<ul className="mt-3 space-y-2 text-neutral-500 dark:text-neutral-400">
-							<li>
-								Ban and I will work together to keep the landscape and
-								environment green and clean by not littering, not using
-								stimulants and respecting people around.
-							</li>
-							<li>Do not sing karaoke past 11:30</li>
-						</ul>
-					</div>
+					{description?.interaction_guests}
 				</div>
 			</div>
 		)
@@ -601,18 +583,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* CONTENT */}
 				<div>
-					<div className="prose sm:prose">
-						<ul className="mt-3 space-y-2 text-neutral-500 dark:text-neutral-400">
-							<li>
-								Up to 6 years: Complimentary (no extra bed)
-							</li>
-							<li>7-12 years.: 50% (with extra bed)</li>
-						</ul>
-					</div>
-					<br />
-					<i className="block text-neutral-600 dark:text-neutral-300">
-						What you pay for a homestay, brings a direct socio-economic benefit to locals. Be proud by not asking for a discount.
-					</i>
+					{description?.about_place}
 				</div>
 			</div>
 		)
@@ -626,7 +597,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				{/* CONTENT */}
 				<div>
 					<span className="block text-neutral-600 dark:text-neutral-300">
-						Host serves simple yet delicious traditional homemade food. You can enjoy mandiyali dham, kullvi siddu, makke ki roti &amp; sarason ka saag, patrodu, Himachali rajmah with rice etc. Non-vegetarian dish can also be prepared on prior notice of two to three hours.&nbsp;
+						{description?.guest_can_access}
 					</span>
 				</div>
 			</div>
@@ -743,6 +714,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
     
 
     const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
+    const {description} = listingDescription && listingDescription != undefined ?  listingDescription : {}
    
 	return (
 		<div className="nc-ListingStayDetailPage">
@@ -804,8 +776,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				{/* CONTENT */}
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1({result})}
-					{renderSection2()}
-					{renderSection7()}
+					{renderSection2({description})}
+					{renderSection7({result})}
 					{renderSection9()}
 					{renderSection3({amenities})}
 					{/* {renderSection4()} */}

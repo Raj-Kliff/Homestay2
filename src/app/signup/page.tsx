@@ -9,7 +9,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Select from '@/shared/Select'
 import axios from 'axios'
-import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha"
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+import Cookies from 'js-cookie';
 
 const countryCodes = require('country-codes-list')
 
@@ -27,11 +30,6 @@ const registerSocials = [
 		href: '#',
 		icon: facebookSvg,
 	},
-	// {
-	// 	name: 'Continue with Twitter',
-	// 	href: '#',
-	// 	icon: twitterSvg,
-	// },
 	{
 		name: 'Continue with Google',
 		href: '#',
@@ -43,7 +41,8 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 
 	const [countryCodesList, setCountryCodesList] = useState<CountryCode[]>([]);
 	const [configData, setConfigData] = useState<any>(null);
-	const [registerSocial, setRegisterSocial] = useState();
+	const [registerSocial, setRegisterSocial] = useState<any>();
+	const [csrfToken, setCsrfToken] = useState("");
 
 	const [formData, setFormData] = useState({
 		first_name: '',
@@ -52,38 +51,53 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 		password: '',
 		dob: '',
 		phone: '',
-		carrier_code: '91',
-		formatted_phone:'919540225345'
+		carrier_code: '',
+		formatted_phone:'',
+		default_country:''
 	  });
+
 
 	  const combineCountryCodeAndPhoneNumber = () => {
 		const { carrier_code, phone } = formData;
-
-		const cleanedPhone = phone.replace(/\D/g, '');
-
-		const formattedPhone = `${carrier_code} ${cleanedPhone}`;
 	  
+		const cleanedPhone = phone.trim().replace(/\D/g, ''); 
+	  
+		const formattedPhone = `${carrier_code} ${cleanedPhone}`;
+
+		console.log(formattedPhone)
+		
 		setFormData((prevData) => ({
 		  ...prevData,
-		  formatted_phone: formattedPhone
+		  formatted_phone: formattedPhone,
 		}));
 	  };
+	  
+	  
+	
 	  
 
 	  // Handle register form field changes
 	  const handleChange = (e:any) => {
-		const { name, value } = e.target;
-	  
-		setFormData((prevData) => {
-		  const updatedData = { ...prevData, [name]: value };
-	  
-		  // If the updated field is either phone or carrier_code, combine them
-		  if (name === 'phone' || name === 'carrier_code') {
-			combineCountryCodeAndPhoneNumber();
-		  }
-	  
-		  return updatedData;
-		});
+			setFormData((prevData) => {
+				const updatedData = { ...prevData, [e.target.name]: e.target.value };
+				return updatedData;
+			});
+		
+	  };
+
+	  // Handle register form field changes
+	  const handlePhoneChange = (e:any, value:any, name:any) => {
+
+		if(name == "phone"){
+			let splitPhone = e?.split(value?.dialCode);
+			setFormData({
+				...formData,
+				carrier_code: value?.dialCode,
+				phone: splitPhone?.[1] || "",
+				formatted_phone: `+${value?.dialCode}${splitPhone?.[1] || ""}`
+			})
+		}
+		
 	  };
 	  
 
@@ -92,12 +106,22 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 		e.preventDefault();
 	
 		try {
-		  const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`,formData,{
-			headers: {
+			const csrfToken = Cookies.get('XSRF-TOKEN');
+			console.log(document.cookie);
+			console.warn('csrfToken :: ',csrfToken);
+			const { data } = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_URL}/api/register`,
+			formData,
+			{headers: {
 				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-			},
-		});
-		  console.log('Success:', data);
+				'X-CSRF-TOKEN': "cookieAccepted=true; __stripe_mid=3ce82c9a-0b56-41ee-9e09-97c8e5d7eb2bf0f8e9", 
+			}}
+			 
+		  );
+		if(data.status == "success"){
+			console.log(data.data.token)
+		}
+
 		} catch (error) {
 		  console.error('Error submitting form:', error);
 		}
@@ -263,17 +287,18 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 							<span className="text-neutral-800 dark:text-neutral-200">
 								Phone
 							</span>
-							<div className='flex items-center gap-2'>
+							{/* <div className='flex items-center gap-2'>
 								<div className='w-[6.5rem]'>
 									<Select name="carrier_code" onChange={handleChange} value={formData.carrier_code}>
 										<option value="+91">+91 IN</option>
-										{countryCodesList.map((country) => (
-											<option key={country.code} value={country.callingCode}>
+										{countryCodesList.map((country, index) => (
+											<option key={index} value={country.callingCode}>
 												{country.callingCode} {country.code}
 											</option>
 										))}
 									</Select>
 								</div>
+								<div className='w-full flex-1'>
 								<Input
 									type="number"
 									placeholder="Phone"
@@ -282,7 +307,18 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 									value={formData.phone}
 									onChange={handleChange}
 								/>
-							</div>
+								</div>
+							</div> */}
+							<PhoneInput
+							country={'in'}
+							value={`${formData.carrier_code}${formData.phone}`}
+							onChange={(e,phone)=>handlePhoneChange(e,phone,"phone")}
+							inputStyle={{
+								width: '100%',
+								borderRadius:'15px',
+								height: '42px'
+							}}
+							/>
 						</label>
 						<label className="block">
 							<span className="flex items-center justify-between text-neutral-800 dark:text-neutral-200">
@@ -317,7 +353,7 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 							</label>
 							)
 						}
-						<ButtonPrimary type="submit">Continue</ButtonPrimary>
+						<ButtonPrimary type="submit">Submit</ButtonPrimary>
 					</form>
 
 					{/* ==== */}

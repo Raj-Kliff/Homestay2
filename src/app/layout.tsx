@@ -11,6 +11,7 @@ import ThemeProvider from './theme-provider'
 import Footer2 from '@/components/Footer2'
 import Footer3 from '@/components/Footer3'
 import Footer4 from '@/components/Footer4'
+import LocationContextProvider from './contextApi/LocationContext'
 
 const poppins = Poppins({
 	subsets: ['latin'],
@@ -20,10 +21,9 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
 	title: 'Homestays of India',
-	// description: 'Booking online & rental online React Next Template',
-	// keywords: 'Chisfis, Booking online, React Next Template',
-	// viewport:
-	// 	'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
+	description: 'Find your suitable stays with Homestays',
+	// keywords: 'Homestays, Booking online, React Next',
+	viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
 }
 
 export default function RootLayout({
@@ -35,23 +35,25 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className={poppins.className}>
-			<ThemeProvider>
-				<body className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
-					<div>
-						<SiteHeader />
-						{children}
-						<FooterNav />
+			<LocationContextProvider>
+				<ThemeProvider>
+					<body className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
+						<div>
+							<SiteHeader />
+							{children}
+							<FooterNav />
 
-						{/* Chose footer style here!!!! */}
-						{/* <Footer /> */}
-						<Footer2 />
-						{/* <Footer3 /> */}
-						{/* <Footer4 /> */}
-					</div>
+							{/* Chose footer style here!!!! */}
+							{/* <Footer /> */}
+							<Footer2 />
+							{/* <Footer3 /> */}
+							{/* <Footer4 /> */}
+						</div>
 
-					<ClientCommons />
-				</body>
-			</ThemeProvider>
+						<ClientCommons />
+					</body>
+				</ThemeProvider>
+			</LocationContextProvider>
 		</html>
 	)
 }
