@@ -76,7 +76,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 	useEffect(()=>{
 		fetchListingDetails()
-	},[])
+	},[fetchListingDetails])
 
 	console.log(listingDetail)
 
