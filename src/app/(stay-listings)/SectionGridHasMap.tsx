@@ -13,9 +13,11 @@ import MapContainer from '@/components/MapContainer'
 import { MapIcon } from '@heroicons/react/24/outline'
 
 const DEMO_STAYS = DEMO_STAY_LISTINGS.filter((_, i) => i < 12)
-export interface SectionGridHasMapProps {}
+export interface SectionGridHasMapProps {
+	stayListings: any
+}
 
-const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
+const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 	const [currentHoverID, setCurrentHoverID] = useState<string | number>(-1)
 	const [showFullMapFixed, setShowFullMapFixed] = useState(false)
 
@@ -29,7 +31,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
 						<TabFilters />
 					</div>
 					<div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 2xl:gap-x-6">
-						{DEMO_STAYS.map((item) => (
+						{stayListings.map((item:any) => (
 							<div
 								key={item.id}
 								onMouseEnter={() => setCurrentHoverID((_) => item.id)}
@@ -71,6 +73,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
 						<MapContainer
 							currentHoverID={currentHoverID}
 							DEMO_DATA={DEMO_STAYS}
+							// DEMO_DATA={stayListings}
 							listingType="stay"
 						/>
 					</div>

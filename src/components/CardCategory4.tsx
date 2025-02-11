@@ -14,6 +14,8 @@ const CardCategory4: FC<CardCategory4Props> = ({
 	taxonomy,
 }) => {
 	const { count, name, href = '/', thumbnail, listingType, cover_photo, property_type_name } = taxonomy
+
+	 
 	return (
 		<Link
 			href={href}

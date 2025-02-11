@@ -1,5 +1,5 @@
 'use client'
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useContext } from 'react'
 import SectionHero from '@/app/(server-components)/SectionHero'
 import BgGlassmorphism from '@/components/BgGlassmorphism'
 import { TaxonomyType } from '@/data/types'
@@ -19,6 +19,7 @@ import axios from 'axios'
 import SkeletonLoader from '@/components/skeleton/SkeletonLoader'
 import SkeletonLoader2 from '@/components/skeleton/SkeletonLoader2'
 import SkeletonLoader3 from '@/components/skeleton/SkeletonLoader3'
+import {LocationContext} from './contextApi/LocationContext'
 
 const DEMO_CATS: any = [
 	{
@@ -153,13 +154,15 @@ const DEMO_CATS_2: TaxonomyType[] = [
 ]
 
 function PageHome() {
-	const [popularDestinations, setPopularDestinations] = useState([]);
-	const [homestayType, setHomeStayType] = useState([]);
-	const [testimonials, setTestimonials] = useState([]);
-	const [nearbyPlaces, setNearbyPlaces] = useState([]);
-	const [staysSuggestion, setStaysSuggestion] = useState([]);
-	const [featuredPlaces, setFeaturedPlaces] = useState([]);
-	const [isLoading, setIsLoading] = useState(true); 
+	const [popularDestinations, setPopularDestinations] = useState<any>([]);
+	const [homestayType, setHomeStayType] = useState<any>([]);
+	const [testimonials, setTestimonials] = useState<any>([]);
+	const [nearbyPlaces, setNearbyPlaces] = useState<any>([]);
+	const [staysSuggestion, setStaysSuggestion] = useState<any>([]);
+	const [featuredPlaces, setFeaturedPlaces] = useState<any>([]);
+	const [isLoading, setIsLoading] = useState<any>(true); 
+
+	const {location} = useContext<any>(LocationContext)
   
 	const fetchPopularDestinations = async () => {
 	  try {
@@ -208,7 +211,7 @@ function PageHome() {
   
 	const fetchExploreNearBy = async () => {
 	  try {
-		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=28.7041&longitude=77.1025&radius=200&items=10`, {
+		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=${location.latitude}&longitude=${location.longitude}&radius=200&items=10`, {
 		  headers: {
 			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 		  },
@@ -266,12 +269,13 @@ function PageHome() {
 	  };
 	  fetchData();
 	}, []);
+
   
 	return (
 	  <main className="nc-PageHome relative overflow-hidden">
 		{/* GLASSMOPHIN */}
 		<BgGlassmorphism />
-  
+
 		<div className="container relative mb-24 space-y-24 lg:mb-28 lg:space-y-28">
 		  {/* SECTION HERO */}
 		  {isLoading ? (
