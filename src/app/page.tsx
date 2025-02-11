@@ -1,5 +1,5 @@
 'use client'
-import React, { useState,useEffect, useContext } from 'react'
+import React, { useState,useEffect, useContext, useCallback } from 'react'
 import SectionHero from '@/app/(server-components)/SectionHero'
 import BgGlassmorphism from '@/components/BgGlassmorphism'
 import { TaxonomyType } from '@/data/types'
@@ -209,20 +209,20 @@ function PageHome() {
 	  }
 	};
   
-	const fetchExploreNearBy = async () => {
-	  try {
-		const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=${location.latitude}&longitude=${location.longitude}&radius=200&items=10`, {
-		  headers: {
-			"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
-		  },
-		});
-		if (data.status === 'success') {
-		  setNearbyPlaces(data.data.places);
+	const fetchExploreNearBy = useCallback(async () => {
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=${location.latitude}&longitude=${location.longitude}&radius=200&items=10`, {
+			headers: {
+			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+			},
+		  });
+		  if (data.status === 'success') {
+			setNearbyPlaces(data.data.places);
+		  }
+		} catch (error) {
+		  console.error(error);
 		}
-	  } catch (error) {
-		console.error(error);
-	  }
-	};
+	  },[location]) 
   
 	const fetchStaysSuggestion = async () => {
 	  try {
@@ -268,7 +268,7 @@ function PageHome() {
 		setIsLoading(false);
 	  };
 	  fetchData();
-	}, []);
+	}, [fetchExploreNearBy]);
 
   
 	return (

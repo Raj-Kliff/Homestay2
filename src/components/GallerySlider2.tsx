@@ -11,7 +11,7 @@ import { Route } from '@/routers/types'
 
 export interface GallerySliderProps {
 	className?: string
-	galleryImgs: any //(StaticImageData | string)[]
+	galleryImgs: any //(StaticImageData | string)[] 
 	ratioClass?: string
 	uniqueID: string
 	href?: any //Route<string>
@@ -33,26 +33,19 @@ export default function GallerySlider2({
 	const [loaded, setLoaded] = useState(false)
 	const [index, setIndex] = useState(0)
 	const [direction, setDirection] = useState(0)
-    // Check if galleryImgs has data
+
+	// Check if galleryImgs has data
 	const hasImages = Array.isArray(galleryImgs) && galleryImgs.length > 0;
-  
-    // If no images, return early or display a message
-      if (!hasImages) {
-          return <div>No images available</div>;
-      }
 
-
-	const images = galleryImgs
-
-	function changePhotoId(newVal: number) {
-		if (newVal > index) {
-			setDirection(1)
-		} else {
-			setDirection(-1)
-		}
-		setIndex(newVal)
+	// If no images, return early or display a message
+	if (!hasImages) {
+		return <div>No images available</div>;
 	}
 
+	// Initialize images and handlers outside any condition
+	const images = galleryImgs
+
+	// Swipeable handlers (always called unconditionally)
 	const handlers = useSwipeable({
 		onSwipedLeft: () => {
 			if (index < images?.length - 1) {
@@ -66,6 +59,16 @@ export default function GallerySlider2({
 		},
 		trackMouse: true,
 	})
+
+	// Change photo function
+	function changePhotoId(newVal: number) {
+		if (newVal > index) {
+			setDirection(1)
+		} else {
+			setDirection(-1)
+		}
+		setIndex(newVal)
+	}
 
 	let currentImage = images[index]?.image_url
 
@@ -138,7 +141,7 @@ export default function GallerySlider2({
 					{/* Bottom Nav bar */}
 					<div className="absolute inset-x-0 bottom-0 h-10 rounded-b-lg bg-gradient-to-t from-neutral-900 opacity-50"></div>
 					<div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 transform items-center justify-center space-x-1.5">
-						{images.map((_:any, i:any) => (
+						{images.map((_: any, i: any) => (
 							<button
 								className={`h-1.5 w-1.5 rounded-full ${
 									i === index ? 'bg-white' : 'bg-white/60'

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useCallback } from 'react'
 import {
 	Dialog,
 	DialogBackdrop,
@@ -64,7 +64,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	const [listingDescription, setListingDescription] = useState<any>()
 
 	// propety list 
-	const fetchListingDetails = async () => {
+	const fetchListingDetails = useCallback(async () => {
 		try {
 		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${endPoint}`, {
 			headers: {
@@ -77,10 +77,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		} catch (error) {
 		  console.error(error);
 		}
-	  };
+	  },[endPoint]) 
 
 	// propety list description
-	const fetchListingDescription = async () => {
+	const fetchListingDescription = useCallback(async () => {
 		try {
 		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-details/${endPoint}`, {
 			headers: {
@@ -93,12 +93,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		} catch (error) {
 		  console.error(error);
 		}
-	  };
+	  },[endPoint]) 
 
 	useEffect(()=>{
 		fetchListingDetails()
 		fetchListingDescription()
-	},[])
+	},[fetchListingDetails,fetchListingDescription])
 
 	console.log('listing::',listingDescription)
 
@@ -363,7 +363,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 									key={item?.id}
 									className="flex items-center space-x-5 py-2.5 sm:py-4 lg:space-x-8 lg:py-5"
 								>
-									<item.icon className="h-6 w-6" />
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+										<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+									</svg>
 									<span>{item?.title}</span>
 								</div>
 							))}

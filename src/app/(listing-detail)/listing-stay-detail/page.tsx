@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useCallback } from 'react'
 import {
 	Dialog,
 	DialogBackdrop,
@@ -59,7 +59,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	const [listingDetail, setListingDetail] = useState()
 
 
-	const fetchListingDetails = async () => {
+	const fetchListingDetails = useCallback(async () => {
 		try {
 		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property${thisPathname}`, {
 			headers: {
@@ -72,13 +72,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		} catch (error) {
 		  console.error(error);
 		}
-	  };
+	  },[thisPathname]) 
+
 
 	useEffect(()=>{
 		fetchListingDetails()
-	},[])
+	},[fetchListingDetails])
 
-	console.log(listingDetail)
+	
 
 	const renderSection1 = () => {
 		return (

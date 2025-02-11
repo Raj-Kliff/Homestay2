@@ -146,7 +146,7 @@ const StayCard2: FC<StayCard2Props> = ({
 		// </div>
 
 		properties?.map((item: any, index: any) => (
-			<div className={`nc-StayCard2 group relative ${className}`}>
+			<div className={`nc-StayCard2 group relative ${className}`} key={item?.id}>
 
 				<div className="relative w-full">
 					<GallerySlider2

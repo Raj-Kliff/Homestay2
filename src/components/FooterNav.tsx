@@ -5,7 +5,7 @@ import {
   MagnifyingGlassIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { PathName } from "@/routers/types";
 import MenuBar from "@/shared/MenuBar";
 import isInViewport from "@/utils/isInViewport";
@@ -54,25 +54,6 @@ const FooterNav = () => {
   const pathname = usePathname();
   const router = useRouter()
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", handleEvent);
-      document.addEventListener("click", handleClickOutside);
-    }
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("scroll", handleEvent);
-        document.removeEventListener("click", handleClickOutside);
-      }
-    };
-  }, []);
-
-  const handleEvent = () => {
-    if (typeof window !== "undefined") {
-      window.requestAnimationFrame(showHideHeaderMenu);
-    }
-  };
-
   const showHideHeaderMenu = () => {
     let currentScrollPos = window.pageYOffset;
     if (!containerRef.current) return;
@@ -97,6 +78,25 @@ const FooterNav = () => {
 
     WIN_PREV_POSITION = currentScrollPos;
   };
+
+  const handleEvent = useCallback(() => {
+    if (typeof window !== "undefined") {
+      window.requestAnimationFrame(showHideHeaderMenu);
+    }
+  }, [showHideHeaderMenu]) 
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", handleEvent);
+      document.addEventListener("click", handleClickOutside);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", handleEvent);
+        document.removeEventListener("click", handleClickOutside);
+      }
+    };
+  }, [handleEvent]);
 
   const handleClickOutside = (event:any) => {
     if (containerRef.current && !containerRef.current.contains(event.target)) {

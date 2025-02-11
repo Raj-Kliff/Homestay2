@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { GoogleMap, useJsApiLoader, GoogleMapProps, Marker } from '@react-google-maps/api';
 
 interface GoogleMapComponentProps {
@@ -25,10 +25,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ latitude, longi
     googleMapsApiKey : googleMapsApiKey,
   });
 
-  const center = {
+  const center = useMemo(() => ({
     lat: parseFloat(latitude),
     lng: parseFloat(longitude),
-  };
+  }), [latitude, longitude]);
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
