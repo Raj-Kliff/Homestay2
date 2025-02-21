@@ -292,6 +292,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 	// amenities 
 	const renderSection3 = ({amenities}:any) => {
+		
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -373,6 +374,32 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					</DialogPanel>
 				</div>
 			</Dialog>
+		)
+	}
+
+	const renderSafetyAmenities = ({safetyAmenities}:any) => {
+		console.log(safetyAmenities)
+		return (
+			<div className="listingSection__wrap">
+				<div>
+					<h2 className="text-2xl font-semibold">Safety Amentites </h2>
+					<span className="mt-2 block text-neutral-500 dark:text-neutral-400">
+						{` About the property's safety amenities and services`}
+					</span>
+				</div>
+				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+				{/* 6 */}
+				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
+					{safetyAmenities?.filter((_:any, i:any) => i < 12).map((item:any) => (
+						<div key={item.id} className="flex items-center space-x-3">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+							    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+							</svg>
+							<span className=" ">{item.title}</span>
+						</div>
+					))}
+				</div>
+			</div>
 		)
 	}
 
@@ -718,7 +745,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
     // const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
     // const {description} = listingDescription && listingDescription != undefined ?  listingDescription : {}
 
-	const { result, amenities } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
+	const { result, amenities, safetyAmenities } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
 	const { description } = listingDescription ?? {}; // Same approach for listingDescription
 
    
@@ -786,6 +813,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					{renderSection7({result})}
 					{renderSection9()}
 					{renderSection3({amenities})}
+					{safetyAmenities && safetyAmenities.length > 0 && renderSafetyAmenities({safetyAmenities})}
 					{/* {renderSection4()} */}
 					<SectionDateRange />
 					{renderSection10()}

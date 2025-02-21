@@ -63,8 +63,6 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 		const cleanedPhone = phone.trim().replace(/\D/g, ''); 
 	  
 		const formattedPhone = `${carrier_code} ${cleanedPhone}`;
-
-		console.log(formattedPhone)
 		
 		setFormData((prevData) => ({
 		  ...prevData,
@@ -106,9 +104,6 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 		e.preventDefault();
 	
 		try {
-			const csrfToken = Cookies.get('XSRF-TOKEN');
-			console.log(document.cookie);
-			console.warn('csrfToken :: ',csrfToken);
 			const { data } = await axios.post(
 			`${process.env.NEXT_PUBLIC_API_URL}/api/register`,
 			formData,
@@ -118,11 +113,25 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 			}}
 			 
 		  );
-		if(data.status == "success"){
-			console.log(data.data.token)
-		}
+		  	console.log(data.status)
+			if(data.status == "success"){
+				console.log("token::",data)
+				alert("Registration successful");
+				setFormData({
+					first_name: '',
+					last_name: '',
+					email: '',
+					password: '',
+					dob: '',
+					phone: '',
+					carrier_code: '',
+					formatted_phone:'',
+					default_country:''
+				})
 
-		} catch (error) {
+			}
+
+		}catch (error) {
 		  console.error('Error submitting form:', error);
 		}
 	  };

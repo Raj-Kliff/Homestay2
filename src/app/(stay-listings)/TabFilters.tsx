@@ -21,6 +21,7 @@ import convertNumbThousand from '@/utils/convertNumbThousand'
 import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
+import GooglePlaceComponent from './GooglePlaceComponent'
 
 // DEMO DATA
 const typeOfPaces = [
@@ -103,6 +104,23 @@ const TabFilters = () => {
 			return location.name.toLowerCase().includes(query.toLowerCase())
 		  })
 
+		const [location, setLocation] = useState('');
+		const [checkin, setCheckin] = useState('');
+		const [checkout, setCheckout] = useState('');
+		const [guest, setGuest] = useState(0);
+		const [bedrooms, setBedrooms] = useState(0);
+		const [beds, setBeds] = useState(0);
+		const [bathrooms, setBathrooms] = useState(0);
+		const [propertyType, setPropertyType] = useState('');
+		const [spaceType, setSpaceType] = useState('');
+		const [selectedAmenities, setSelectedAmenities] = useState('');
+		const [bookType, setBookType] = useState('');
+		const [mapDetails, setMapDetails] = useState('');
+		const [minPrice, setMinPrice] = useState(0);
+		const [maxPrice, setMaxPrice] = useState(0);
+		const [currencyCode, setCurrencyCode] = useState('INR');
+		const [items, setItems] = useState(0);
+		const [page, setPage] = useState(1);
 
 	// fetch data for filter 
 	const fetchDataForFilter = async () => {
@@ -121,9 +139,57 @@ const TabFilters = () => {
 		}
 	};
 
+
+	// search properties api based on filter
+	const searchProperties = async () => {
+		try {
+
+			const requestData = { location, checkin, checkout, guest, bedrooms, beds, bathrooms, property_type: propertyType, space_type: spaceType, amenities: selectedAmenities, book_type: bookType, map_details: mapDetails, min_price: minPrice, max_price: maxPrice, currency_code: currencyCode, items, page };
+			const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/search`, requestData, {
+				headers: {
+				  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			})
+			if(data.status === "success"){
+				console.log("search successful")
+			}
+			
+		} catch (error) {
+			console.log(error)
+		}
+	} 
+
+	const handleBedsChange = (value:number) => {
+		setBeds(value);
+	  };
+	  
+	  const handleBedroomsChange = (value:number) => {
+		setBedrooms(value);
+	  };
+	  
+	  const handleBathroomsChange = (value:number) => {
+		setBathrooms(value);
+	  };
+
+	  // Handle checkbox change
+	const handleCheckboxChange = (id:any) => {
+		// Check if the checkbox is already selected
+		if (selectedAmenities.includes(id)) {
+		// If selected, remove the id from the state
+		setSelectedAmenities(prev => prev.split(',').filter(item => item !== id).join(','));
+		} else {
+		// If not selected, add the id to the state
+		setSelectedAmenities(prev => prev ? `${prev},${id}` : `${id}`);
+		}
+	};
+
 	useEffect(()=>{
 		fetchDataForFilter()
 	},[])
+
+	useEffect(()=>{
+		searchProperties()
+	},[searchProperties, location, checkin, checkout, beds, bathrooms, bedrooms, propertyType, spaceType, selectedAmenities])
 
 
 	//
@@ -182,11 +248,14 @@ const TabFilters = () => {
 									<div className="relative flex flex-col space-y-5 px-5 py-6">
 										{list?.map(([key, value]: [string, any]) => (
 											<div key={key} className="">
-												<Checkbox
+												{/* <Checkbox
 													name={value}
 													label={value}
 													// subLabel={item.description}
-												/>
+												/> */}
+												<input onChange={(e)=>setPropertyType(e.target.value)} value={value} type="radio" name="property-type" id={`${key}-${value}`} className='cursor-pointer' />
+												<label className='ms-3 cursor-pointer' htmlFor={`${key}-${value}`}>{value}</label>
+												
 											</div>
 										))}
 									</div>
@@ -207,6 +276,24 @@ const TabFilters = () => {
 					</>
 				)}
 			</Popover>
+		)
+	}
+
+	const renderCheckInDate = () => {
+		return (
+			<div>
+				<input type="date" value={checkin} onChange={(e)=>setCheckin(e.target.value)} className='flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-700 dark:hover:border-neutral-600' />
+				<small className='text-gray-400 ps-3'>Checkin Date</small>
+			</div>
+		)
+	}
+
+	const renderCheckOutDate = () => {
+		return (
+			<div>
+				<input type="date" value={checkout} onChange={(e)=>setCheckout(e.target.value)} className='flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-700 dark:hover:border-neutral-600' />
+				<small className='text-gray-400 ps-3'>Checkout Date</small>
+			</div>
 		)
 	}
 
@@ -297,9 +384,9 @@ const TabFilters = () => {
 							<PopoverPanel className="absolute left-0 z-10 mt-3 w-screen max-w-sm px-4 sm:px-0">
 								<div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-xl dark:border-neutral-700 dark:bg-neutral-900">
 									<div className="relative flex flex-col space-y-5 px-5 py-6">
-										<NcInputNumber label="Beds" defaultValue={dataForFilter?.beds || 0} max={10} />
-										<NcInputNumber label="Bedrooms" defaultValue={dataForFilter?.bedrooms || 0} max={10} />
-										<NcInputNumber label="Bathrooms" defaultValue={dataForFilter?.bathrooms || 0} max={10} />
+										<NcInputNumber label="Beds" onChange={handleBedsChange} defaultValue={dataForFilter?.beds || 0} max={10} />
+										<NcInputNumber label="Bedrooms" onChange={handleBedroomsChange} defaultValue={dataForFilter?.bedrooms || 0} max={10} />
+										<NcInputNumber label="Bathrooms" onChange={handleBathroomsChange} defaultValue={dataForFilter?.bathrooms || 0} max={10} />
 									</div>
 									<div className="flex items-center justify-between bg-neutral-50 p-5 dark:border-t dark:border-neutral-800 dark:bg-neutral-900">
 										<ButtonThird onClick={close} sizeClass="px-4 py-2 sm:px-5">
@@ -372,7 +459,7 @@ const TabFilters = () => {
 												<div className="relative mt-1 rounded-md">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 														<span className="text-neutral-500 sm:text-sm">
-															$
+														₹
 														</span>
 													</div>
 													<input
@@ -395,7 +482,7 @@ const TabFilters = () => {
 												<div className="relative mt-1 rounded-md">
 													<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 														<span className="text-neutral-500 sm:text-sm">
-															$
+														₹
 														</span>
 													</div>
 													<input
@@ -443,7 +530,8 @@ const TabFilters = () => {
 							key={item?.title}
 							name={item?.title}
 							label={item?.title}
-							defaultChecked={!!item.defaultChecked}
+							defaultChecked={selectedAmenities.includes(item.id)}
+							onChange={() => handleCheckboxChange(item.id)}
 						/>
 					))}
 				</div>
@@ -541,22 +629,26 @@ const TabFilters = () => {
 		
 		const entries = Object?.entries(data);
 	  
-		const list1 = entries?.slice(0, Math.ceil(entries?.length / 2));
-		const list2 = entries?.slice(Math.ceil(entries?.length / 2));
+		const list1 = entries?.slice(0, Math.ceil(entries?.length));
+		// const list2 = entries?.slice(Math.ceil(entries?.length / 2));
 	  
 		return (
 		  <div className="grid grid-cols-2 gap-4">
 			<div className="flex flex-col space-y-5">
-			  {list1.map(([key, value]: [string, any]) => (
-				<Checkbox
-				  key={key}
-				  name={key}
-				  label={value}  
-				  defaultChecked={false}
-				/>
+			  {list1.map(([key, value]: [string, any], index:number) => (
+				// <Checkbox
+				//   key={key}
+				//   name={key}
+				//   label={value}  
+				//   defaultChecked={false}
+				// />
+				<div className='flex gap-1 items-center' key={index}>
+					<input onChange={(e)=>setSpaceType(e.target.value)} value={key} type="radio" name="space-type" id={`${key}-${value}`} className='cursor-pointer' />
+					<label className='ms-3 cursor-pointer' htmlFor={`${key}-${value}`}>{value}</label>
+				</div>
 			  ))}
 			</div>
-			<div className="flex flex-col space-y-5">
+			{/* <div className="flex flex-col space-y-5">
 			  {list2.map(([key, value]: [string, any]) => (
 				<Checkbox
 				  key={key}
@@ -565,7 +657,7 @@ const TabFilters = () => {
 				  defaultChecked={false} 
 				/>
 			  ))}
-			</div>
+			</div> */}
 		  </div>
 		);
 	  };
@@ -753,10 +845,13 @@ const TabFilters = () => {
 
 	return (
 		<div className="flex lg:space-x-4">
-			<div className="hidden space-x-4 lg:flex">
+			<div className="hidden space-x-4 lg:flex justify-start flex-wrap gap-3">
 				{
-					renderSearchLocation()
+					// renderSearchLocation()
+					<GooglePlaceComponent setLocation={setLocation} />
 				}
+				{renderCheckInDate()}
+				{renderCheckOutDate()}
 				{renderTabsTypeOfPlace(dataForFilter)}
 				{renderTabsPriceRage(dataForFilter)}
 				{renderTabsRoomAndBeds(dataForFilter)}

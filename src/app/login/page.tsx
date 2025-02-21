@@ -1,4 +1,5 @@
-import React, { FC } from 'react'
+'use client'
+import React, { FC, useState } from 'react'
 import facebookSvg from '@/images/Facebook.svg'
 import twitterSvg from '@/images/Twitter.svg'
 import googleSvg from '@/images/Google.svg'
@@ -6,6 +7,7 @@ import Input from '@/shared/Input'
 import ButtonPrimary from '@/shared/ButtonPrimary'
 import Image from 'next/image'
 import Link from 'next/link'
+import axios from 'axios'
 
 export interface PageLoginProps {}
 
@@ -16,11 +18,6 @@ const loginSocials = [
 		icon: facebookSvg,
 	},
 	{
-		name: 'Continue with Twitter',
-		href: '#',
-		icon: twitterSvg,
-	},
-	{
 		name: 'Continue with Google',
 		href: '#',
 		icon: googleSvg,
@@ -28,6 +25,27 @@ const loginSocials = [
 ]
 
 const PageLogin: FC<PageLoginProps> = ({}) => {
+
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+
+	const handleLoginSubmit = async (e:any) => {
+		e.preventDefault()
+
+		try {
+
+			const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {email, password}, {headers: {
+				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+			}})
+			if(data.status === "success"){
+				alert("Login successful")
+			}
+			
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	return (
 		<div className={`nc-PageLogin`}>
 			<div className="container mb-24 lg:mb-32">
@@ -61,7 +79,7 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 						<div className="absolute left-0 top-1/2 w-full -translate-y-1/2 transform border border-neutral-100 dark:border-neutral-800"></div>
 					</div>
 					{/* FORM */}
-					<form className="grid grid-cols-1 gap-6" action="#" method="post">
+					<form className="grid grid-cols-1 gap-6" action="#" method="post" onSubmit={handleLoginSubmit}>
 						<label className="block">
 							<span className="text-neutral-800 dark:text-neutral-200">
 								Email address
@@ -70,6 +88,7 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 								type="email"
 								placeholder="example@example.com"
 								className="mt-1"
+								onChange={(e)=>setEmail(e.target.value)}
 							/>
 						</label>
 						<label className="block">
@@ -79,9 +98,9 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 									Forgot password?
 								</Link>
 							</span>
-							<Input type="password" className="mt-1" />
+							<Input type="password" className="mt-1" onChange={(e)=>setPassword(e.target.value)} />
 						</label>
-						<ButtonPrimary type="submit">Continue</ButtonPrimary>
+						<ButtonPrimary type="submit">Login</ButtonPrimary>
 					</form>
 
 					{/* ==== */}
