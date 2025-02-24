@@ -28,11 +28,11 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	subHeading = 'Popular places to stay that Homestays recommends for you',
 	headingIsCenter,
 	// tabs = ['New York', 'Tokyo', 'Paris', 'London'],
-	tabs = ['All','Homestay', 'Farmstay', 'Second Home', 'Workstation'],
+	tabs = ['Homestay', 'Farmstay', 'Second Home', 'Workstation'],
 	cardType = 'card2',
 }) => {
 
-	const [currentActiveTab, setCurrentActiveTab] = useState('All')
+	const [currentActiveTab, setCurrentActiveTab] = useState('Homestay')
 
 	function filterListingByTab(tab:any) {
 		return stayListings.filter((item:any) => item.name === tab);
@@ -48,8 +48,8 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 
  
 	
-	const filteredProducts = currentActiveTab != "All" ? filterListingByTab(currentActiveTab).slice(0, 8) : stayListings.slice(0, 8);
-	console.warn('currentActiveTab ::',currentActiveTab);
+	const filteredProducts = filterListingByTab(currentActiveTab);
+	
 	const renderCard = (stay: any) => {
 		let CardName = StayCard
 		switch (cardType) {
@@ -70,7 +70,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	return (
 		<div className="nc-SectionGridFeaturePlaces relative" style={{marginTop:'4rem'}}>
 			<HeaderFilter
-				tabActive={'All'}
+				tabActive={'Homestay'}
 				subHeading={subHeading}
 				tabs={tabs}
 				heading={heading}

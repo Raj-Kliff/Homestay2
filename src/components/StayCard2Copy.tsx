@@ -18,7 +18,7 @@ export interface StayCard2Props {
 
 const DEMO_DATA = DEMO_STAY_LISTINGS[0]
 
-const StayCard2: FC<StayCard2Props> = ({
+const StayCard2Copy: FC<StayCard2Props> = ({
 	size = 'default',
 	className = '',
 	data = DEMO_DATA,
@@ -145,16 +145,16 @@ const StayCard2: FC<StayCard2Props> = ({
 		// 	<Link href={"/listing-stay-detail"}>{renderContent()}</Link>
 		// </div>
 
-		properties?.slice(0,8).map((item: any, index: any) => (
-			<div className={`nc-StayCard2 group relative ${className}`} key={item?.id}>
+		// properties?.map((item: any, index: any) => (
+			<div className={`nc-StayCard2 group relative ${className}`} key={data?.id}>
 
 				<div className="relative w-full">
 					<GallerySlider2
 						uniqueID={`StayCard2_${id}`}
 						ratioClass="aspect-w-12 aspect-h-11"
-						galleryImgs={item?.property_photos}
+						galleryImgs={data?.property_photos}
 						imageClass="rounded-lg"
-						href={`/property/${item?.slug}`}
+						href={`/property/${data?.slug}`}
 					/>
 					{/* <BtnLikeIcon
 						isLiked={like}
@@ -163,13 +163,13 @@ const StayCard2: FC<StayCard2Props> = ({
 					{saleOff && <SaleOffBadge className="absolute left-3 top-3" />} */}
 				</div>
 
-				<Link href={`/property/${item?.slug}`}>
+				<Link href={`/property/${data?.slug}`}>
 					<div
 						className={size === 'default' ? 'mt-3 space-y-3' : 'mt-2 space-y-2'}
 					>
 						<div className="space-y-2">
 							<span className="text-sm text-neutral-500 dark:text-neutral-400">
-								{item?.bedrooms} {item?.bedrooms > 1 ? 'bedrooms' : 'bedroom'} · {item?.beds} {item?.beds > 1 ? 'beds' : 'bed'}
+								{data?.bedrooms} {data?.bedrooms > 1 ? 'bedrooms' : 'bedroom'} · {data?.beds} {data?.beds > 1 ? 'beds' : 'bed'}
 							</span>
 							<div className="flex items-center space-x-2">
 								{/* {isAds && <Badge name="ADS" color="green" />} */}
@@ -178,7 +178,7 @@ const StayCard2: FC<StayCard2Props> = ({
 										size === 'default' ? 'text-base' : 'text-base'
 									}`}
 								>
-									<span className="line-clamp-1">{item?.name}</span>
+									<span className="line-clamp-1">{data?.name}</span>
 								</h2>
 							</div>
 							<div className="flex items-center space-x-1.5 text-sm text-neutral-500 dark:text-neutral-400">
@@ -203,13 +203,13 @@ const StayCard2: FC<StayCard2Props> = ({
 										/>
 									</svg>
 								)}
-								<span className="">{item?.property_address?.city}, {item?.property_address?.state}</span>
+								<span className="">{data?.property_address?.city}, {data?.property_address?.state}</span>
 							</div>
 						</div>
 						<div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
 						<div className="flex items-center justify-between">
 							<span className="text-base font-semibold">
-								{ isTodayWeekend === false ? item?.property_price?.price : item?.property_price?.weekend_price}
+								{ isTodayWeekend === false ? data?.property_price?.price : data?.property_price?.weekend_price}
 								{` `}
 								{size === 'default' && (
 									<span className="text-sm font-normal text-neutral-500 dark:text-neutral-400">
@@ -218,8 +218,8 @@ const StayCard2: FC<StayCard2Props> = ({
 								)}
 							</span>
 							<StartRating
-								reviewCount={item?.reviews_count}
-								point={item?.avg_rating}
+								reviewCount={data?.reviews_count}
+								point={data?.avg_rating}
 							/>
 							{/* {properties[0].reviews_count && (
 							<StartRating reviewCount={properties[0].reviews_count} point={properties[0].avg_rating} />
@@ -228,8 +228,8 @@ const StayCard2: FC<StayCard2Props> = ({
 					</div>
 				</Link>
 			</div>
-		))
+		// ))
 	)
 }
 
-export default StayCard2
+export default StayCard2Copy

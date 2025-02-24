@@ -8,6 +8,7 @@ export interface ListingStayMapPageProps {}
 const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
 
   const [featuredPlaces, setFeaturedPlaces] = useState<any>([]);
+  const [allInternalProperties, setAllInternalProperties] = useState([]);
 
   const fetchFeaturedPlaces = async () => {
 	  try {
@@ -28,9 +29,18 @@ const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
     fetchFeaturedPlaces()
   },[])
 
+  useEffect(() => {
+    // Extract all internal 'properties' arrays and merge them
+    const internalProperties = featuredPlaces.flatMap((property:any) => property.properties);
+    
+    // Update state with the combined internal properties
+    setAllInternalProperties(internalProperties);
+  }, [featuredPlaces]);
+
+
   return (
     <div className="container pb-24 lg:pb-28 2xl:pl-10 xl:pr-0 xl:max-w-none">
-      <SectionGridHasMap stayListings={featuredPlaces} />
+      <SectionGridHasMap stayListings={allInternalProperties} />
     </div>
   );
 };

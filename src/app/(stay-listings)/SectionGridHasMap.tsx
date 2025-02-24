@@ -11,6 +11,7 @@ import Heading2 from '@/shared/Heading2'
 import StayCard2 from '@/components/StayCard2'
 import MapContainer from '@/components/MapContainer'
 import { MapIcon } from '@heroicons/react/24/outline'
+import StayCard2Copy from '@/components/StayCard2Copy'
 
 const DEMO_STAYS = DEMO_STAY_LISTINGS.filter((_, i) => i < 12)
 export interface SectionGridHasMapProps {
@@ -37,7 +38,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 								onMouseEnter={() => setCurrentHoverID((_) => item.id)}
 								onMouseLeave={() => setCurrentHoverID((_) => -1)}
 							>
-								<StayCard2 data={item} />
+								<StayCard2Copy data={item} />
 							</div>
 						))}
 					</div>
@@ -73,7 +74,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 						<MapContainer
 							currentHoverID={currentHoverID}
 							DEMO_DATA={DEMO_STAYS}
-							// DEMO_DATA={stayListings}
+							// DEMO_DATA2={stayListings}
 							listingType="stay"
 						/>
 					</div>
