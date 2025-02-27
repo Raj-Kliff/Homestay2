@@ -14,6 +14,7 @@ interface MapContainerProps {
 	currentHoverID: string | number
 	DEMO_DATA: CarDataType[] | ExperiencesDataType[] | StayDataType[]
 	listingType: 'car' | 'experiences' | 'stay'
+	DEMO_DATA2: any
 }
 
 interface ListingData {
@@ -35,6 +36,7 @@ interface ListingData {
 const MapContainer: FC<MapContainerProps> = ({
 	currentHoverID = -1,
 	DEMO_DATA,
+	DEMO_DATA2,
 	listingType,
 }) => {
 
@@ -60,6 +62,19 @@ const MapContainer: FC<MapContainerProps> = ({
 	// 	setListings(mappedListings); 
 	//   }, []);
 
+	const [isDataLoaded, setIsDataLoaded] = useState(false)
+
+	useEffect(()=>{
+		if(DEMO_DATA2 && DEMO_DATA2.length > 0){
+			setIsDataLoaded(true)
+		}
+	},[DEMO_DATA2])
+
+	if(!isDataLoaded){
+		return <div className='w-full h-full flex items-center justify-center animate-pulse bg-gray-200'>Loading....</div>
+	}
+
+
 	return (
 		<>
 			{/* BELLOW IS MY GOOGLE API KEY -- PLEASE DELETE AND TYPE YOUR API KEY */}
@@ -68,9 +83,12 @@ const MapContainer: FC<MapContainerProps> = ({
 					width: '100%',
 					height: '100%',
 				}}
-				defaultZoom={12}
+				defaultZoom={4}
 				// defaultCenter={DEMO_DATA[0].map}
-				defaultCenter={DEMO_DATA[0].map}
+				defaultCenter={{
+					lat: parseFloat(DEMO_DATA2[0]?.property_address?.latitude),
+					lng: parseFloat(DEMO_DATA2[0]?.property_address?.longitude)
+				}}
 				gestureHandling={'greedy'}
 				mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID}
 			>
@@ -83,18 +101,21 @@ const MapContainer: FC<MapContainerProps> = ({
 						/>
 					</div>
 				</MapControl>
-				{DEMO_DATA.map((item) => (
+				{DEMO_DATA2?.map((item:any) => (
 					<AdvancedMarker
 						key={item.id}
-						position={item.map}
+						position={{
+							lat: parseFloat(item?.property_address?.latitude),
+							lng: parseFloat(item?.property_address?.longitude)
+						}}
 						clickable
 						onClick={() => console.log('clicked')}
 					>
 						<AnyReactComponent
 							isSelected={currentHoverID === item.id}
 							key={item.id}
-							lat={item.map.lat}
-							lng={item.map.lng}
+							lat={item?.property_address?.latitude}
+							lng={item?.property_address?.latitude}
 							// car={listingType === 'car' ? (item as CarDataType) : undefined}
 							// experiences={
 							// 	listingType === 'experiences'
@@ -102,7 +123,8 @@ const MapContainer: FC<MapContainerProps> = ({
 							// 		: undefined
 							// }
 							listing={
-								listingType === 'stay' ? (item as StayDataType) : undefined
+								// listingType === 'stay' ? (item as StayDataType) : undefined
+								listingType === 'stay' ? (item as any) : undefined
 							}
 						/>
 					</AdvancedMarker>

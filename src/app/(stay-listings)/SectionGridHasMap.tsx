@@ -74,7 +74,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 						<MapContainer
 							currentHoverID={currentHoverID}
 							DEMO_DATA={DEMO_STAYS}
-							// DEMO_DATA2={stayListings}
+							DEMO_DATA2={stayListings}
 							listingType="stay"
 						/>
 					</div>

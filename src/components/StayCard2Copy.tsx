@@ -209,7 +209,7 @@ const StayCard2Copy: FC<StayCard2Props> = ({
 						<div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
 						<div className="flex items-center justify-between">
 							<span className="text-base font-semibold">
-								{ isTodayWeekend === false ? data?.property_price?.price : data?.property_price?.weekend_price}
+							₹ { isTodayWeekend === false ? data?.property_price?.price : data?.property_price?.weekend_price}
 								{` `}
 								{size === 'default' && (
 									<span className="text-sm font-normal text-neutral-500 dark:text-neutral-400">

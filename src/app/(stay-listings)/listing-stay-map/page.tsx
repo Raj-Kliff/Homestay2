@@ -7,8 +7,8 @@ export interface ListingStayMapPageProps {}
 
 const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
 
-  const [featuredPlaces, setFeaturedPlaces] = useState<any>([]);
-  const [allInternalProperties, setAllInternalProperties] = useState([]);
+  const [featuredPlaces, setFeaturedPlaces] = useState<any[]>([]);
+  const [allInternalProperties, setAllInternalProperties] = useState<any[]>([]);
 
   const fetchFeaturedPlaces = async () => {
 	  try {
@@ -19,6 +19,8 @@ const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
 		});
 		if (data.status === 'success') {
 		  setFeaturedPlaces(data.data.properties);
+      const internalProperties = data.data.properties.flatMap((property: any) => property.properties);
+      setAllInternalProperties(internalProperties);
 		}
 	  } catch (error) {
 		console.error(error);
@@ -29,13 +31,14 @@ const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
     fetchFeaturedPlaces()
   },[])
 
-  useEffect(() => {
-    // Extract all internal 'properties' arrays and merge them
-    const internalProperties = featuredPlaces.flatMap((property:any) => property.properties);
+
+  // useEffect(() => {
+  //   // Extract all internal 'properties' arrays and merge them
+  //   const internalProperties = featuredPlaces.flatMap((property:any) => property.properties);
     
-    // Update state with the combined internal properties
-    setAllInternalProperties(internalProperties);
-  }, [featuredPlaces]);
+  //   // Update state with the combined internal properties
+  //   setAllInternalProperties(internalProperties);
+  // }, [featuredPlaces]);
 
 
   return (

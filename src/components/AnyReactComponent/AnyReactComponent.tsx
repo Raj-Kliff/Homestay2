@@ -7,10 +7,11 @@ import StayCard from '@/components/StayCard'
 import { CarDataType, ExperiencesDataType, StayDataType } from '@/data/types'
 import React, { FC, Fragment } from 'react'
 import { useState } from 'react'
+import StayCard2Copy from '../StayCard2Copy'
 
 export interface AnyReactComponentProps {
 	className?: string
-	listing?: StayDataType
+	listing?: any //StayDataType
 	experiences?: ExperiencesDataType
 	car?: CarDataType
 	isSelected?: boolean
@@ -27,6 +28,7 @@ const AnyReactComponent: FC<AnyReactComponentProps> = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false)
 
+
 	return (
 		<div
 			className={`nc-AnyReactComponent relative ${className}`}
@@ -40,7 +42,7 @@ const AnyReactComponent: FC<AnyReactComponentProps> = ({
 						: 'bg-white hover:bg-neutral-900 hover:text-white dark:bg-neutral-900 dark:hover:bg-white dark:hover:text-neutral-900'
 				}`}
 			>
-				{listing?.price || experiences?.price || car?.price}
+				{listing?.property_price?.price}
 			</span>
 			<Transition
 				show={isOpen}
@@ -54,7 +56,8 @@ const AnyReactComponent: FC<AnyReactComponentProps> = ({
 			>
 				<div className="aspect-w-1 absolute -left-12 bottom-full z-50 w-[260px] pb-3">
 					{listing && (
-						<StayCard size="small" data={listing} className="shadow-2xl" />
+						// <StayCard size="small" data={listing} className="shadow-2xl" />
+						<StayCard2Copy size='small' key={listing.id} data={listing} className="shadow-2xl bg-white rounded-xl p-2" />
 					)}
 					{experiences && (
 						<ExperiencesCard
