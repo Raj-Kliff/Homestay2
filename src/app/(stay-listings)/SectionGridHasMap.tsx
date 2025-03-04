@@ -18,9 +18,18 @@ export interface SectionGridHasMapProps {
 	stayListings: any
 }
 
+const itemsPerPage = 20;
+
 const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 	const [currentHoverID, setCurrentHoverID] = useState<string | number>(-1)
 	const [showFullMapFixed, setShowFullMapFixed] = useState(false)
+
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const totalPages = Math.ceil(stayListings?.length / itemsPerPage);
+	const currentItems = stayListings?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+	const handlePageChange = (page:number) => {
+		setCurrentPage(page);
+	  };
 
 	return (
 		<div>
@@ -32,7 +41,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 						<TabFilters />
 					</div>
 					<div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 2xl:gap-x-6">
-						{stayListings.map((item:any) => (
+						{currentItems.map((item:any) => (
 							<div
 								key={item.id}
 								onMouseEnter={() => setCurrentHoverID((_) => item.id)}
@@ -43,7 +52,35 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 						))}
 					</div>
 					<div className="mt-16 flex items-center justify-center">
-						<Pagination />
+						{/* <Pagination /> */}
+						<div>
+							<button 
+							onClick={() => handlePageChange(currentPage - 1)} 
+							disabled={currentPage === 1}
+							className={` ${currentPage === 1 ? 'invisible' : ''} inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700`}
+							>
+							&larr;
+							</button>
+
+							{/* Display page numbers */}
+							{Array.from({ length: totalPages }, (_, index) => (
+							<button 
+								key={index + 1} 
+								onClick={() => handlePageChange(index + 1)} 
+								className={` mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${currentPage === index+1 ? "bg-primary-700" : "bg-primary-600"}`}
+							>
+								{index + 1}
+							</button>
+							))}
+
+							<button 
+							onClick={() => handlePageChange(currentPage + 1)} 
+							disabled={currentPage === totalPages}
+							className={`${currentPage === totalPages ? 'invisible' : ''} border border-gray-400  inline-flex h-11 px-3 items-center justify-center rounded-full text-gray-700`}
+							>
+							&rarr;
+							</button>
+						</div>
 					</div>
 				</div>
 
@@ -74,7 +111,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 						<MapContainer
 							currentHoverID={currentHoverID}
 							DEMO_DATA={DEMO_STAYS}
-							DEMO_DATA2={stayListings}
+							DEMO_DATA2={currentItems}
 							listingType="stay"
 						/>
 					</div>

@@ -83,7 +83,7 @@ const MapContainer: FC<MapContainerProps> = ({
 					width: '100%',
 					height: '100%',
 				}}
-				defaultZoom={4}
+				defaultZoom={6}
 				// defaultCenter={DEMO_DATA[0].map}
 				defaultCenter={{
 					lat: parseFloat(DEMO_DATA2[0]?.property_address?.latitude),
