@@ -13,6 +13,7 @@ import axios from 'axios'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation'
 
 const countryCodes = require('country-codes-list')
 
@@ -42,7 +43,7 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 	const [countryCodesList, setCountryCodesList] = useState<CountryCode[]>([]);
 	const [configData, setConfigData] = useState<any>(null);
 	const [registerSocial, setRegisterSocial] = useState<any>();
-	const [csrfToken, setCsrfToken] = useState("");
+	const router = useRouter()
 
 	const [formData, setFormData] = useState({
 		first_name: '',
@@ -80,7 +81,6 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 				const updatedData = { ...prevData, [e.target.name]: e.target.value };
 				return updatedData;
 			});
-		
 	  };
 
 	  // Handle register form field changes
@@ -109,13 +109,11 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 			formData,
 			{headers: {
 				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
-				'X-CSRF-TOKEN': "cookieAccepted=true; __stripe_mid=3ce82c9a-0b56-41ee-9e09-97c8e5d7eb2bf0f8e9", 
 			}}
 			 
 		  );
-		  	console.log(data.status)
+		  	
 			if(data.status == "success"){
-				console.log("token::",data)
 				alert("Registration successful");
 				setFormData({
 					first_name: '',
@@ -128,6 +126,7 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 					formatted_phone:'',
 					default_country:''
 				})
+				router.push("/login")
 
 			}
 
@@ -185,7 +184,7 @@ const PageSignUp: FC<PageSignUpProps> = ({}) => {
 	return (
 		<div className={`nc-PageSignUp`}>
 			<div className="container mb-24 lg:mb-32">
-				<h2 className="my-10 mt-5 flex items-center justify-center text-3xl font-semibold leading-[115%] text-neutral-900 dark:text-neutral-100 md:text-5xl md:leading-[115%]">
+				<h2 className="my-10 mt-5 flex items-center justify-center text-3xl font-semibold leading-[100%] text-neutral-900 dark:text-neutral-100 md:text-5xl md:leading-[100%]">
 					Signup
 				</h2>
 				<div className="mx-auto max-w-md space-y-6">

@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import GallerySlider from '@/components/GallerySlider'
 import GallerySlider2 from '@/components/GallerySlider2'
 import { DEMO_STAY_LISTINGS } from '@/data/listings'
@@ -9,6 +9,7 @@ import BtnLikeIcon from '@/components/BtnLikeIcon'
 import SaleOffBadge from '@/components/SaleOffBadge'
 import Badge from '@/shared/Badge'
 import Link from 'next/link'
+import axios from 'axios'
 
 export interface StayCard2Props {
 	className?: string
@@ -41,6 +42,8 @@ const StayCard2: FC<StayCard2Props> = ({
 	} = data
 
 	const [isTodayWeekend, setIsTodayWeekend] = useState(false)
+	const [listingDetail, setListingDetail] = useState<any>({})
+	const [currentSlug, setCurrentSlug] = useState<String>('')
 
 	function isWeekend() {
 		const today = new Date();
@@ -137,6 +140,53 @@ const StayCard2: FC<StayCard2Props> = ({
 		)
 	}
 
+	const fetchListingDetails = useCallback(async () => {
+		if (!currentSlug) return;
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${currentSlug}`, {
+			headers: {
+			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+			},
+		  });
+		  if (data.status === 'success') {
+			setListingDetail(data.data);
+		  }
+		} catch (error) {
+		  console.error(error);
+		}
+	  },[currentSlug]) 
+
+
+	const favouriteProperty = async() => {
+		try {
+			const property_id = listingDetail?.result?.id
+			const user_id = listingDetail?.result?.users?.id
+			const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/toggle-favourite`,{property_id, user_id}, {
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			})
+			if(data.status === 'success'){
+				alert('successful')
+			}
+			
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const handleLikeButtonClick = (slug: string) => {
+		setCurrentSlug(slug); // Update currentSlug to trigger listing details fetch
+		favouriteProperty(); // Directly trigger the API call
+	};
+
+	useEffect(()=>{
+		// if (currentSlug) {
+		// 	fetchListingDetails();
+		// 	favouriteProperty()
+		// }
+		fetchListingDetails();
+	  },[currentSlug, fetchListingDetails])
 	
 
 	return (
@@ -156,11 +206,13 @@ const StayCard2: FC<StayCard2Props> = ({
 						imageClass="rounded-lg"
 						href={`/property/${item?.slug}`}
 					/>
-					{/* <BtnLikeIcon
+					<BtnLikeIcon
 						isLiked={like}
 						className="absolute right-3 top-3 z-[1]"
+						// onClick={() => setCurrentSlug(item?.slug)}
+						onClick={() => handleLikeButtonClick(item?.slug)}
 					/>
-					{saleOff && <SaleOffBadge className="absolute left-3 top-3" />} */}
+					{/* {saleOff && <SaleOffBadge className="absolute left-3 top-3" />} */}
 				</div>
 
 				<Link href={`/property/${item?.slug}`}>

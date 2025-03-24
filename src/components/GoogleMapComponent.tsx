@@ -33,9 +33,10 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ latitude, longi
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
   const onLoad = useCallback(function callback(map: google.maps.Map) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+    // const bounds = new window.google.maps.LatLngBounds(center);
+    // map.fitBounds(bounds);
     setMap(map);
+    map.setZoom(16);
   }, [center]);
 
   const onUnmount = useCallback(function callback() {
@@ -46,9 +47,14 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ latitude, longi
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={6}
       onLoad={onLoad}
       onUnmount={onUnmount}
+      options={{
+        zoomControl: false, // Disable zoom control UI
+        scrollwheel: false, // Disable zooming with mouse scroll
+        disableDoubleClickZoom: true, // Disable zooming with double-click
+      }}
     >
       {/* You can add Marker or other components inside the map */}
       <Marker position={{ lat: center.lat, lng: center.lng }} />

@@ -12,6 +12,7 @@ import Footer2 from '@/components/Footer2'
 import Footer3 from '@/components/Footer3'
 import Footer4 from '@/components/Footer4'
 import LocationContextProvider from './contextApi/LocationContext'
+import {ImageProvider} from './contextApi/ImageContext'
 import Script from 'next/script'
 
 const poppins = Poppins({
@@ -41,23 +42,25 @@ export default function RootLayout({
             />
 			{/* <script src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&libraries=places`}></script> */}
             <LocationContextProvider>
-                <ThemeProvider>
-                    <body className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
-                        <div>
-                            <SiteHeader />
-                            {children}
-                            <FooterNav />
+                <ImageProvider>
+                    <ThemeProvider>
+                        <body className="bg-white text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-200">
+                            <div>
+                                <SiteHeader />
+                                {children}
+                                <FooterNav />
 
-                            {/* Chose footer style here!!!! */}
-                            {/* <Footer /> */}
-                            <Footer2 />
-                            {/* <Footer3 /> */}
-                            {/* <Footer4 /> */}
-                        </div>
+                                {/* Chose footer style here!!!! */}
+                                {/* <Footer /> */}
+                                <Footer2 />
+                                {/* <Footer3 /> */}
+                                {/* <Footer4 /> */}
+                            </div>
 
-                        <ClientCommons />
-                    </body>
-                </ThemeProvider>
+                            <ClientCommons />
+                        </body>
+                    </ThemeProvider>
+                </ImageProvider>
             </LocationContextProvider>
         </html>
     )

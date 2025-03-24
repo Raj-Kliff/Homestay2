@@ -8,6 +8,8 @@ import ButtonPrimary from '@/shared/ButtonPrimary'
 import Image from 'next/image'
 import Link from 'next/link'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useImages } from '../contextApi/ImageContext'
 
 export interface PageLoginProps {}
 
@@ -28,6 +30,9 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+	const {setToken} = useImages()
+
+	const router = useRouter()
 
 	const handleLoginSubmit = async (e:any) => {
 		e.preventDefault()
@@ -35,10 +40,12 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 		try {
 
 			const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {email, password}, {headers: {
-				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 			}})
 			if(data.status === "success"){
 				alert("Login successful")
+				setToken(data.data.token)
+				router.push("/")
 			}
 			
 		} catch (error) {
@@ -49,7 +56,7 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 	return (
 		<div className={`nc-PageLogin`}>
 			<div className="container mb-24 lg:mb-32">
-				<h2 className="my-20 flex items-center justify-center text-3xl font-semibold leading-[115%] text-neutral-900 dark:text-neutral-100 md:text-5xl md:leading-[115%]">
+				<h2 className="my-20 flex items-center justify-center text-3xl font-semibold leading-[10%] text-neutral-900 dark:text-neutral-100 md:text-5xl md:leading-[10%]">
 					Login
 				</h2>
 				<div className="mx-auto max-w-md space-y-6">

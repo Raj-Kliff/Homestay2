@@ -16,6 +16,7 @@ import {
 } from '@headlessui/react'
 import LikeSaveBtns from '../LikeSaveBtns'
 import { Route } from 'next'
+import { useImages } from '@/app/contextApi/ImageContext'
 
 const PHOTOS: string[] = [
 	'https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
@@ -77,13 +78,23 @@ const ListingImageGallery: FC<Props> = ({ images = DEMO_IMAGE }) => {
 		router.push(`${thisPathname}/?${params.toString()}` as Route)
 	}
 
+	const {imagess} = useImages()
+	const updatedImages = [...imagess].map(
+		(item, index): ListingGalleryImage => {
+			return {
+				id: index,
+				url: item,
+			}
+		},
+	)
+
 	const renderContent = () => {
 		return (
 			<div className=" ">
 				{photoId && (
 					<Suspense>
 						<Modal
-							images={images}
+							images={updatedImages}
 							onClose={() => {
 								// @ts-ignore
 								setLastViewedPhoto(photoId)
@@ -96,7 +107,7 @@ const ListingImageGallery: FC<Props> = ({ images = DEMO_IMAGE }) => {
 				)}
 
 				<div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
-					{images?.map(({ id, url }) => (
+					{updatedImages?.map(({ id, url }) => (
 						<div
 							key={id}
 							onClick={() => {
@@ -148,7 +159,7 @@ const ListingImageGallery: FC<Props> = ({ images = DEMO_IMAGE }) => {
 							>
 								<ArrowLeftIcon className="h-6 w-6" />
 							</button>
-							<LikeSaveBtns />
+							{/* <LikeSaveBtns /> */}
 						</div>
 
 						<div className="flex min-h-full items-center justify-center pt-0 text-center sm:p-4">

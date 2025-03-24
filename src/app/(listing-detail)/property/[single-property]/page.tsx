@@ -33,6 +33,7 @@ import GuestsInput from './GuestInput'
 import StayDatesRangeInput from './StayDateRangeInput'
 import SectionDateRange from '../../SectionDateRange'
 import GoogleMapComponent from '@/components/GoogleMapComponent'
+import { useImages } from '@/app/contextApi/ImageContext'
 
 export interface ListingStayDetailPageProps {}
 
@@ -41,6 +42,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 	let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false)
 	const [listingDetail, setListingDetail] = useState<any>({})
+	const [daysToStay, setDaysToStay] = useState<number>(1)
+	const [totalFee, setTotalFee] = useState<number>(0)
+	const {setImagess} = useImages()
 
 	const thisPathname = usePathname()
 	let endPoint = thisPathname.split('/').pop();
@@ -56,8 +60,26 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 	const handleOpenModalImageGallery = () => {
-		router.push(`${thisPathname}/?modal=PHOTO_TOUR_SCROLLABLE` as Route)
+		router.push(`${endPoint}/?modal=PHOTO_TOUR_SCROLLABLE` as Route)
 	}
+
+	const calculateTotalFee = () => {
+		const price = listingDetail?.result?.property_price?.price ?? 0;
+		const guestFee = listingDetail?.result?.property_price?.guest_fee ?? 0;
+		const securityFee = listingDetail?.result?.property_price?.security_fee ?? 0;
+		const cleaningFee = listingDetail?.result?.property_price?.cleaning_fee ?? 0;
+		const totalDays = daysToStay;
+
+		// Calculate total fee
+		const total = (price * totalDays) + guestFee + securityFee + cleaningFee;
+
+		// Set the total fee
+		setTotalFee(total);
+	}
+
+	useEffect(()=>{
+		calculateTotalFee()
+	},[listingDetail, daysToStay])
 
 	// ---------------
 	// const [listingDetail, setListingDetail] = useState<any>({})
@@ -73,6 +95,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		  });
 		  if (data.status === 'success') {
 			setListingDetail(data.data);
+			const photos = data.data.result?.property_photos?.map((photo: any) => photo.image_url);
+			setImagess(photos || [])
 		  }
 		} catch (error) {
 		  console.error(error);
@@ -100,7 +124,6 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		fetchListingDescription()
 	},[fetchListingDetails,fetchListingDescription])
 
-	console.log('listing::',listingDescription)
 
 	const renderSection1 = ({result}:any) => {
 		return (
@@ -303,12 +326,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				</div>
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
-				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
-					{amenities?.filter((_:any, i:any) => i < 12).map((item:any) => (
+				<div className="flex gap-5 flex-wrap">
+					{amenities?.Facilities?.filter((_:any, i:any) => i < 12).map((item:any) => (
 						<div key={item.id} className="flex items-center space-x-3">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+							{/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
 							    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-							</svg>
+							</svg> */}
+							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.title}</span>
 						</div>
 					))}
@@ -359,7 +383,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						</div>
 
 						<div className="hiddenScrollbar flex-1 divide-y divide-neutral-200 overflow-y-auto px-8 text-neutral-700 dark:divide-neutral-700 dark:text-neutral-300">
-							{listingDetail?.amenities?.map((item:any) => (
+							{listingDetail?.amenities?.Facilities?.map((item:any) => (
 								<div
 									key={item?.id}
 									className="flex items-center space-x-5 py-2.5 sm:py-4 lg:space-x-8 lg:py-5"
@@ -389,12 +413,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				</div>
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
-				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
+				<div className="flex gap-5 flex-wrap">
 					{safetyAmenities?.filter((_:any, i:any) => i < 12).map((item:any) => (
 						<div key={item.id} className="flex items-center space-x-3">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-							    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-							</svg>
+							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.title}</span>
 						</div>
 					))}
@@ -468,8 +490,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						</a>
 						<div className="mt-1.5 flex items-center text-sm text-neutral-500 dark:text-neutral-400">
 							<StartRating />
-							<span className="mx-2">·</span>
-							<span> 12 places</span>
+							{/* <span className="mx-2">·</span>
+							<span> 12 places</span> */}
 						</div>
 					</div>
 				</div>
@@ -481,7 +503,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* info */}
 				<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
-					<div className="flex items-center space-x-3">
+					<h2 className='text-black font-bold'>Description:</h2>
+					<p>description text here</p>
+					{/* <div className="flex items-center space-x-3">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="icon icon-tabler icon-tabler-mail"
@@ -505,14 +529,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
                     <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
 
 						<span>{result?.users?.phone}</span>
-					</div>
+					</div> */}
 				</div>
 
 				{/* == */}
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+				{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				<div>
 					<ButtonSecondary href="/author">See host profile</ButtonSecondary>
-				</div>
+				</div> */}
 			</div>
 		)
 	}
@@ -640,12 +664,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					<h2 className="text-2xl font-semibold">Activities </h2>
 				</div>
 				{/* 6 */}
-				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
+				<div className="flex gap-5 flex-wrap">
 					{Activities_demos.filter((_, i) => i < 12).map((item) => (
 						<div key={item.name} className="flex items-center space-x-3">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-							<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-							</svg>
+							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.name}</span>
 						</div>
 					))}
@@ -654,19 +676,17 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection12 = () => {
+	const renderSection12 = ({attractions}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
 					<h2 className="text-2xl font-semibold">Local Attractions </h2>
 				</div>
 				{/* 6 */}
-				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
-					{Local_attraction_demos.filter((_, i) => i < 12).map((item) => (
-						<div key={item.name} className="flex items-center space-x-3">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-							<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-							</svg>
+				<div className="flex gap-5 flex-wrap">
+					{attractions?.filter((_:any, i:number) => i < 12).map((item:any) => (
+						<div key={item.id} className="flex items-center space-x-3">
+							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.name}</span>
 						</div>
 					))}
@@ -676,19 +696,17 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 
-	const renderSection13 = () => {
+	const renderSection13 = ({excursions}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
 					<h2 className="text-2xl font-semibold">Excursions </h2>
 				</div>
 				{/* 6 */}
-				<div className="grid grid-cols-1 gap-6 text-sm text-neutral-700 dark:text-neutral-300 xl:grid-cols-3">
-					{Excursions_attraction_demos.filter((_, i) => i < 12).map((item) => (
-						<div key={item.name} className="flex items-center space-x-3">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-							<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-							</svg>
+				<div className="flex gap-5 flex-wrap">
+					{excursions?.filter((_:any, i:number) => i < 12).map((item:any) => (
+						<div key={item.id} className="flex items-center space-x-3">
+							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.name}</span>
 						</div>
 					))}
@@ -697,13 +715,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSidebar = () => {
+	const renderSidebar = ({result}:any) => {
 		return (
 			<div className="listingSectionSidebar__wrap shadow-xl">
 				{/* PRICE */}
 				<div className="flex justify-between">
-					<span className="text-3xl font-semibold">
-					₹119
+					<span className="text-xl font-semibold">
+					 {result?.property_price?.currency_code} {result?.property_price?.price}
 						<span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
 							/night
 						</span>
@@ -713,7 +731,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* FORM */}
 				<form className="flex flex-col rounded-3xl border border-neutral-200 dark:border-neutral-700">
-					<StayDatesRangeInput className="z-[11] flex-1" />
+					<StayDatesRangeInput setDaysToStay={setDaysToStay} className="z-[11] flex-1" />
 					<div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
 					<GuestsInput className="flex-1" />
 				</form>
@@ -721,17 +739,31 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				{/* SUM */}
 				<div className="flex flex-col space-y-4">
 					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>₹119 x 3 night</span>
-						<span>₹357</span>
+						<span>{result?.property_price?.currency_code} {result?.property_price?.price} x {daysToStay} night</span>
+						<span>{result?.property_price?.currency_code} {result?.property_price?.price * daysToStay}</span>
 					</div>
+					{ result?.property_price?.cleaning_fee >= 0 &&
 					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>Service charge</span>
-						<span>₹0</span>
+						<span>Cleaning Fee</span>
+						<span>{result?.property_price?.currency_code} {result?.property_price?.cleaning_fee}</span>
 					</div>
+					}
+					{ result?.property_price?.security_fee >= 0 &&
+					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+						<span>Security Fee</span>
+						<span>{result?.property_price?.currency_code} {result?.property_price?.security_fee}</span>
+					</div>
+					}
+					{ result?.property_price?.guest_fee >= 0 &&
+					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+						<span>Guest Fee</span>
+						<span>{result?.property_price?.currency_code} {result?.property_price?.guest_fee}</span>
+					</div>
+					}
 					<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
 					<div className="flex justify-between font-semibold">
 						<span>Total</span>
-						<span>₹199</span>
+						<span>₹{totalFee}</span>
 					</div>
 				</div>
 
@@ -745,7 +777,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
     // const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
     // const {description} = listingDescription && listingDescription != undefined ?  listingDescription : {}
 
-	const { result, amenities, safetyAmenities } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
+	const { result, amenities, attractions, excursions } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
 	const { description } = listingDescription ?? {}; // Same approach for listingDescription
 
    
@@ -813,21 +845,21 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					{renderSection7({result})}
 					{renderSection9()}
 					{renderSection3({amenities})}
-					{safetyAmenities && safetyAmenities.length > 0 && renderSafetyAmenities({safetyAmenities})}
+					{/* {amenities && safetyAmenities.length > 0 && renderSafetyAmenities({safetyAmenities})} */}
 					{/* {renderSection4()} */}
 					<SectionDateRange />
 					{renderSection10()}
 					{renderSection11()}
-					{renderSection12()}
-					{renderSection13()}
+					{attractions?.length > 0 && renderSection12({attractions})}
+					{excursions?.length > 0 && renderSection13({excursions})}
 					{renderSection5({result})}
 					{renderSection6()}
-					{renderSection8()}
+					{description?.interaction_guests && renderSection8()}
 				</div>
 
 				{/* SIDEBAR */}
 				<div className="mt-14 hidden flex-grow lg:mt-0 lg:block">
-					<div className="sticky top-28">{renderSidebar()}</div>
+					<div className="sticky top-28">{renderSidebar({result})}</div>
 				</div>
 			</main>
 		</div>

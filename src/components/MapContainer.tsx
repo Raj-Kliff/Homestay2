@@ -13,8 +13,8 @@ import { CarDataType, ExperiencesDataType, StayDataType } from '@/data/types'
 interface MapContainerProps {
 	currentHoverID: string | number
 	DEMO_DATA: CarDataType[] | ExperiencesDataType[] | StayDataType[]
-	listingType: 'car' | 'experiences' | 'stay'
-	DEMO_DATA2: any
+	listingType: any //'car' | 'experiences' | 'stay'
+	DEMO_DATA2?: any
 }
 
 interface ListingData {

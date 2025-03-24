@@ -1,19 +1,35 @@
 'use client'
 
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 export interface BtnLikeIconProps {
 	className?: string
 	colorClass?: string
 	isLiked?: boolean
+	onClick?: () => void;
 }
 
 const BtnLikeIcon: FC<BtnLikeIconProps> = ({
 	className = '',
 	colorClass = 'text-white bg-black bg-opacity-30 hover:bg-opacity-50',
 	isLiked = false,
+	onClick
 }) => {
 	const [likedState, setLikedState] = useState(isLiked)
+
+	useEffect(() => {
+		setLikedState(isLiked)
+	}, [isLiked])
+
+	const handleClick = () => {
+		// Call the parent onClick function if it exists
+		if (onClick) {
+			onClick()
+		}
+
+		// Toggle the liked state
+		setLikedState(!likedState)
+	}
 
 	return (
 		<div
@@ -22,7 +38,8 @@ const BtnLikeIcon: FC<BtnLikeIconProps> = ({
 			} ${colorClass} ${className}`}
 			data-nc-id="BtnLikeIcon"
 			title="Save"
-			onClick={() => setLikedState(!likedState)}
+			// onClick={() => setLikedState(!likedState)}
+			onClick={handleClick}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

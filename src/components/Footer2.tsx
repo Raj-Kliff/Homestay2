@@ -1,4 +1,7 @@
+'use client'
 import Logo from '@/shared/Logo'
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const navigation: {
 	solutions: { name: string; href: string }[]
@@ -90,8 +93,32 @@ const navigation: {
 }
 
 export default function Footer2() {
+
+	const [staticPages, setStaticPages] = useState<any>([])
+
+	const fetchStaticPages = async() => {
+		try {
+			const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/pages`,{
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			})
+			if(data.status === 'success'){
+				setStaticPages(data.data)
+			}
+		} catch (error) {
+			
+		}
+	}
+
+	useEffect(()=>{
+		fetchStaticPages()
+	},[])
+
+	console.log("staticPages::", staticPages)
+
 	return (
-		<footer className="border-t border-neutral-200 dark:border-neutral-700 -mt-[5rem] bg-[#454545]">
+		<footer className="border-t border-neutral-200 dark:border-neutral-700 bg-[#454545]">
 			<div className="mx-auto max-w-7xl px-6 pb-2 pt-16 sm:pt-14 lg:px-8 lg:pt-4">
 				<div className="xl:grid xl:grid-cols-3 xl:gap-8">
 					<div className="space-y-2">
@@ -173,10 +200,10 @@ export default function Footer2() {
 									Company
 								</h3>
 								<ul role="list" className="mt-3 space-y-1">
-									{navigation.legal.map((item) => (
-										<li key={item.name}>
+									{staticPages?.map((item:any, index:number) => (
+										<li key={index}>
 											<a
-												href={item.href}
+												href={item.url}
 												className="text-sm/6 text-white hover:text-gray-900 dark:text-neutral-400"
 											>
 												{item.name}

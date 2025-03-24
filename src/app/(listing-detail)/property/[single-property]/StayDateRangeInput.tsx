@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Fragment, useState, FC } from 'react'
+import React, { Fragment, useState, FC, useEffect } from 'react'
 import {
 	Popover,
 	PopoverButton,
@@ -14,23 +14,51 @@ import DatePicker from 'react-datepicker'
 import ClearDataButton from '@/app/(client-components)/(HeroSearchForm)/ClearDataButton'
 
 export interface StayDatesRangeInputProps {
-	className?: string
+	className?: string,
+	setDaysToStay?: any
 }
 
 const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
-	className = 'flex-1',
+	className = 'flex-1', setDaysToStay
 }) => {
 	const [startDate, setStartDate] = useState<Date | null>(
-		new Date('2023/02/06'),
+		new Date(),
 	)
-	const [endDate, setEndDate] = useState<Date | null>(new Date('2023/02/23'))
-	//
+	// const [endDate, setEndDate] = useState<Date | null>(new Date())
+	const [endDate, setEndDate] = useState<Date | null>(() => {
+		const tomorrow = new Date();
+		tomorrow.setDate(tomorrow.getDate() + 1);
+		return tomorrow;
+	  });
 
 	const onChangeDate = (dates: [Date | null, Date | null]) => {
 		const [start, end] = dates
 		setStartDate(start)
 		setEndDate(end)
 	}
+
+	useEffect(() => {
+		if (startDate && endDate) {
+		  // Convert startDate and endDate to Date objects
+		  const start = new Date(startDate);
+		  const end = new Date(endDate);
+	
+		  // Check if the dates are valid
+		  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+			alert('Invalid date format');
+			return;
+		  }
+	
+		  // Calculate the difference in milliseconds
+		  const differenceInTime = end.getTime() - start.getTime();
+	
+		  // Convert milliseconds to days
+		  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+	
+		  // Update the state with the calculated number of days
+		  setDaysToStay(differenceInDays);
+		}
+	  }, [startDate, endDate]);
 
 	const renderInput = () => {
 		return (

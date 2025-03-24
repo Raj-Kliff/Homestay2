@@ -1,5 +1,6 @@
+'use client'
 import rightImg from "@/images/about-hero-right.png";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SectionFounder from "./SectionFounder";
 import SectionStatistic from "./SectionStatistic";
 import SectionHero from "./SectionHero";
@@ -8,21 +9,46 @@ import BackgroundSection from "@/components/BackgroundSection";
 import SectionClientSay from "@/components/SectionClientSay";
 import SectionSubscribe2 from "@/components/SectionSubscribe2";
 import Heading from "@/shared/Heading";
+import axios from "axios";
+import parse from 'html-react-parser';
 
 export interface PageAboutProps {}
 
 const PageAbout: FC<PageAboutProps> = ({}) => {
+
+  const [aboutPageContent, setAboutPageContent] = useState<any>()
+
+  const fetchAboutPageContent = async() => {
+		try {
+			const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/page/about`,{
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			})
+			if(data.status === 'success'){
+				setAboutPageContent(data.data)
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+  useEffect(()=>{
+    fetchAboutPageContent()
+  },[])
+
   return (
     <div className={`nc-PageAbout overflow-hidden relative`}>
       {/* ======== BG GLASS ======== */}
       <BgGlassmorphism />
 
       <div className="container py-16 lg:py-28 space-y-16 lg:space-y-28">
+        
         <SectionHero
           rightImg={rightImg}
-          heading="👋 About Us."
+          heading={`👋 ${aboutPageContent?.title ? aboutPageContent.title : 'About'}`}
           btnText=""
-          subHeading="‘Homestays of India’ is dedicated to support authentic family run homestays across India. We aim to provide travelers a unique culturally immersive experience and the locals an alternate source of income while preserving their heritage, culture and traditions."
+          subHeading={aboutPageContent?.content ? parse(aboutPageContent.content) : ''}
         />
 
         <SectionFounder />

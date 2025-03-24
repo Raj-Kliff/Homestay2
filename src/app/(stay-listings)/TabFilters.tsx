@@ -152,6 +152,7 @@ const TabFilters = () => {
 			})
 			if(data.status === "success"){
 				console.log("search successful")
+				console.log(data)
 			}
 			
 		} catch (error) {
@@ -190,6 +191,11 @@ const TabFilters = () => {
 	useEffect(()=>{
 		searchProperties()
 	},[searchProperties, location, checkin, checkout, beds, bathrooms, bedrooms, propertyType, spaceType, selectedAmenities])
+
+	useEffect(()=>{
+		setMinPrice(rangePrices[0])
+		setMaxPrice(rangePrices[1])
+	},[rangePrices])
 
 
 	//
@@ -417,9 +423,9 @@ const TabFilters = () => {
 							className={`flex items-center justify-center rounded-full border border-primary-500 bg-primary-50 px-4 py-2 text-sm text-primary-700 focus:outline-none`}
 						>
 							<span>
-								{`$${convertNumbThousand(
+								{`₹${convertNumbThousand(
 									rangePrices[0],
-								)} - $${convertNumbThousand(rangePrices[1])}`}{' '}
+								)} - ₹${convertNumbThousand(rangePrices[1])}`}{' '}
 							</span>
 							{renderXClear()}
 						</PopoverButton>
@@ -440,8 +446,10 @@ const TabFilters = () => {
 											<Slider
 												range
 												className="text-red-400"
-												min={dataForFilter?.min_price || 1}
-												max={dataForFilter?.max_price || 1000}
+												min={0}
+												max={2000}
+												// min={dataForFilter?.min_price || 1}
+												// max={dataForFilter?.max_price || 1000}
 												defaultValue={[rangePrices[0], rangePrices[1]]}
 												allowCross={false}
 												onChange={(e) => setRangePrices(e as number[])}
@@ -468,7 +476,7 @@ const TabFilters = () => {
 														disabled
 														id="minPrice"
 														className="block w-full rounded-full border-neutral-200 pl-7 pr-3 text-neutral-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-														value={dataForFilter?.min_price}
+														value={rangePrices[0]}
 													/>
 												</div>
 											</div>
@@ -491,7 +499,7 @@ const TabFilters = () => {
 														name="maxPrice"
 														id="maxPrice"
 														className="block w-full rounded-full border-neutral-200 pl-7 pr-3 text-neutral-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-														value={dataForFilter?.max_price}
+														value={rangePrices[1]}
 													/>
 												</div>
 											</div>

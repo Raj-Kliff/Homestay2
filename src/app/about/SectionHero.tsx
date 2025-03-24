@@ -6,7 +6,7 @@ export interface SectionHeroProps {
 	className?: string
 	rightImg: StaticImageData
 	heading: ReactNode
-	subHeading: string
+	subHeading: any
 	btnText: string
 }
 
