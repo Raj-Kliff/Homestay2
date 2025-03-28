@@ -1,5 +1,7 @@
 'use client'
 
+import { useImages } from '@/app/contextApi/ImageContext'
+import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 
 export interface BtnLikeIconProps {
@@ -13,7 +15,7 @@ const BtnLikeIcon: FC<BtnLikeIconProps> = ({
 	className = '',
 	colorClass = 'text-white bg-black bg-opacity-30 hover:bg-opacity-50',
 	isLiked = false,
-	onClick
+	onClick,
 }) => {
 	const [likedState, setLikedState] = useState(isLiked)
 
@@ -30,6 +32,7 @@ const BtnLikeIcon: FC<BtnLikeIconProps> = ({
 		// Toggle the liked state
 		setLikedState(!likedState)
 	}
+
 
 	return (
 		<div

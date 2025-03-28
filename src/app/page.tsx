@@ -211,7 +211,12 @@ function PageHome() {
   
 	const fetchExploreNearBy = useCallback(async () => {
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=${location.latitude}&longitude=${location.longitude}&radius=200&items=10`, {
+		//   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=${location.latitude}&longitude=${location.longitude}&radius=200&items=10`, {
+		// 	headers: {
+		// 	  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+		// 	},
+		//   });
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/nearby-places?latitude=28.6097&longitude=77.0895&radius=200&items=10`, {
 			headers: {
 			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 			},

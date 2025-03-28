@@ -1,18 +1,47 @@
+'use client'
 import {
 	Popover,
 	PopoverButton,
 	PopoverPanel,
 	Transition,
 } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Avatar from '@/shared/Avatar'
 import SwitchDarkMode2 from '@/shared/SwitchDarkMode2'
 import Link from 'next/link'
+import { useImages } from '@/app/contextApi/ImageContext'
+import axios from 'axios'
+import { MdLogout } from "react-icons/md";
+
 interface Props {
 	className?: string
 }
 
 export default function AvatarDropdown({ className = '' }: Props) {
+
+	const {token, setToken, loggedUser, setLoggedUser} = useImages()
+
+	const fetchLoggedUser = async () => {
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
+			headers: {
+			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+			  'Authorization': `Bearer ${token}`,
+			},
+		  });
+		  if (data.status === 'success') {
+			setLoggedUser(data?.data)
+		  }
+		} catch (error) {
+		  console.error(error);
+		}
+	}
+
+	useEffect(()=>{
+		fetchLoggedUser()
+	},[token])
+
+
 	return (
 		<>
 			<Popover className={`AvatarDropdown relative flex ${className}`}>
@@ -205,11 +234,11 @@ export default function AvatarDropdown({ className = '' }: Props) {
 										</div> */}
 
 										{/* ------------------ 2 --------------------- */}
-										<Link
-											href={'/login'}
+										<div
 											className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>
+											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
 											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
 											<svg
 													width="24"
@@ -234,8 +263,36 @@ export default function AvatarDropdown({ className = '' }: Props) {
 													/>
 												</svg>
 											</div>
+											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium">{'Guest Login'}</p>
+												{
+													<>
+														<p className="text-sm font-medium">{loggedUser?.first_name} {loggedUser?.last_name}</p>
+														<p className="text-xs font-medium text-gray-400">{loggedUser?.email}</p>
+													</>
+												}
+												
+												
+											</div>
+										</div>
+
+										{/* ------------------ 2 --------------------- */}
+										<Link
+											href={'/login'}
+											className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
+											onClick={() => close()}
+										>
+											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
+												<MdLogout className='w-5 h-5 ms-1' />
+											</div>
+											<div className="ml-4">
+												{
+													token === null ?
+													(<p className="text-sm font-medium">{'Guest Login'}</p>)
+													: (<p className="text-sm text-red-500 font-medium" onClick={()=>{localStorage.removeItem('loginToken'),setToken(null);}}>{'Logout'}</p>)
+												}
+												
+												
 											</div>
 										</Link>
 

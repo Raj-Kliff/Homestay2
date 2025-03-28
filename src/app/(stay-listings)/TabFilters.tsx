@@ -22,6 +22,7 @@ import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
 import GooglePlaceComponent from './GooglePlaceComponent'
+import debounce from 'lodash/debounce';
 
 // DEMO DATA
 const typeOfPaces = [
@@ -104,7 +105,7 @@ const TabFilters = () => {
 			return location.name.toLowerCase().includes(query.toLowerCase())
 		  })
 
-		const [location, setLocation] = useState('');
+		const [location, setLocation] = useState('Delhi');
 		const [checkin, setCheckin] = useState('');
 		const [checkout, setCheckout] = useState('');
 		const [guest, setGuest] = useState(0);
@@ -184,12 +185,15 @@ const TabFilters = () => {
 		}
 	};
 
+	const debouncedSearchProperties = debounce(searchProperties, 500);
+
 	useEffect(()=>{
 		fetchDataForFilter()
 	},[])
 
 	useEffect(()=>{
-		searchProperties()
+		// searchProperties()
+		debouncedSearchProperties();
 	},[searchProperties, location, checkin, checkout, beds, bathrooms, bedrooms, propertyType, spaceType, selectedAmenities])
 
 	useEffect(()=>{
@@ -709,11 +713,37 @@ const TabFilters = () => {
 
 							<div className="hiddenScrollbar flex-grow overflow-y-auto">
 								<div className="divide-y divide-neutral-200 px-4 dark:divide-neutral-800">
+									
+									{/* ---- */}
+									<div className="py-7">
+										<h3 className="text-xl font-medium">Search</h3>
+										<div className="relative mt-6">
+											<GooglePlaceComponent setLocation={setLocation} />
+										</div>
+									</div>
+
+									{/* ---- */}
+									<div className="py-7">
+										<h3 className="text-xl font-medium">Select Checkin Date</h3>
+										<div className="relative mt-6">
+											{renderCheckInDate()}
+										</div>
+									</div>
+
+									{/* ---- */}
+									<div className="py-7">
+										<h3 className="text-xl font-medium">Select Checkout Date</h3>
+										<div className="relative mt-6">
+											{renderCheckOutDate()}
+										</div>
+									</div>
+
 									{/* ---- */}
 									<div className="py-7">
 										<h3 className="text-xl font-medium">Type of place</h3>
 										<div className="relative mt-6">
-											{renderMoreFilterItem(typeOfPaces)}
+											{/* {renderMoreFilterItem(typeOfPaces)} */}
+											{renderTabsTypeOfPlace(dataForFilter)}
 										</div>
 									</div>
 
@@ -721,7 +751,8 @@ const TabFilters = () => {
 									<div className="py-7">
 										<h3 className="text-xl font-medium">Range Prices</h3>
 										<div className="relative mt-6">
-											<div className="relative flex flex-col space-y-8">
+											{renderTabsPriceRage(dataForFilter)}
+											{/* <div className="relative flex flex-col space-y-8">
 												<div className="space-y-5">
 													<Slider
 														range
@@ -782,7 +813,7 @@ const TabFilters = () => {
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> */}
 										</div>
 									</div>
 
@@ -790,9 +821,19 @@ const TabFilters = () => {
 									<div className="py-7">
 										<h3 className="text-xl font-medium">Rooms and beds</h3>
 										<div className="relative mt-6 flex flex-col space-y-5">
-											<NcInputNumber label="Beds" max={10} />
+											{renderTabsRoomAndBeds(dataForFilter)}
+											{/* <NcInputNumber label="Beds" max={10} />
 											<NcInputNumber label="Bedrooms" max={10} />
-											<NcInputNumber label="Bathrooms" max={10} />
+											<NcInputNumber label="Bathrooms" max={10} /> */}
+										</div>
+									</div>
+
+									{/* ---- */}
+									<div className="py-7">
+										<h3 className="text-xl font-medium">Space Type</h3>
+										<div className="relative mt-6">
+											{renderPropertyTypes(dataForFilter?.space_type || {})}
+											{/* {renderMoreFilterItem(moreFilter2)} */}
 										</div>
 									</div>
 
@@ -800,33 +841,11 @@ const TabFilters = () => {
 									<div className="py-7">
 										<h3 className="text-xl font-medium">Amenities</h3>
 										<div className="relative mt-6">
-											{renderMoreFilterItem(moreFilter1)}
+											{renderMoreFilterItem(dataForFilter?.amenities)}
+											{/* {renderMoreFilterItem(moreFilter1)} */}
 										</div>
 									</div>
 
-									{/* ---- */}
-									<div className="py-7">
-										<h3 className="text-xl font-medium">Facilities</h3>
-										<div className="relative mt-6">
-											{renderMoreFilterItem(moreFilter2)}
-										</div>
-									</div>
-
-									{/* ---- */}
-									<div className="py-7">
-										<h3 className="text-xl font-medium">Property type</h3>
-										<div className="relative mt-6">
-											{renderMoreFilterItem(moreFilter3)}
-										</div>
-									</div>
-
-									{/* ---- */}
-									<div className="py-7">
-										<h3 className="text-xl font-medium">House rules</h3>
-										<div className="relative mt-6">
-											{renderMoreFilterItem(moreFilter4)}
-										</div>
-									</div>
 								</div>
 							</div>
 

@@ -10,6 +10,8 @@ import SaleOffBadge from '@/components/SaleOffBadge'
 import Badge from '@/shared/Badge'
 import Link from 'next/link'
 import axios from 'axios'
+import { useImages } from '@/app/contextApi/ImageContext'
+import { toast } from 'react-toastify'
 
 export interface StayCard2Props {
 	className?: string
@@ -42,8 +44,10 @@ const StayCard2: FC<StayCard2Props> = ({
 	} = data
 
 	const [isTodayWeekend, setIsTodayWeekend] = useState(false)
-	const [listingDetail, setListingDetail] = useState<any>({})
 	const [currentSlug, setCurrentSlug] = useState<String>('')
+	const[toggleLike, setToggleLike] = useState<boolean>(false)
+	const {loggedUser, token} = useImages()
+	const [favouriteProperties, setFavouriteProperties] = useState<any>()
 
 	function isWeekend() {
 		const today = new Date();
@@ -140,34 +144,38 @@ const StayCard2: FC<StayCard2Props> = ({
 		)
 	}
 
-	const fetchListingDetails = useCallback(async () => {
-		if (!currentSlug) return;
+	const fetchListingDetails = async () => {
 		try {
+			if (!currentSlug) return;
 		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${currentSlug}`, {
 			headers: {
 			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 			},
 		  });
 		  if (data.status === 'success') {
-			setListingDetail(data.data);
+			favouriteProperty(data?.data?.result?.id, loggedUser?.id)
 		  }
 		} catch (error) {
 		  console.error(error);
 		}
-	  },[currentSlug]) 
+	  } 
 
 
-	const favouriteProperty = async() => {
+	const favouriteProperty = async(property_id: String, user_id: String) => {
 		try {
-			const property_id = listingDetail?.result?.id
-			const user_id = listingDetail?.result?.users?.id
 			const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/toggle-favourite`,{property_id, user_id}, {
 				headers: {
 					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 				},
 			})
 			if(data.status === 'success'){
-				alert('successful')
+				if(data?.data?.status === 'Active'){
+					toast.success("Added to favourite property")
+				}else if(data?.data?.status === 'Inactive'){
+					toast.success("Removed from favourite property")
+				}
+				console.log('id', data?.data?.id)
+				console.log('status', data?.data?.status)
 			}
 			
 		} catch (error) {
@@ -175,19 +183,34 @@ const StayCard2: FC<StayCard2Props> = ({
 		}
 	}
 
-	const handleLikeButtonClick = (slug: string) => {
-		setCurrentSlug(slug); // Update currentSlug to trigger listing details fetch
-		favouriteProperty(); // Directly trigger the API call
-	};
+	const fetchFavouriteProperties = async () => {
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/favourites-list?user_id=${loggedUser?.id}`, {
+			headers: {
+			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+			  'Authorization': `Bearer ${token}`,
+			},
+		  });
+		  if (data.status === 'success') {
+			  setFavouriteProperties(data?.data)
+			  console.log("favouritePorperiteis2::",data?.data)
+		  }
+		} catch (error) {
+		  console.error(error);
+		}
+	}
 
 	useEffect(()=>{
-		// if (currentSlug) {
-		// 	fetchListingDetails();
-		// 	favouriteProperty()
-		// }
-		fetchListingDetails();
-	  },[currentSlug, fetchListingDetails])
+		fetchFavouriteProperties()
+	},[])
+
+	useEffect(()=>{
+		if (currentSlug) {
+			fetchListingDetails();
+		  }
+	  },[currentSlug, toggleLike])
 	
+	  console.log("favouritePorperiteis::",favouriteProperties)
 
 	return (
 		// <div className={`nc-StayCard2 group relative ${className}`}>
@@ -207,10 +230,10 @@ const StayCard2: FC<StayCard2Props> = ({
 						href={`/property/${item?.slug}`}
 					/>
 					<BtnLikeIcon
-						isLiked={like}
+						// isLiked={like}
+						isLiked={favouriteProperties?.some((property:any) => property.id === item?.id)}
 						className="absolute right-3 top-3 z-[1]"
-						// onClick={() => setCurrentSlug(item?.slug)}
-						onClick={() => handleLikeButtonClick(item?.slug)}
+						onClick={() =>{ setCurrentSlug(item?.slug), setToggleLike(!toggleLike)}}
 					/>
 					{/* {saleOff && <SaleOffBadge className="absolute left-3 top-3" />} */}
 				</div>

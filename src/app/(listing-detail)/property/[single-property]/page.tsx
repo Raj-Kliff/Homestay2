@@ -34,8 +34,16 @@ import StayDatesRangeInput from './StayDateRangeInput'
 import SectionDateRange from '../../SectionDateRange'
 import GoogleMapComponent from '@/components/GoogleMapComponent'
 import { useImages } from '@/app/contextApi/ImageContext'
+import GallerySlider2 from '@/components/GallerySlider2'
+import GallerySlider from '@/components/GallerySlider'
+import { IoBedOutline } from "react-icons/io5";
+import { HiOutlineUsers } from "react-icons/hi2";
+import { FaBaby } from "react-icons/fa";
+import CustomRoomModal from './CustomRoomModal'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 
 export interface ListingStayDetailPageProps {}
+  
 
 const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	//
@@ -45,6 +53,93 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	const [daysToStay, setDaysToStay] = useState<number>(1)
 	const [totalFee, setTotalFee] = useState<number>(0)
 	const {setImagess} = useImages()
+	const [activeModal, setActiveModal] = useState<number | null>(null);
+
+  // Example data for buttons and modals
+  const modalData = [
+    { id: 1, title: "Modal 1", content: "This is the content of Modal 1." },
+    { id: 2, title: "Modal 2", content: "This is the content of Modal 2." },
+    { id: 3, title: "Modal 3", content: "This is the content of Modal 3." },
+  ];
+
+  const categories = [
+	{
+	  name: 'Classic',
+	  posts: [
+		{
+		  id: 1,
+		  title: 'Does drinking coffee make you smarter?',
+		  date: '5h ago',
+		  commentCount: 5,
+		  shareCount: 2,
+		  imageUrl : [
+			"https://media.istockphoto.com/id/1419410282/photo/silent-forest-in-spring-with-beautiful-bright-sun-rays.jpg?s=612x612&w=0&k=20&c=UHeb1pGOw6ozr6utsenXHhV19vW6oiPIxDqhKCS2Llk=",
+			"https://st5.depositphotos.com/23188010/77062/i/450/depositphotos_770624600-stock-photo-green-field-morning-render-illustration.jpg",
+			]
+		},
+	  ],
+	},
+	{
+	  name: 'Superior',
+	  posts: [
+		{
+		  id: 1,
+		  title: 'Is tech making coffee better or worse?',
+		  date: 'Jan 7',
+		  commentCount: 29,
+		  shareCount: 16,
+		  imageUrl : [
+			"https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+			"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9YYh5Fk1u9VsWWr1MhkyQeOzeNbtnnMO96g&s",
+			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+			]
+		},
+		{
+		  id: 2,
+		  title: 'The most innovative things happening in coffee',
+		  date: 'Mar 19',
+		  commentCount: 24,
+		  shareCount: 12,
+		  imageUrl : [
+			"https://t3.ftcdn.net/jpg/02/70/35/00/360_F_270350073_WO6yQAdptEnAhYKM5GuA9035wbRnVJSr.jpg",
+			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+			]
+		},
+	  ],
+	},
+	{
+	  name: 'Family',
+	  posts: [
+		{
+		  id: 1,
+		  title: 'Ask Me Anything: 10 answers to your questions about coffee',
+		  date: '2d ago',
+		  commentCount: 9,
+		  shareCount: 5,
+		  imageUrl : [
+			"https://cdn.pixabay.com/photo/2018/08/04/11/30/draw-3583548_1280.png",
+			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+			]
+		},
+		{
+		  id: 2,
+		  title: "The worst advice we've ever heard about coffee",
+		  date: '4d ago',
+		  commentCount: 1,
+		  shareCount: 2,
+		  imageUrl : [
+			"https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+			]
+		},
+	  ],
+	},
+  ]
+
 
 	const thisPathname = usePathname()
 	let endPoint = thisPathname.split('/').pop();
@@ -135,15 +230,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				</div> */}
 
 				{/* 2 */}
-				<h2 className="text-2xl font-semibold sm:text-3xl lg:text-4xl">
+				<h2 className="text-2xl flex gap-2 font-semibold sm:text-3xl lg:text-4xl">
 					{result?.name}
+					<StartRating reviewCount={result?.reviews_count} point={result?.avg_rating} />
 				</h2>
 
 				{/* 3 */}
 				<div className="flex items-center space-x-4">
-					<StartRating reviewCount={result?.reviews_count} point={result?.avg_rating} />
-					<span>·</span>
-					<div className="flex items-center">
+					<div className="flex items-start">
 						<MapPinIcon className="h-5 w-5" />
 						<span className="ml-1">  {result?.property_address?.address_line_1}</span>
 					</div>
@@ -496,40 +590,11 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 					</div>
 				</div>
 
-				{/* desc */}
-				{/* <span className="block text-neutral-600 dark:text-neutral-300">
-				You will be hosted by Tek Singh  who is the owner of this house and running this homestay since 2021. He lives 500m from the homestay & he is full time available there to ensure a warm and welcoming stay for the guests. 
-				</span> */}
 
 				{/* info */}
 				<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
 					<h2 className='text-black font-bold'>Description:</h2>
 					<p>description text here</p>
-					{/* <div className="flex items-center space-x-3">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="icon icon-tabler icon-tabler-mail"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                        <polyline points="3 7 12 13 21 7" />
-                        </svg>
-
-						<span>{result?.users?.email}</span>
-					</div>
-					<div className="flex items-center space-x-3">
-                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-
-						<span>{result?.users?.phone}</span>
-					</div> */}
 				</div>
 
 				{/* == */}
@@ -772,13 +837,122 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			</div>
 		)
 	}
-    
+	  
 
-    // const {result, amenities} = listingDetail && listingDetail != undefined ?  listingDetail : {}
-    // const {description} = listingDescription && listingDescription != undefined ?  listingDescription : {}
+	const renderRoomSection = () => {
+		return (
+			<div className='listingSection__wrap'>
+				<div className="flex w-full justify-center">
+					<div className="w-full">
+						<TabGroup>
+							<TabList className="flex gap-4">
+								{categories.map(({ name }) => (
+								<Tab
+									key={name}
+									className="rounded-full px-3 text-sm/6 font-semibold text-gray-800 dark:text-white 
+									focus:outline-none data-[selected]:bg-gray-300 data-[hover]:bg-gray-200 
+									data-[selected]:data-[hover]:bg-gray-200 dark:data-[selected]:bg-white/10 
+									dark:data-[hover]:bg-white/5 dark:data-[selected]:data-[hover]:bg-white/10 
+									data-[focus]:outline-1 data-[focus]:outline-gray-800 dark:data-[focus]:outline-white"
+								>
+									{name}
+								</Tab>
+								))}
+							</TabList>
+							<TabPanels>
+								{categories.map(({ name, posts }) => (
+								<TabPanel key={name} className="rounded-xl">
+									{posts.map((post) => (
+										<div key={post.id} className='pt-5'>
+										 <div  className="nc-StayCard2 grid grid-cols-1 sm:grid-cols-3 gap-5 group relative w-full border-t border-neutral-200 dark:border-neutral-800 pt-5">
+											<div className="relative w-full">
+												<GallerySlider
+													uniqueID="StayCard2_sampleID"
+													ratioClass="aspect-w-12 aspect-h-9"
+													galleryImgs={post.imageUrl}						
+													imageClass="rounded-lg"
+													href="javascript:void(0)"
+												/>
+												<div className='mt-2' onClick={() => setActiveModal(post.id)}>
+													<Badge name={`${post.imageUrl.length} Photos →`} color="red" className='cursor-pointer' />
+												</div>
+											</div>
+						
+											<div className='col-span-2'>
+												<div className="mt-3 space-y-3">
+													
+													<div className="flex items-start justify-between">
+														<div>
+															<p className="text-base font-semibold">
+																Single Room
+															</p>
+															<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
+																<div className="text-center">
+																	<IoBedOutline className='w-5 h-5' />
+																	<p>x 1</p>
+																</div>	
+																<div className="text-center">
+																	<HiOutlineUsers className='w-5 h-5' />
+																	<p>x 2</p>
+																</div>	
+																<div className="text-center">
+																	<FaBaby className='w-5 h-5' />
+																	<p>x 1</p>
+																</div>	
+															</div>
+														</div>
+														<div className="flex items-start flex-col">
+															<p className="text-base font-semibold">
+																₹1.00 <span className="text-sm text-neutral-500 dark:text-neutral-400">/1 nights</span>
+															</p>
+															<form>
+																<select
+																	id="rooms"
+																	className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+																>
+																	<option value="1 room">1 Room</option>
+																	<option value="2 room">2 Room</option>
+																</select>
+															</form>
+															<ButtonPrimary sizeClass="px-4 py-2 sm:px-5">Enquire Now</ButtonPrimary>
+														</div>
+													</div>
+												</div>
+											</div>
+										 </div>
+
+										{/* room modal image gallery  */}
+										 <CustomRoomModal
+											key={post.id}
+											isOpen={activeModal === post.id}
+											closeModal={() => setActiveModal(null)}
+											title={`${name} Room`}
+											>
+											<GallerySlider
+												uniqueID="StayCard2_sampleID"
+												ratioClass="aspect-w-12 aspect-h-9"
+												galleryImgs={post.imageUrl}						
+												imageClass="rounded-lg"
+												href="javascript:void(0)"
+											/>
+											</CustomRoomModal>
+										</div>
+									))}
+								</TabPanel>
+								))}
+							</TabPanels>
+						</TabGroup>
+					</div>
+				</div>
+
+			</div>
+
+			
+		)
+	}
 
 	const { result, amenities, attractions, excursions } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
-	const { description } = listingDescription ?? {}; // Same approach for listingDescription
+	const { description } = listingDescription ?? {}; 
 
    
 	return (
@@ -837,13 +1011,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			</header>
 
 			{/* MAIN */}
-			<main className="relative z-10 mt-11 flex flex-col lg:flex-row">
+			<main className={`relative ${activeModal == null ? 'z-10' : 'z-40'} mt-11 flex flex-col lg:flex-row`}>
 				{/* CONTENT */}
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1({result})}
+					{renderRoomSection()}
 					{renderSection2({description})}
 					{renderSection7({result})}
-					{renderSection9()}
+					{description?.about_place != null && renderSection9()}
 					{renderSection3({amenities})}
 					{/* {amenities && safetyAmenities.length > 0 && renderSafetyAmenities({safetyAmenities})} */}
 					{/* {renderSection4()} */}

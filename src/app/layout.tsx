@@ -14,6 +14,7 @@ import Footer4 from '@/components/Footer4'
 import LocationContextProvider from './contextApi/LocationContext'
 import {ImageProvider} from './contextApi/ImageContext'
 import Script from 'next/script'
+import { ToastContainer, toast } from 'react-toastify';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -62,6 +63,8 @@ export default function RootLayout({
                     </ThemeProvider>
                 </ImageProvider>
             </LocationContextProvider>
+
+            <ToastContainer />
         </html>
     )
 }

@@ -109,14 +109,14 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 				<div className="flex items-center text-sm font-medium">
 					<span
 						onClick={() => setShowHeroSearch('location')}
-						className="block cursor-pointer py-3 pl-5 pr-4"
+						className="block cursor-pointer py-1 pl-5 pr-4"
 					>
 						Location
 					</span>
 					<span className="h-5 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
 					<span
 						onClick={() => setShowHeroSearch('dates')}
-						className="block cursor-pointer px-4 py-3"
+						className="block cursor-pointer px-4 py-1"
 					>
 						Check In
 					</span>
@@ -125,7 +125,7 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 						onClick={() => {
 							setShowHeroSearch('guests')
 						}}
-						className="block cursor-pointer px-4 py-3 font-normal"
+						className="block cursor-pointer px-4 py-1 font-normal"
 					>
 						Add guests
 					</span>
@@ -135,8 +135,8 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 					className="ml-auto flex-shrink-0 cursor-pointer pr-2"
 					onClick={() => setShowHeroSearch('location')}
 				>
-					<span className="bg-primary-600 flex h-8 w-8 items-center justify-center rounded-full text-white">
-						<MagnifyingGlassIcon className="h-5 w-5" />
+					<span className="bg-primary-600 flex h-6 w-6 m-1 mr-0 items-center justify-center rounded-full text-white">
+						<MagnifyingGlassIcon className="h-4 w-4" />
 					</span>
 				</div>
 			</div>

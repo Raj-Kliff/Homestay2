@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 
 // Define the structure of the context
 interface ImageContextType {
@@ -7,6 +7,8 @@ interface ImageContextType {
   setImagess: any;
   token: any;
   setToken: any;
+  loggedUser: any;
+  setLoggedUser: any;
 }
 
 // Create the context
@@ -27,10 +29,17 @@ export const ImageProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     'https://images.pexels.com/photos/2861361/pexels-photo-2861361.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
   ]);
 
-  const [token, setToken] = useState<String>('')
+  const [token, setToken] = useState<String | null>(null)
+  const [loggedUser, setLoggedUser] = useState<any>()
+
+  useEffect(() => {
+    if (!token && localStorage.getItem('loginToken')) {
+        setToken(localStorage.getItem('loginToken'))
+    }
+  }, [])
 
   return (
-    <ImageContext.Provider value={{ imagess, setImagess, token, setToken}}>
+    <ImageContext.Provider value={{ imagess, setImagess, token, setToken, loggedUser, setLoggedUser}}>
       {children}
     </ImageContext.Provider>
   );

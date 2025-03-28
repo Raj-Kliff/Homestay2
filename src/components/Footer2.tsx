@@ -115,8 +115,6 @@ export default function Footer2() {
 		fetchStaticPages()
 	},[])
 
-	console.log("staticPages::", staticPages)
-
 	return (
 		<footer className="border-t border-neutral-200 dark:border-neutral-700 bg-[#454545]">
 			<div className="mx-auto max-w-7xl px-6 pb-2 pt-16 sm:pt-14 lg:px-8 lg:pt-4">

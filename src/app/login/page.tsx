@@ -44,7 +44,8 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 			}})
 			if(data.status === "success"){
 				alert("Login successful")
-				setToken(data.data.token)
+				localStorage.setItem('loginToken', data?.data?.token)
+				setToken(data?.data?.token)
 				router.push("/")
 			}
 			

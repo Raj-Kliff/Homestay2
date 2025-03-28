@@ -38,7 +38,13 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 				<div className="min-h-screen w-full max-w-[1184px] flex-shrink-0 xl:w-[60%] xl:px-8 2xl:w-[60%]">
 					<Heading2 className="!mb-8" />
 					<div className="mb-8 lg:mb-11">
-						<TabFilters />
+						<details className='hidden sm:block'>
+							<summary className='mb-5 border-2 px-4 py-2 rounded-full w-fit'>Filters:</summary>
+							<TabFilters />
+						</details>
+						<div className='sm:hidden'>
+							<TabFilters />
+						</div>
 					</div>
 					<div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 2xl:gap-x-6">
 						{currentItems.map((item:any) => (
@@ -62,7 +68,6 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 							&larr;
 							</button>
 
-							{/* Display page numbers */}
 							{Array.from({ length: totalPages }, (_, index) => (
 							<button 
 								key={index + 1} 
