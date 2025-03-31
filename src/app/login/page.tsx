@@ -10,6 +10,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useImages } from '../contextApi/ImageContext'
+import { toast } from 'react-toastify'
 
 export interface PageLoginProps {}
 
@@ -43,7 +44,7 @@ const PageLogin: FC<PageLoginProps> = ({}) => {
 				"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 			}})
 			if(data.status === "success"){
-				alert("Login successful")
+				toast.success("Login successful")
 				localStorage.setItem('loginToken', data?.data?.token)
 				setToken(data?.data?.token)
 				router.push("/")

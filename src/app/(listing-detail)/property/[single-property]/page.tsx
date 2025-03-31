@@ -849,7 +849,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 								{categories.map(({ name }) => (
 								<Tab
 									key={name}
-									className="rounded-full px-3 text-sm/6 font-semibold text-gray-800 dark:text-white 
+									className="rounded-full px-5 text-lg font-semibold text-gray-800 dark:text-white 
 									focus:outline-none data-[selected]:bg-gray-300 data-[hover]:bg-gray-200 
 									data-[selected]:data-[hover]:bg-gray-200 dark:data-[selected]:bg-white/10 
 									dark:data-[hover]:bg-white/5 dark:data-[selected]:data-[hover]:bg-white/10 

@@ -12,6 +12,8 @@ import Link from 'next/link'
 import { useImages } from '@/app/contextApi/ImageContext'
 import axios from 'axios'
 import { MdLogout } from "react-icons/md";
+import { toast } from 'react-toastify'
+import { FaRegCircleUser } from "react-icons/fa6";
 
 interface Props {
 	className?: string
@@ -37,6 +39,12 @@ export default function AvatarDropdown({ className = '' }: Props) {
 		}
 	}
 
+	const handleLogout = () => {
+		toast.success("Logout successful")
+		localStorage.removeItem('loginToken');
+		setToken(null);
+	}
+
 	useEffect(()=>{
 		fetchLoggedUser()
 	},[token])
@@ -51,7 +59,14 @@ export default function AvatarDropdown({ className = '' }: Props) {
 							className={`flex px-4 py-1 ms-2 items-center justify-center self-center rounded-full text-white border-2 border-white hover:text-gray-700 hover:bg-slate-100 focus:outline-none dark:border-neutral-700 dark:text-slate-300 dark:hover:bg-slate-800`}
 						>
 							{/* <Avatar sizeClass="w-8 h-8 sm:w-9 sm:h-9" /> */}
-							Login
+							{
+								token !== null ? (
+									<div className='flex gap-1 items-center'>
+										<FaRegCircleUser />
+										<p>{loggedUser?.first_name}</p>
+									</div>
+								) : ('Login')
+							}
 						</PopoverButton>
 						<Transition
 							as={Fragment}
@@ -193,7 +208,7 @@ export default function AvatarDropdown({ className = '' }: Props) {
 										<div className="w-full border-b border-neutral-200 dark:border-neutral-700" /> */}
 
 										{/* ------------------ 2 --------------------- */}
-										{/* <div className="-m-3 flex items-center justify-between rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700">
+										<div className="-m-3 flex items-center justify-between rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700">
 											<div className="flex items-center">
 												<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
 													<svg
@@ -231,10 +246,12 @@ export default function AvatarDropdown({ className = '' }: Props) {
 												</div>
 											</div>
 											<SwitchDarkMode2 />
-										</div> */}
+										</div>
 
 										{/* ------------------ 2 --------------------- */}
-										<div
+										{
+											token !== null &&
+											<div
 											className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>
@@ -275,6 +292,7 @@ export default function AvatarDropdown({ className = '' }: Props) {
 												
 											</div>
 										</div>
+										}
 
 										{/* ------------------ 2 --------------------- */}
 										<Link
@@ -283,13 +301,41 @@ export default function AvatarDropdown({ className = '' }: Props) {
 											onClick={() => close()}
 										>
 											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
-												<MdLogout className='w-5 h-5 ms-1' />
+												{
+													token === null ?
+													(<svg
+														width="24"
+														height="24"
+														viewBox="0 0 24 24"
+														fill="none"
+														xmlns="http://www.w3.org/2000/svg"
+													>
+														<path
+															d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+															stroke="currentColor"
+															strokeWidth="1.5"
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														/>
+														<path
+															d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+															stroke="currentColor"
+															strokeWidth="1.5"
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														/>
+													</svg>)
+													:(<MdLogout className='w-5 h-5 ms-1' />)
+												}
+												
 											</div>
 											<div className="ml-4">
 												{
 													token === null ?
-													(<p className="text-sm font-medium">{'Guest Login'}</p>)
-													: (<p className="text-sm text-red-500 font-medium" onClick={()=>{localStorage.removeItem('loginToken'),setToken(null);}}>{'Logout'}</p>)
+													(
+													<p className="text-sm font-medium">{'Guest Login'}</p>
+												)
+													: (<p className="text-sm text-red-500 font-medium" onClick={handleLogout}>{'Logout'}</p>)
 												}
 												
 												
@@ -297,81 +343,42 @@ export default function AvatarDropdown({ className = '' }: Props) {
 										</Link>
 
 										{/* ------------------ 2 --------------------- */}
-										<Link
+										{ token === null && <Link
 											href={'/login'}
 											className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
 											onClick={() => close()}
 										>
 											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
-											<svg
-													width="24"
-													height="24"
-													viewBox="0 0 24 24"
-													fill="none"
-													xmlns="http://www.w3.org/2000/svg"
-												>
-													<path
-														d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
-														stroke="currentColor"
-														strokeWidth="1.5"
-														strokeLinecap="round"
-														strokeLinejoin="round"
-													/>
-													<path
-														d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
-														stroke="currentColor"
-														strokeWidth="1.5"
-														strokeLinecap="round"
-														strokeLinejoin="round"
-													/>
-												</svg>
+												{
+													<svg
+														width="24"
+														height="24"
+														viewBox="0 0 24 24"
+														fill="none"
+														xmlns="http://www.w3.org/2000/svg"
+													>
+														<path
+															d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+															stroke="currentColor"
+															strokeWidth="1.5"
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														/>
+														<path
+															d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+															stroke="currentColor"
+															strokeWidth="1.5"
+															strokeLinecap="round"
+															strokeLinejoin="round"
+														/>
+													</svg>
+												}
 											</div>
 											<div className="ml-4">
-												<p className="text-sm font-medium">{'Host Login'}</p>
+													<p className="text-sm font-medium">{'Host Login'}</p>
 											</div>
-										</Link>
-
-										{/* ------------------ 2 --------------------- */}
-										{/* <Link
-											href={'/#'}
-											className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 dark:hover:bg-neutral-700"
-											onClick={() => close()}
-										>
-											<div className="flex flex-shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
-												<svg
-													width="24"
-													height="24"
-													viewBox="0 0 24 24"
-													fill="none"
-													xmlns="http://www.w3.org/2000/svg"
-												>
-													<path
-														d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
-														stroke="currentColor"
-														strokeWidth="1.5"
-														strokeLinecap="round"
-														strokeLinejoin="round"
-													/>
-													<path
-														d="M15 12H3.62"
-														stroke="currentColor"
-														strokeWidth="1.5"
-														strokeLinecap="round"
-														strokeLinejoin="round"
-													/>
-													<path
-														d="M5.85 8.6499L2.5 11.9999L5.85 15.3499"
-														stroke="currentColor"
-														strokeWidth="1.5"
-														strokeLinecap="round"
-														strokeLinejoin="round"
-													/>
-												</svg>
-											</div>
-											<div className="ml-4">
-												<p className="text-sm font-medium">{'Log out'}</p>
-											</div>
-										</Link> */}
+										</Link>}
+										
 									</div>
 								</div>
 							</PopoverPanel>
