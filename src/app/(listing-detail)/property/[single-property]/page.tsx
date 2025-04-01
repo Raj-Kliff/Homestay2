@@ -42,103 +42,103 @@ import { FaBaby } from "react-icons/fa";
 import CustomRoomModal from './CustomRoomModal'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 
-export interface ListingStayDetailPageProps {}
-  
+export interface ListingStayDetailPageProps { }
 
-const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
+
+const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	//
 
 	let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false)
 	const [listingDetail, setListingDetail] = useState<any>({})
 	const [daysToStay, setDaysToStay] = useState<number>(1)
 	const [totalFee, setTotalFee] = useState<number>(0)
-	const {setImagess} = useImages()
+	const { setImagess } = useImages()
 	const [activeModal, setActiveModal] = useState<number | null>(null);
 
-  // Example data for buttons and modals
-  const modalData = [
-    { id: 1, title: "Modal 1", content: "This is the content of Modal 1." },
-    { id: 2, title: "Modal 2", content: "This is the content of Modal 2." },
-    { id: 3, title: "Modal 3", content: "This is the content of Modal 3." },
-  ];
+	// Example data for buttons and modals
+	const modalData = [
+		{ id: 1, title: "Modal 1", content: "This is the content of Modal 1." },
+		{ id: 2, title: "Modal 2", content: "This is the content of Modal 2." },
+		{ id: 3, title: "Modal 3", content: "This is the content of Modal 3." },
+	];
 
-  const categories = [
-	{
-	  name: 'Classic',
-	  posts: [
+	const categories = [
 		{
-		  id: 1,
-		  title: 'Does drinking coffee make you smarter?',
-		  date: '5h ago',
-		  commentCount: 5,
-		  shareCount: 2,
-		  imageUrl : [
-			"https://media.istockphoto.com/id/1419410282/photo/silent-forest-in-spring-with-beautiful-bright-sun-rays.jpg?s=612x612&w=0&k=20&c=UHeb1pGOw6ozr6utsenXHhV19vW6oiPIxDqhKCS2Llk=",
-			"https://st5.depositphotos.com/23188010/77062/i/450/depositphotos_770624600-stock-photo-green-field-morning-render-illustration.jpg",
-			]
-		},
-	  ],
-	},
-	{
-	  name: 'Superior',
-	  posts: [
-		{
-		  id: 1,
-		  title: 'Is tech making coffee better or worse?',
-		  date: 'Jan 7',
-		  commentCount: 29,
-		  shareCount: 16,
-		  imageUrl : [
-			"https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
-			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-			"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9YYh5Fk1u9VsWWr1MhkyQeOzeNbtnnMO96g&s",
-			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
-			]
+			name: 'Classic',
+			posts: [
+				{
+					id: 1,
+					title: 'Does drinking coffee make you smarter?',
+					date: '5h ago',
+					commentCount: 5,
+					shareCount: 2,
+					imageUrl: [
+						"https://media.istockphoto.com/id/1419410282/photo/silent-forest-in-spring-with-beautiful-bright-sun-rays.jpg?s=612x612&w=0&k=20&c=UHeb1pGOw6ozr6utsenXHhV19vW6oiPIxDqhKCS2Llk=",
+						"https://st5.depositphotos.com/23188010/77062/i/450/depositphotos_770624600-stock-photo-green-field-morning-render-illustration.jpg",
+					]
+				},
+			],
 		},
 		{
-		  id: 2,
-		  title: 'The most innovative things happening in coffee',
-		  date: 'Mar 19',
-		  commentCount: 24,
-		  shareCount: 12,
-		  imageUrl : [
-			"https://t3.ftcdn.net/jpg/02/70/35/00/360_F_270350073_WO6yQAdptEnAhYKM5GuA9035wbRnVJSr.jpg",
-			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
-			]
+			name: 'Superior',
+			posts: [
+				{
+					id: 1,
+					title: 'Is tech making coffee better or worse?',
+					date: 'Jan 7',
+					commentCount: 29,
+					shareCount: 16,
+					imageUrl: [
+						"https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+						"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+						"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9YYh5Fk1u9VsWWr1MhkyQeOzeNbtnnMO96g&s",
+						"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+					]
+				},
+				{
+					id: 2,
+					title: 'The most innovative things happening in coffee',
+					date: 'Mar 19',
+					commentCount: 24,
+					shareCount: 12,
+					imageUrl: [
+						"https://t3.ftcdn.net/jpg/02/70/35/00/360_F_270350073_WO6yQAdptEnAhYKM5GuA9035wbRnVJSr.jpg",
+						"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+						"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+					]
+				},
+			],
 		},
-	  ],
-	},
-	{
-	  name: 'Family',
-	  posts: [
 		{
-		  id: 1,
-		  title: 'Ask Me Anything: 10 answers to your questions about coffee',
-		  date: '2d ago',
-		  commentCount: 9,
-		  shareCount: 5,
-		  imageUrl : [
-			"https://cdn.pixabay.com/photo/2018/08/04/11/30/draw-3583548_1280.png",
-			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
-			]
+			name: 'Family',
+			posts: [
+				{
+					id: 1,
+					title: 'Ask Me Anything: 10 answers to your questions about coffee',
+					date: '2d ago',
+					commentCount: 9,
+					shareCount: 5,
+					imageUrl: [
+						"https://cdn.pixabay.com/photo/2018/08/04/11/30/draw-3583548_1280.png",
+						"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+						"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+					]
+				},
+				{
+					id: 2,
+					title: "The worst advice we've ever heard about coffee",
+					date: '4d ago',
+					commentCount: 1,
+					shareCount: 2,
+					imageUrl: [
+						"https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+						"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+						"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
+					]
+				},
+			],
 		},
-		{
-		  id: 2,
-		  title: "The worst advice we've ever heard about coffee",
-		  date: '4d ago',
-		  commentCount: 1,
-		  shareCount: 2,
-		  imageUrl : [
-			"https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
-			"https://images.unsplash.com/photo-1575936123452-b67c3203c357?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-			"https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg",
-			]
-		},
-	  ],
-	},
-  ]
+	]
 
 
 	const thisPathname = usePathname()
@@ -172,9 +172,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		setTotalFee(total);
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		calculateTotalFee()
-	},[listingDetail, daysToStay])
+	}, [listingDetail, daysToStay])
 
 	// ---------------
 	// const [listingDetail, setListingDetail] = useState<any>({})
@@ -183,44 +183,44 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	// propety list 
 	const fetchListingDetails = useCallback(async () => {
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${endPoint}`, {
-			headers: {
-			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
-			},
-		  });
-		  if (data.status === 'success') {
-			setListingDetail(data.data);
-			const photos = data.data.result?.property_photos?.map((photo: any) => photo.image_url);
-			setImagess(photos || [])
-		  }
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${endPoint}`, {
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			});
+			if (data.status === 'success') {
+				setListingDetail(data.data);
+				const photos = data.data.result?.property_photos?.map((photo: any) => photo.image_url);
+				setImagess(photos || [])
+			}
 		} catch (error) {
-		  console.error(error);
+			console.error(error);
 		}
-	  },[endPoint]) 
+	}, [endPoint])
 
 	// propety list description
 	const fetchListingDescription = useCallback(async () => {
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-details/${endPoint}`, {
-			headers: {
-			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
-			},
-		  });
-		  if (data.status === 'success') {
-			setListingDescription(data.data);
-		  }
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property-details/${endPoint}`, {
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			});
+			if (data.status === 'success') {
+				setListingDescription(data.data);
+			}
 		} catch (error) {
-		  console.error(error);
+			console.error(error);
 		}
-	  },[endPoint]) 
+	}, [endPoint])
 
-	useEffect(()=>{
+	useEffect(() => {
 		fetchListingDetails()
 		fetchListingDescription()
-	},[fetchListingDetails,fetchListingDescription])
+	}, [fetchListingDetails, fetchListingDescription])
 
 
-	const renderSection1 = ({result}:any) => {
+	const renderSection1 = ({ result }: any) => {
 		return (
 			<div className="listingSection__wrap !space-y-6">
 				{/* 1 */}
@@ -259,7 +259,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 				{/* 6 */}
 				<div className="flex items-center justify-between space-x-8 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start xl:space-x-12">
-				<div className="flex items-center space-x-3">
+					<div className="flex items-center space-x-3">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
@@ -387,13 +387,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 							{result?.bathrooms} <span className="hidden sm:inline-block">baths</span>
 						</span>
 					</div>
-					
+
 				</div>
 			</div>
 		)
 	}
 
-	const renderSection2 = ({description}:any) => {
+	const renderSection2 = ({ description }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				<h2 className="text-2xl font-semibold">Stay information</h2>
@@ -408,8 +408,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 	// amenities 
-	const renderSection3 = ({amenities}:any) => {
-		
+	const renderSection3 = ({ amenities }: any) => {
+
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -421,7 +421,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{amenities?.Facilities?.filter((_:any, i:any) => i < 12).map((item:any) => (
+					{amenities?.Facilities?.filter((_: any, i: any) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							{/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
 							    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -436,7 +436,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200"></div>
 				<div>
 					<ButtonSecondary onClick={openModalAmenities}>
-					{/* <ButtonSecondary onClick={() => { 
+						{/* <ButtonSecondary onClick={() => { 
 						openModalAmenities();
 						renderModalAmenities(listingDetail?.amenities); 
 					}}> */}
@@ -477,7 +477,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						</div>
 
 						<div className="hiddenScrollbar flex-1 divide-y divide-neutral-200 overflow-y-auto px-8 text-neutral-700 dark:divide-neutral-700 dark:text-neutral-300">
-							{listingDetail?.amenities?.Facilities?.map((item:any) => (
+							{listingDetail?.amenities?.Facilities?.map((item: any) => (
 								<div
 									key={item?.id}
 									className="flex items-center space-x-5 py-2.5 sm:py-4 lg:space-x-8 lg:py-5"
@@ -495,7 +495,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSafetyAmenities = ({safetyAmenities}:any) => {
+	const renderSafetyAmenities = ({ safetyAmenities }: any) => {
 		console.log(safetyAmenities)
 		return (
 			<div className="listingSection__wrap">
@@ -508,7 +508,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{safetyAmenities?.filter((_:any, i:any) => i < 12).map((item:any) => (
+					{safetyAmenities?.filter((_: any, i: any) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.title}</span>
@@ -563,7 +563,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection5 = ({result}:any) => {
+	const renderSection5 = ({ result }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				{/* HEADING */}
@@ -646,7 +646,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection7 = ({result}:any) => {
+	const renderSection7 = ({ result }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				{/* HEADING */}
@@ -741,7 +741,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSection12 = ({attractions}:any) => {
+	const renderSection12 = ({ attractions }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -749,7 +749,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				</div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{attractions?.filter((_:any, i:number) => i < 12).map((item:any) => (
+					{attractions?.filter((_: any, i: number) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.name}</span>
@@ -761,7 +761,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 	}
 
 
-	const renderSection13 = ({excursions}:any) => {
+	const renderSection13 = ({ excursions }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -769,7 +769,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 				</div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{excursions?.filter((_:any, i:number) => i < 12).map((item:any) => (
+					{excursions?.filter((_: any, i: number) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.name}</span>
@@ -780,13 +780,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 		)
 	}
 
-	const renderSidebar = ({result}:any) => {
+	const renderSidebar = ({ result }: any) => {
 		return (
 			<div className="listingSectionSidebar__wrap shadow-xl">
 				{/* PRICE */}
 				<div className="flex justify-between">
 					<span className="text-xl font-semibold">
-					 {result?.property_price?.currency_code} {result?.property_price?.price}
+						{result?.property_price?.currency_code} {result?.property_price?.price}
 						<span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
 							/night
 						</span>
@@ -807,23 +807,23 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						<span>{result?.property_price?.currency_code} {result?.property_price?.price} x {daysToStay} night</span>
 						<span>{result?.property_price?.currency_code} {result?.property_price?.price * daysToStay}</span>
 					</div>
-					{ result?.property_price?.cleaning_fee >= 0 &&
-					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>Cleaning Fee</span>
-						<span>{result?.property_price?.currency_code} {result?.property_price?.cleaning_fee}</span>
-					</div>
+					{result?.property_price?.cleaning_fee >= 0 &&
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>Cleaning Fee</span>
+							<span>{result?.property_price?.currency_code} {result?.property_price?.cleaning_fee}</span>
+						</div>
 					}
-					{ result?.property_price?.security_fee >= 0 &&
-					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>Security Fee</span>
-						<span>{result?.property_price?.currency_code} {result?.property_price?.security_fee}</span>
-					</div>
+					{result?.property_price?.security_fee >= 0 &&
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>Security Fee</span>
+							<span>{result?.property_price?.currency_code} {result?.property_price?.security_fee}</span>
+						</div>
 					}
-					{ result?.property_price?.guest_fee >= 0 &&
-					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>Guest Fee</span>
-						<span>{result?.property_price?.currency_code} {result?.property_price?.guest_fee}</span>
-					</div>
+					{result?.property_price?.guest_fee >= 0 &&
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>Guest Fee</span>
+							<span>{result?.property_price?.currency_code} {result?.property_price?.guest_fee}</span>
+						</div>
 					}
 					<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
 					<div className="flex justify-between font-semibold">
@@ -837,9 +837,141 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			</div>
 		)
 	}
-	  
 
-	const renderRoomSection = () => {
+
+	const renderRoomSection = ({rooms, result}:any) => {
+		return (
+			<>
+				<div className='listingSection__wrap'>
+					{
+						rooms?.map((item:any)=>(
+							<div className="flex w-full justify-center border-t first:border-t-0" key={item?.id}>
+								<div className="w-full">
+									<div className="mt-3 space-y-3">
+										<div className="flex items-start justify-between">
+											<div>
+												<p className="text-xl font-bold">
+													{item?.room_type?.name}
+												</p>
+												<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
+													<div className="text-center">
+													<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+															width={24}
+															height={24}
+															color={'currentColor'}
+															fill={'none'}
+															className="h-6 w-6"
+														>
+															<path
+																d="M22 17.5H2"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+																strokeLinejoin="round"
+															/>
+															<path
+																d="M22 21V16C22 14.1144 22 13.1716 21.4142 12.5858C20.8284 12 19.8856 12 18 12H6C4.11438 12 3.17157 12 2.58579 12.5858C2 13.1716 2 14.1144 2 16V21"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+																strokeLinejoin="round"
+															/>
+															<path
+																d="M16 12V10.6178C16 10.1103 15.9085 9.94054 15.4396 9.7405C14.4631 9.32389 13.2778 9 12 9C10.7222 9 9.53688 9.32389 8.5604 9.7405C8.09154 9.94054 8 10.1103 8 10.6178L8 12"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															/>
+															<path
+																d="M20 12V7.36057C20 6.66893 20 6.32311 19.8292 5.99653C19.6584 5.66995 19.4151 5.50091 18.9284 5.16283C16.9661 3.79978 14.5772 3 12 3C9.42282 3 7.03391 3.79978 5.07163 5.16283C4.58492 5.50091 4.34157 5.66995 4.17079 5.99653C4 6.32311 4 6.66893 4 7.36057V12"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															/>
+														</svg>
+														<p>x {item?.beds}</p>
+													</div>
+													<div className="text-center">
+													<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+															width={24}
+															height={24}
+															color={'currentColor'}
+															fill={'none'}
+															className="h-6 w-6"
+														>
+															<path
+																d="M6 20L5 21M18 20L19 21"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															/>
+															<path
+																d="M3 12V13C3 16.2998 3 17.9497 4.02513 18.9749C5.05025 20 6.70017 20 10 20H14C17.2998 20 18.9497 20 19.9749 18.9749C21 17.9497 21 16.2998 21 13V12"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+																strokeLinejoin="round"
+															/>
+															<path
+																d="M2 12H22"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															/>
+															<path
+																d="M4 12V5.5234C4 4.12977 5.12977 3 6.5234 3C7.64166 3 8.62654 3.73598 8.94339 4.80841L9 5"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															/>
+															<path
+																d="M8 6L10.5 4"
+																stroke="currentColor"
+																strokeWidth="1.5"
+																strokeLinecap="round"
+															/>
+														</svg>
+														<p>x {item?.bathrooms}</p>
+													</div>
+												</div>
+											</div>
+											<div className="flex items-start flex-col">
+												<p className="text-base font-semibold">
+													₹{item?.room_price} <span className="text-sm text-neutral-500 dark:text-neutral-400">/1 nights</span>
+												</p>
+												<form>
+													<select
+														id="rooms"
+														className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+													>
+														{[...Array(result?.bedrooms)].map((_, index) => {
+															const value = index + 1;
+															return (
+																<option key={value} value={`${value} room`}>
+																{value} Room
+																</option>
+															);
+															})}
+													</select>
+												</form>
+												<ButtonPrimary sizeClass="px-4 py-2 sm:px-5">Enquire Now</ButtonPrimary>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						))
+					}
+				</div>
+			</>
+		)
+	}
+
+	const renderRoomSection1 = () => {
 		return (
 			<div className='listingSection__wrap'>
 				<div className="flex w-full justify-center">
@@ -847,98 +979,98 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						<TabGroup>
 							<TabList className="flex gap-4">
 								{categories.map(({ name }) => (
-								<Tab
-									key={name}
-									className="rounded-full px-5 text-lg font-semibold text-gray-800 dark:text-white 
+									<Tab
+										key={name}
+										className="rounded-full px-5 text-lg font-semibold text-gray-800 dark:text-white 
 									focus:outline-none data-[selected]:bg-gray-300 data-[hover]:bg-gray-200 
 									data-[selected]:data-[hover]:bg-gray-200 dark:data-[selected]:bg-white/10 
 									dark:data-[hover]:bg-white/5 dark:data-[selected]:data-[hover]:bg-white/10 
 									data-[focus]:outline-1 data-[focus]:outline-gray-800 dark:data-[focus]:outline-white"
-								>
-									{name}
-								</Tab>
+									>
+										{name}
+									</Tab>
 								))}
 							</TabList>
 							<TabPanels>
 								{categories.map(({ name, posts }) => (
-								<TabPanel key={name} className="rounded-xl">
-									{posts.map((post) => (
-										<div key={post.id} className='pt-5'>
-										 <div  className="nc-StayCard2 grid grid-cols-1 sm:grid-cols-3 gap-5 group relative w-full border-t border-neutral-200 dark:border-neutral-800 pt-5">
-											<div className="relative w-full">
-												<GallerySlider
-													uniqueID="StayCard2_sampleID"
-													ratioClass="aspect-w-12 aspect-h-9"
-													galleryImgs={post.imageUrl}						
-													imageClass="rounded-lg"
-													href="javascript:void(0)"
-												/>
-												<div className='mt-2' onClick={() => setActiveModal(post.id)}>
-													<Badge name={`${post.imageUrl.length} Photos →`} color="red" className='cursor-pointer' />
-												</div>
-											</div>
-						
-											<div className='col-span-2'>
-												<div className="mt-3 space-y-3">
-													
-													<div className="flex items-start justify-between">
-														<div>
-															<p className="text-base font-semibold">
-																Single Room
-															</p>
-															<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
-																<div className="text-center">
-																	<IoBedOutline className='w-5 h-5' />
-																	<p>x 1</p>
-																</div>	
-																<div className="text-center">
-																	<HiOutlineUsers className='w-5 h-5' />
-																	<p>x 2</p>
-																</div>	
-																<div className="text-center">
-																	<FaBaby className='w-5 h-5' />
-																	<p>x 1</p>
-																</div>	
-															</div>
+									<TabPanel key={name} className="rounded-xl">
+										{posts.map((post) => (
+											<div key={post.id} className='pt-5'>
+												<div className="nc-StayCard2 grid grid-cols-1 sm:grid-cols-3 gap-5 group relative w-full border-t border-neutral-200 dark:border-neutral-800 pt-5">
+													<div className="relative w-full">
+														<GallerySlider
+															uniqueID="StayCard2_sampleID"
+															ratioClass="aspect-w-12 aspect-h-9"
+															galleryImgs={post.imageUrl}
+															imageClass="rounded-lg"
+															href="javascript:void(0)"
+														/>
+														<div className='mt-2' onClick={() => setActiveModal(post.id)}>
+															<Badge name={`${post.imageUrl.length} Photos →`} color="red" className='cursor-pointer' />
 														</div>
-														<div className="flex items-start flex-col">
-															<p className="text-base font-semibold">
-																₹1.00 <span className="text-sm text-neutral-500 dark:text-neutral-400">/1 nights</span>
-															</p>
-															<form>
-																<select
-																	id="rooms"
-																	className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-																>
-																	<option value="1 room">1 Room</option>
-																	<option value="2 room">2 Room</option>
-																</select>
-															</form>
-															<ButtonPrimary sizeClass="px-4 py-2 sm:px-5">Enquire Now</ButtonPrimary>
+													</div>
+
+													<div className='col-span-2'>
+														<div className="mt-3 space-y-3">
+
+															<div className="flex items-start justify-between">
+																<div>
+																	<p className="text-base font-semibold">
+																		Single Room
+																	</p>
+																	<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
+																		<div className="text-center">
+																			<IoBedOutline className='w-5 h-5' />
+																			<p>x 1</p>
+																		</div>
+																		<div className="text-center">
+																			<HiOutlineUsers className='w-5 h-5' />
+																			<p>x 2</p>
+																		</div>
+																		<div className="text-center">
+																			<FaBaby className='w-5 h-5' />
+																			<p>x 1</p>
+																		</div>
+																	</div>
+																</div>
+																<div className="flex items-start flex-col">
+																	<p className="text-base font-semibold">
+																		₹1.00 <span className="text-sm text-neutral-500 dark:text-neutral-400">/1 nights</span>
+																	</p>
+																	<form>
+																		<select
+																			id="rooms"
+																			className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+																		>
+																			<option value="1 room">1 Room</option>
+																			<option value="2 room">2 Room</option>
+																		</select>
+																	</form>
+																	<ButtonPrimary sizeClass="px-4 py-2 sm:px-5">Enquire Now</ButtonPrimary>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
-											</div>
-										 </div>
 
-										{/* room modal image gallery  */}
-										 <CustomRoomModal
-											key={post.id}
-											isOpen={activeModal === post.id}
-											closeModal={() => setActiveModal(null)}
-											title={`${name} Room`}
-											>
-											<GallerySlider
-												uniqueID="StayCard2_sampleID"
-												ratioClass="aspect-w-12 aspect-h-9"
-												galleryImgs={post.imageUrl}						
-												imageClass="rounded-lg"
-												href="javascript:void(0)"
-											/>
-											</CustomRoomModal>
-										</div>
-									))}
-								</TabPanel>
+												{/* room modal image gallery  */}
+												<CustomRoomModal
+													key={post.id}
+													isOpen={activeModal === post.id}
+													closeModal={() => setActiveModal(null)}
+													title={`${name} Room`}
+												>
+													<GallerySlider
+														uniqueID="StayCard2_sampleID"
+														ratioClass="aspect-w-12 aspect-h-9"
+														galleryImgs={post.imageUrl}
+														imageClass="rounded-lg"
+														href="javascript:void(0)"
+													/>
+												</CustomRoomModal>
+											</div>
+										))}
+									</TabPanel>
 								))}
 							</TabPanels>
 						</TabGroup>
@@ -947,14 +1079,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 
 			</div>
 
-			
+
 		)
 	}
 
-	const { result, amenities, attractions, excursions } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
-	const { description } = listingDescription ?? {}; 
+	const { result, amenities, attractions, excursions, rooms } = listingDetail ?? {}; // Use nullish coalescing (??) to provide a fallback empty object
+	const { description } = listingDescription ?? {};
 
-   
+
 	return (
 		<div className="nc-ListingStayDetailPage">
 			{/*  HEADER */}
@@ -973,12 +1105,11 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 						/>
 						<div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 transition-opacity hover:opacity-100"></div>
 					</div>
-					{result?.property_photos?.filter((_:any, i:any) => i >= 1 && i < 5).map((item:any, index:any) => (
+					{result?.property_photos?.filter((_: any, i: any) => i >= 1 && i < 5).map((item: any, index: any) => (
 						<div
 							key={index}
-							className={`relative overflow-hidden rounded-md sm:rounded-xl ${
-								index >= 3 ? 'hidden sm:block' : ''
-							}`}
+							className={`relative overflow-hidden rounded-md sm:rounded-xl ${index >= 3 ? 'hidden sm:block' : ''
+								}`}
 						>
 							<div className="aspect-h-3 aspect-w-4 sm:aspect-h-5 sm:aspect-w-6">
 								<Image
@@ -1014,27 +1145,27 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({}) => {
 			<main className={`relative ${activeModal == null ? 'z-10' : 'z-40'} mt-11 flex flex-col lg:flex-row`}>
 				{/* CONTENT */}
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
-					{renderSection1({result})}
-					{renderRoomSection()}
-					{renderSection2({description})}
-					{renderSection7({result})}
+					{renderSection1({ result })}
+					{renderRoomSection({rooms, result})}
+					{renderSection2({ description })}
+					{renderSection7({ result })}
 					{description?.about_place != null && renderSection9()}
-					{renderSection3({amenities})}
+					{renderSection3({ amenities })}
 					{/* {amenities && safetyAmenities.length > 0 && renderSafetyAmenities({safetyAmenities})} */}
 					{/* {renderSection4()} */}
 					<SectionDateRange />
 					{renderSection10()}
 					{renderSection11()}
-					{attractions?.length > 0 && renderSection12({attractions})}
-					{excursions?.length > 0 && renderSection13({excursions})}
-					{renderSection5({result})}
+					{attractions?.length > 0 && renderSection12({ attractions })}
+					{excursions?.length > 0 && renderSection13({ excursions })}
+					{renderSection5({ result })}
 					{renderSection6()}
 					{description?.interaction_guests && renderSection8()}
 				</div>
 
 				{/* SIDEBAR */}
 				<div className="mt-14 hidden flex-grow lg:mt-0 lg:block">
-					<div className="sticky top-28">{renderSidebar({result})}</div>
+					<div className="sticky top-28">{renderSidebar({ result })}</div>
 				</div>
 			</main>
 		</div>

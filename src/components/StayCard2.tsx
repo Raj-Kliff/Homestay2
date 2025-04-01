@@ -45,22 +45,22 @@ const StayCard2: FC<StayCard2Props> = ({
 
 	const [isTodayWeekend, setIsTodayWeekend] = useState(false)
 	const [currentSlug, setCurrentSlug] = useState<String>('')
-	const[toggleLike, setToggleLike] = useState<boolean>(false)
-	const {loggedUser, token} = useImages()
+	const [toggleLike, setToggleLike] = useState<boolean>(false)
+	const { loggedUser, token } = useImages()
 	const [favouriteProperties, setFavouriteProperties] = useState<any>()
 
 	function isWeekend() {
 		const today = new Date();
 		const day = today.getDay();
-		
-		if( day === 0 || day === 6 ){
+
+		if (day === 0 || day === 6) {
 			setIsTodayWeekend(true)
 		}
 	}
-	
-	useEffect(()=>{
+
+	useEffect(() => {
 		isWeekend()
-	},[])
+	}, [])
 
 
 	const renderSliderGallery = () => {
@@ -89,9 +89,8 @@ const StayCard2: FC<StayCard2Props> = ({
 					<div className="flex items-center space-x-2">
 						{isAds && <Badge name="ADS" color="green" />}
 						<h2
-							className={`font-semibold capitalize text-neutral-900 dark:text-white ${
-								size === 'default' ? 'text-base' : 'text-base'
-							}`}
+							className={`font-semibold capitalize text-neutral-900 dark:text-white ${size === 'default' ? 'text-base' : 'text-base'
+								}`}
 						>
 							<span className="line-clamp-1">{properties[0].name}</span>
 						</h2>
@@ -147,37 +146,35 @@ const StayCard2: FC<StayCard2Props> = ({
 	const fetchListingDetails = async () => {
 		try {
 			if (!currentSlug) return;
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${currentSlug}`, {
-			headers: {
-			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
-			},
-		  });
-		  if (data.status === 'success') {
-			favouriteProperty(data?.data?.result?.id, loggedUser?.id)
-		  }
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/property/${currentSlug}`, {
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+				},
+			});
+			if (data.status === 'success') {
+				favouriteProperty(data?.data?.result?.id, loggedUser?.id)
+			}
 		} catch (error) {
-		  console.error(error);
+			console.error(error);
 		}
-	  } 
+	}
 
 
-	const favouriteProperty = async(property_id: String, user_id: String) => {
+	const favouriteProperty = async (property_id: String, user_id: String) => {
 		try {
-			const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/toggle-favourite`,{property_id, user_id}, {
+			const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/toggle-favourite`, { property_id, user_id }, {
 				headers: {
 					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
 				},
 			})
-			if(data.status === 'success'){
-				if(data?.data?.status === 'Active'){
+			if (data.status === 'success') {
+				if (data?.data?.status === 'Active') {
 					toast.success("Added to favourite property")
-				}else if(data?.data?.status === 'Inactive'){
+				} else if (data?.data?.status === 'Inactive') {
 					toast.success("Removed from favourite property")
 				}
-				console.log('id', data?.data?.id)
-				console.log('status', data?.data?.status)
 			}
-			
+
 		} catch (error) {
 			console.log(error)
 		}
@@ -185,32 +182,32 @@ const StayCard2: FC<StayCard2Props> = ({
 
 	const fetchFavouriteProperties = async () => {
 		try {
-		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/favourites-list?user_id=${loggedUser?.id}`, {
-			headers: {
-			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
-			  'Authorization': `Bearer ${token}`,
-			},
-		  });
-		  if (data.status === 'success') {
-			  setFavouriteProperties(data?.data)
-			  console.log("favouritePorperiteis2::",data?.data)
-		  }
+			const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/favourites-list?user_id=${loggedUser?.id}`, {
+				headers: {
+					"x-api-key": process.env.NEXT_PUBLIC_X_API_KEY,
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			if (data.status === 'success') {
+				setFavouriteProperties(data?.data)
+				console.log("favouritePorperiteis2::", data?.data)
+			}
 		} catch (error) {
-		  console.error(error);
+			console.error(error);
 		}
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		fetchFavouriteProperties()
-	},[])
+	}, [])
 
-	useEffect(()=>{
+	useEffect(() => {
 		if (currentSlug) {
 			fetchListingDetails();
-		  }
-	  },[currentSlug, toggleLike])
-	
-	  console.log("favouritePorperiteis::",favouriteProperties)
+		}
+	}, [currentSlug, toggleLike])
+
+	console.log("favouritePorperiteis::", favouriteProperties)
 
 	return (
 		// <div className={`nc-StayCard2 group relative ${className}`}>
@@ -218,7 +215,7 @@ const StayCard2: FC<StayCard2Props> = ({
 		// 	<Link href={"/listing-stay-detail"}>{renderContent()}</Link>
 		// </div>
 
-		properties?.slice(0,8).map((item: any, index: any) => (
+		properties?.slice(0, 8).map((item: any, index: any) => (
 			<div className={`nc-StayCard2 group relative ${className}`} key={item?.id}>
 
 				<div className="relative w-full">
@@ -231,9 +228,9 @@ const StayCard2: FC<StayCard2Props> = ({
 					/>
 					<BtnLikeIcon
 						// isLiked={like}
-						isLiked={favouriteProperties?.some((property:any) => property.id === item?.id)}
+						isLiked={favouriteProperties?.some((property: any) => property.id === item?.id)}
 						className="absolute right-3 top-3 z-[1]"
-						onClick={() =>{ setCurrentSlug(item?.slug), setToggleLike(!toggleLike)}}
+						onClick={() => { setCurrentSlug(item?.slug), setToggleLike(!toggleLike) }}
 					/>
 					{/* {saleOff && <SaleOffBadge className="absolute left-3 top-3" />} */}
 				</div>
@@ -249,9 +246,8 @@ const StayCard2: FC<StayCard2Props> = ({
 							<div className="flex items-center space-x-2">
 								{/* {isAds && <Badge name="ADS" color="green" />} */}
 								<h2
-									className={`font-semibold capitalize text-neutral-900 dark:text-white ${
-										size === 'default' ? 'text-base' : 'text-base'
-									}`}
+									className={`font-semibold capitalize text-neutral-900 dark:text-white ${size === 'default' ? 'text-base' : 'text-base'
+										}`}
 								>
 									<span className="line-clamp-1">{item?.name}</span>
 								</h2>
@@ -284,7 +280,7 @@ const StayCard2: FC<StayCard2Props> = ({
 						<div className="w-14 border-b border-neutral-100 dark:border-neutral-800"></div>
 						<div className="flex items-center justify-between">
 							<span className="text-base font-semibold">
-								{ isTodayWeekend === false ? item?.property_price?.price : item?.property_price?.weekend_price}
+								{isTodayWeekend === false ? item?.property_price?.price : item?.property_price?.weekend_price}
 								{` `}
 								{size === 'default' && (
 									<span className="text-sm font-normal text-neutral-500 dark:text-neutral-400">

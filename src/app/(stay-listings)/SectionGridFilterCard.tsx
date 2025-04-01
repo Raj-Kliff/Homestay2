@@ -31,7 +31,68 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
 		setCurrentPage(page);
 	  };
 
-  useEffect(() => {
+    const renderPageNumbers = () => {
+      const pageNumbers = [];
+    
+      const maxPageNumbers = 3; // Limit the number of page numbers displayed
+      const half = Math.floor(maxPageNumbers / 2);
+    
+      let startPage = Math.max(1, currentPage - half);
+      let endPage = Math.min(totalPages, currentPage + half);
+    
+      if (currentPage <= half) {
+        startPage = 1;
+        endPage = Math.min(maxPageNumbers, totalPages);
+      } else if (currentPage + half >= totalPages) {
+        startPage = Math.max(1, totalPages - maxPageNumbers + 1);
+        endPage = totalPages;
+      }
+    
+      if (startPage > 1) {
+        pageNumbers.push(
+          <button key={1} onClick={() => handlePageChange(1)} className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600">
+            1
+          </button>
+        );
+        if (startPage > 2) {
+          pageNumbers.push(<span key="start-ellipsis" className="mx-1 text-gray-500">...</span>);
+        }
+      }
+    
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${
+              currentPage === i ? "bg-primary-700" : "bg-primary-600"
+            }`}
+          >
+            {i}
+          </button>
+        );
+      }
+    
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          pageNumbers.push(<span key="end-ellipsis" className="mx-1 text-gray-500">...</span>);
+        }
+        pageNumbers.push(
+          <button
+            key={totalPages}
+            onClick={() => handlePageChange(totalPages)}
+            className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600"
+          >
+            {totalPages}
+          </button>
+        );
+      }
+    
+      return pageNumbers;
+    };
+    
+
+  useEffect(() => { 
     // Extract all internal 'properties' arrays and merge them
     const internalProperties = data.flatMap((property:any) => property.properties);
     
@@ -54,37 +115,33 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
           <StayCard2Copy key={index} data={stay} />
         ))}
       </div>
-      <div className="flex mt-[5rem] justify-center items-center">
-        {/* <Pagination /> */}
-        <div>
-							<button 
-							onClick={() => handlePageChange(currentPage - 1)} 
-							disabled={currentPage === 1}
-							className={` ${currentPage === 1 ? 'invisible' : ''} inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700`}
+      {/* pagination  */}
+					<div className="mt-16 flex items-center justify-center">
+						<div className="flex items-center space-x-2">
+							{/* Previous Button */}
+							<button
+								onClick={() => handlePageChange(currentPage - 1)}
+								disabled={currentPage === 1}
+								className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+									}`}
 							>
-							&larr;
+								&larr;
 							</button>
 
-							{/* Display page numbers */}
-							{Array.from({ length: totalPages }, (_, index) => (
-							<button 
-								key={index + 1} 
-								onClick={() => handlePageChange(index + 1)} 
-								className={` mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${currentPage === index+1 ? "bg-primary-700" : "bg-primary-600"}`}
-							>
-								{index + 1}
-							</button>
-							))}
+							{/* Page Numbers */}
+							{renderPageNumbers()}
 
-							<button 
-							onClick={() => handlePageChange(currentPage + 1)} 
-							disabled={currentPage === totalPages}
-							className={`${currentPage === totalPages ? 'invisible' : ''} border border-gray-400  inline-flex h-11 px-3 items-center justify-center rounded-full text-gray-700`}
+							{/* Next Button */}
+							<button
+								onClick={() => handlePageChange(currentPage + 1)}
+								disabled={currentPage === totalPages}
+								className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+									}`}
 							>
-							&rarr;
+								&rarr;
 							</button>
+						</div>
 					</div>
-      </div>
     </div>
   );
 };

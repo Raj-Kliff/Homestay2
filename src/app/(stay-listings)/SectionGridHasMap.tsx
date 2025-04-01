@@ -20,16 +20,77 @@ export interface SectionGridHasMapProps {
 
 const itemsPerPage = 20;
 
-const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
+const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings }) => {
 	const [currentHoverID, setCurrentHoverID] = useState<string | number>(-1)
 	const [showFullMapFixed, setShowFullMapFixed] = useState(false)
 
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const totalPages = Math.ceil(stayListings?.length / itemsPerPage);
 	const currentItems = stayListings?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-	const handlePageChange = (page:number) => {
+	const handlePageChange = (page: number) => {
 		setCurrentPage(page);
-	  };
+	};
+
+	// for pagination 
+	const renderPageNumbers = () => {
+		const pageNumbers = [];
+
+		const maxPageNumbers = 3; // Limit the number of page numbers displayed
+		const half = Math.floor(maxPageNumbers / 2);
+
+		let startPage = Math.max(1, currentPage - half);
+		let endPage = Math.min(totalPages, currentPage + half);
+
+		if (currentPage <= half) {
+			startPage = 1;
+			endPage = Math.min(maxPageNumbers, totalPages);
+		} else if (currentPage + half >= totalPages) {
+			startPage = Math.max(1, totalPages - maxPageNumbers + 1);
+			endPage = totalPages;
+		}
+
+		if (startPage > 1) {
+			pageNumbers.push(
+				<button key={1} onClick={() => handlePageChange(1)} className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600">
+					1
+				</button>
+			);
+			if (startPage > 2) {
+				pageNumbers.push(<span key="start-ellipsis" className="mx-1 text-gray-500">...</span>);
+			}
+		}
+
+		for (let i = startPage; i <= endPage; i++) {
+			pageNumbers.push(
+				<button
+					key={i}
+					onClick={() => handlePageChange(i)}
+					className={`mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${currentPage === i ? "bg-primary-700" : "bg-primary-600"
+						}`}
+				>
+					{i}
+				</button>
+			);
+		}
+
+		if (endPage < totalPages) {
+			if (endPage < totalPages - 1) {
+				pageNumbers.push(<span key="end-ellipsis" className="mx-1 text-gray-500">...</span>);
+			}
+			pageNumbers.push(
+				<button
+					key={totalPages}
+					onClick={() => handlePageChange(totalPages)}
+					className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600"
+				>
+					{totalPages}
+				</button>
+			);
+		}
+
+		return pageNumbers;
+	};
+
 
 	return (
 		<div>
@@ -47,7 +108,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 						</div>
 					</div>
 					<div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 2xl:gap-x-6">
-						{currentItems.map((item:any) => (
+						{currentItems.map((item: any) => (
 							<div
 								key={item.id}
 								onMouseEnter={() => setCurrentHoverID((_) => item.id)}
@@ -57,36 +118,36 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 							</div>
 						))}
 					</div>
+
+					{/* pagination  */}
 					<div className="mt-16 flex items-center justify-center">
-						{/* <Pagination /> */}
-						<div>
-							<button 
-							onClick={() => handlePageChange(currentPage - 1)} 
-							disabled={currentPage === 1}
-							className={` ${currentPage === 1 ? 'invisible' : ''} inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700`}
+						<div className="flex items-center space-x-2">
+							{/* Previous Button */}
+							<button
+								onClick={() => handlePageChange(currentPage - 1)}
+								disabled={currentPage === 1}
+								className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+									}`}
 							>
-							&larr;
+								&larr;
 							</button>
 
-							{Array.from({ length: totalPages }, (_, index) => (
-							<button 
-								key={index + 1} 
-								onClick={() => handlePageChange(index + 1)} 
-								className={` mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${currentPage === index+1 ? "bg-primary-700" : "bg-primary-600"}`}
-							>
-								{index + 1}
-							</button>
-							))}
+							{/* Page Numbers */}
+							{renderPageNumbers()}
 
-							<button 
-							onClick={() => handlePageChange(currentPage + 1)} 
-							disabled={currentPage === totalPages}
-							className={`${currentPage === totalPages ? 'invisible' : ''} border border-gray-400  inline-flex h-11 px-3 items-center justify-center rounded-full text-gray-700`}
+							{/* Next Button */}
+							<button
+								onClick={() => handlePageChange(currentPage + 1)}
+								disabled={currentPage === totalPages}
+								className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+									}`}
 							>
-							&rarr;
+								&rarr;
 							</button>
 						</div>
 					</div>
+
+
 				</div>
 
 				{!showFullMapFixed && (
@@ -101,9 +162,8 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({stayListings}) => {
 
 				{/* MAPPPPP */}
 				<div
-					className={`xl:static xl:block xl:flex-1 ${
-						showFullMapFixed ? 'fixed inset-0 z-50' : 'hidden'
-					}`}
+					className={`xl:static xl:block xl:flex-1 ${showFullMapFixed ? 'fixed inset-0 z-50' : 'hidden'
+						}`}
 				>
 					{showFullMapFixed && (
 						<ButtonClose
