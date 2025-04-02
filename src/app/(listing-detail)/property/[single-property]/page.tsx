@@ -54,6 +54,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	const [totalFee, setTotalFee] = useState<number>(0)
 	const { setImagess } = useImages()
 	const [activeModal, setActiveModal] = useState<number | null>(null);
+	const [categorizedRooms, setCategorizeRooms] = useState<any>([])
+	const [roomPrice, setRoomPrice] = useState<number>(0)
+	const [selectedRooms, setSelectedRooms] = useState<any>({});
 
 	// Example data for buttons and modals
 	const modalData = [
@@ -158,15 +161,31 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		router.push(`${endPoint}/?modal=PHOTO_TOUR_SCROLLABLE` as Route)
 	}
 
+	const handleRoomChange = (roomType:any, pricePerRoom:any, newSelectedRooms:any) => {
+		const prevSelectedRooms = selectedRooms[roomType] || 0;
+	
+		// Calculate the price difference
+		const priceDifference = (newSelectedRooms - prevSelectedRooms) * pricePerRoom;
+	
+		// Update the state with the new selection
+		setSelectedRooms((prevState:any) => ({
+		  ...prevState,
+		  [roomType]: newSelectedRooms,
+		}));
+	
+		// Update the total price
+		setRoomPrice((prevTotal:any) => prevTotal + priceDifference);
+	  };
+
 	const calculateTotalFee = () => {
-		const price = listingDetail?.result?.property_price?.price ?? 0;
+		// const price = listingDetail?.result?.property_price?.price ?? 0;
 		const guestFee = listingDetail?.result?.property_price?.guest_fee ?? 0;
 		const securityFee = listingDetail?.result?.property_price?.security_fee ?? 0;
-		const cleaningFee = listingDetail?.result?.property_price?.cleaning_fee ?? 0;
+		// const cleaningFee = listingDetail?.result?.property_price?.cleaning_fee ?? 0;
 		const totalDays = daysToStay;
 
 		// Calculate total fee
-		const total = (price * totalDays) + guestFee + securityFee + cleaningFee;
+		const total = (roomPrice * totalDays) + guestFee + securityFee;
 
 		// Set the total fee
 		setTotalFee(total);
@@ -174,7 +193,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 	useEffect(() => {
 		calculateTotalFee()
-	}, [listingDetail, daysToStay])
+	}, [listingDetail, daysToStay, roomPrice])
 
 	// ---------------
 	// const [listingDetail, setListingDetail] = useState<any>({})
@@ -190,6 +209,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 			});
 			if (data.status === 'success') {
 				setListingDetail(data.data);
+				const rooms = categorizeRooms(data?.data?.rooms)
+				setCategorizeRooms(rooms)
 				const photos = data.data.result?.property_photos?.map((photo: any) => photo.image_url);
 				setImagess(photos || [])
 			}
@@ -219,6 +240,28 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		fetchListingDescription()
 	}, [fetchListingDetails, fetchListingDescription])
 
+	
+	const categorizeRooms = (rooms:any) => {
+		const categorized:any = {}
+
+		for(const room of rooms){
+			const roomType  = room?.room_type?.name;
+
+			if(!categorized[roomType]){
+				categorized[roomType] = {
+					room_type: roomType,
+					room_price: room.room_price,
+					beds: room.beds,
+					bathrooms: room.bathrooms,
+					total_rooms: 1
+				}
+			}else{
+				categorized[roomType].total_rooms += 1;
+			}
+		}
+
+		return Object.values(categorized);
+	}
 
 	const renderSection1 = ({ result }: any) => {
 		return (
@@ -291,13 +334,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							/>
 						</svg>
 						<span className=" ">
-							<span className="hidden sm:inline-block">No. of rooms: </span> {result?.bedrooms}
+							<span className="hidden sm:inline-block">No. of rooms: </span> {listingDetail?.rooms?.length}
 						</span>
 					</div>
 					<div className="flex items-center space-x-3">
 						<UsersIcon className="h-6 w-6" />
 						<span className="">
-							<span className="hidden sm:inline-block">Total Capacity:</span> {listingDetail?.guests}
+							<span className="hidden sm:inline-block">Total Capacity:</span> {result?.accommodates}
 						</span>
 					</div>
 					<div className="flex items-center space-x-3">
@@ -786,13 +829,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* PRICE */}
 				<div className="flex justify-between">
 					<span className="text-xl font-semibold">
-						{result?.property_price?.currency_code} {result?.property_price?.price}
+						{/* {result?.property_price?.currency_code} {result?.property_price?.price} */}
+						₹{roomPrice}
 						<span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
 							/night
 						</span>
 					</span>
-					<StartRating />
+					<StartRating point={result?.avg_rating} reviewCount={result?.reviews_count} />
 				</div>
+				
 
 				{/* FORM */}
 				<form className="flex flex-col rounded-3xl border border-neutral-200 dark:border-neutral-700">
@@ -802,27 +847,29 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				</form>
 
 				{/* SUM */}
+				{
+				roomPrice !== 0 &&
 				<div className="flex flex-col space-y-4">
 					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>{result?.property_price?.currency_code} {result?.property_price?.price} x {daysToStay} night</span>
-						<span>{result?.property_price?.currency_code} {result?.property_price?.price * daysToStay}</span>
+						<span>₹ {roomPrice} x {daysToStay} night</span>
+						<span>₹ {roomPrice * daysToStay}</span>
 					</div>
-					{result?.property_price?.cleaning_fee >= 0 &&
+					{/* {result?.property_price?.cleaning_fee >= 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Cleaning Fee</span>
-							<span>{result?.property_price?.currency_code} {result?.property_price?.cleaning_fee}</span>
+							<span>₹{result?.property_price?.cleaning_fee}</span>
 						</div>
-					}
+					} */}
 					{result?.property_price?.security_fee >= 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Security Fee</span>
-							<span>{result?.property_price?.currency_code} {result?.property_price?.security_fee}</span>
+							<span>₹{result?.property_price?.security_fee}</span>
 						</div>
 					}
 					{result?.property_price?.guest_fee >= 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Guest Fee</span>
-							<span>{result?.property_price?.currency_code} {result?.property_price?.guest_fee}</span>
+							<span>₹{result?.property_price?.guest_fee}</span>
 						</div>
 					}
 					<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
@@ -831,6 +878,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 						<span>₹{totalFee}</span>
 					</div>
 				</div>
+				}
 
 				{/* SUBMIT */}
 				<ButtonPrimary href={'/checkout'}>Reserve</ButtonPrimary>
@@ -839,19 +887,19 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	}
 
 
-	const renderRoomSection = ({rooms, result}:any) => {
+	const renderRoomSection = ({rooms}:any) => {
 		return (
 			<>
 				<div className='listingSection__wrap'>
 					{
-						rooms?.map((item:any)=>(
-							<div className="flex w-full justify-center border-t first:border-t-0" key={item?.id}>
+						categorizedRooms?.map((item:any)=>(
+							<div className="flex w-full justify-center border-t first:border-t-0" key={item?.room_type}>
 								<div className="w-full">
 									<div className="mt-3 space-y-3">
 										<div className="flex items-start justify-between">
 											<div>
 												<p className="text-xl font-bold">
-													{item?.room_type?.name}
+													{item?.room_type}
 												</p>
 												<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
 													<div className="text-center">
@@ -935,7 +983,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 																strokeLinecap="round"
 															/>
 														</svg>
-														<p>x {item?.bathrooms}</p>
+														<p>x 1 ({item?.bathrooms})</p>
 													</div>
 												</div>
 											</div>
@@ -947,8 +995,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 													<select
 														id="rooms"
 														className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+														onChange={(e)=>{
+															const selectedRooms = parseInt(e.target.value);
+                        									handleRoomChange(item?.room_type, item?.room_price, selectedRooms);
+														}}		
 													>
-														{[...Array(result?.bedrooms)].map((_, index) => {
+														<option value='0' selected>Select Room</option>
+														{[...Array(item?.total_rooms)].map((_, index) => {
 															const value = index + 1;
 															return (
 																<option key={value} value={`${value} room`}>
@@ -958,7 +1011,6 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 															})}
 													</select>
 												</form>
-												<ButtonPrimary sizeClass="px-4 py-2 sm:px-5">Enquire Now</ButtonPrimary>
 											</div>
 										</div>
 									</div>
@@ -1146,7 +1198,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* CONTENT */}
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1({ result })}
-					{renderRoomSection({rooms, result})}
+					{rooms?.length > 0 && renderRoomSection({rooms})}
 					{renderSection2({ description })}
 					{renderSection7({ result })}
 					{description?.about_place != null && renderSection9()}
