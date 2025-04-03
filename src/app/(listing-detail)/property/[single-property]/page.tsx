@@ -302,134 +302,150 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 				{/* 6 */}
 				<div className="flex items-center justify-between space-x-8 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start xl:space-x-12">
-					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							width={24}
-							height={24}
-							color={'currentColor'}
-							fill={'none'}
-							className="h-6 w-6"
-						>
-							<path
-								d="M3 22H21"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M4 22V6C4 2.69067 4.78933 2 8.57143 2H15.4286C19.2107 2 20 2.69067 20 6V22"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M13.92 11.7592V9.85424C13.92 8.8324 13.0604 8.00403 12 8.00403C10.9396 8.00403 10.08 8.8324 10.08 9.85424V11.7592M15 14.0843C15 15.6952 13.6462 17.004 12 17.004C10.3538 17.004 9 15.6952 9 14.0843C9 12.374 10.3538 11.0739 12 11.0739C13.6462 11.0739 15 12.374 15 14.0843Z"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-						</svg>
-						<span className=" ">
-							<span className="hidden sm:inline-block">No. of rooms: </span> {result?.bedrooms}
-						</span>
-					</div>
-					<div className="flex items-center space-x-3">
-						<UsersIcon className="h-6 w-6" />
-						<span className="">
-							<span className="hidden sm:inline-block">Total Capacity:</span> {result?.accommodates}
-						</span>
-					</div>
-					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							width={24}
-							height={24}
-							color={'currentColor'}
-							fill={'none'}
-							className="h-6 w-6"
-						>
-							<path
-								d="M22 17.5H2"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M22 21V16C22 14.1144 22 13.1716 21.4142 12.5858C20.8284 12 19.8856 12 18 12H6C4.11438 12 3.17157 12 2.58579 12.5858C2 13.1716 2 14.1144 2 16V21"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M16 12V10.6178C16 10.1103 15.9085 9.94054 15.4396 9.7405C14.4631 9.32389 13.2778 9 12 9C10.7222 9 9.53688 9.32389 8.5604 9.7405C8.09154 9.94054 8 10.1103 8 10.6178L8 12"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-							<path
-								d="M20 12V7.36057C20 6.66893 20 6.32311 19.8292 5.99653C19.6584 5.66995 19.4151 5.50091 18.9284 5.16283C16.9661 3.79978 14.5772 3 12 3C9.42282 3 7.03391 3.79978 5.07163 5.16283C4.58492 5.50091 4.34157 5.66995 4.17079 5.99653C4 6.32311 4 6.66893 4 7.36057V12"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-						</svg>
-						<span className=" ">
-							{result?.beds} <span className="hidden sm:inline-block">beds</span>
-						</span>
-					</div>
-					<div className="flex items-center space-x-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							width={24}
-							height={24}
-							color={'currentColor'}
-							fill={'none'}
-							className="h-6 w-6"
-						>
-							<path
-								d="M6 20L5 21M18 20L19 21"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-							<path
-								d="M3 12V13C3 16.2998 3 17.9497 4.02513 18.9749C5.05025 20 6.70017 20 10 20H14C17.2998 20 18.9497 20 19.9749 18.9749C21 17.9497 21 16.2998 21 13V12"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-							<path
-								d="M2 12H22"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-							<path
-								d="M4 12V5.5234C4 4.12977 5.12977 3 6.5234 3C7.64166 3 8.62654 3.73598 8.94339 4.80841L9 5"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-							<path
-								d="M8 6L10.5 4"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-							/>
-						</svg>
-						<span className=" ">
-							{result?.bathrooms} <span className="hidden sm:inline-block">baths</span>
-						</span>
-					</div>
+					{
+						result?.bedrooms > 0 && 
+						<div className="flex items-center space-x-3">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								width={24}
+								height={24}
+								color={'currentColor'}
+								fill={'none'}
+								className="h-6 w-6"
+							>
+								<path
+									d="M3 22H21"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+								<path
+									d="M4 22V6C4 2.69067 4.78933 2 8.57143 2H15.4286C19.2107 2 20 2.69067 20 6V22"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+								<path
+									d="M13.92 11.7592V9.85424C13.92 8.8324 13.0604 8.00403 12 8.00403C10.9396 8.00403 10.08 8.8324 10.08 9.85424V11.7592M15 14.0843C15 15.6952 13.6462 17.004 12 17.004C10.3538 17.004 9 15.6952 9 14.0843C9 12.374 10.3538 11.0739 12 11.0739C13.6462 11.0739 15 12.374 15 14.0843Z"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+							</svg>
+							<span className=" ">
+								<span className="hidden sm:inline-block">No. of rooms: </span> {result?.bedrooms}
+							</span>
+						</div>
+					}
+					
+					{
+						result?.accommodates > 0 && 
+						<div className="flex items-center space-x-3">
+							<UsersIcon className="h-6 w-6" />
+							<span className="">
+								<span className="hidden sm:inline-block">Total Capacity:</span> {result?.accommodates}
+							</span>
+						</div>
+					}
+					
+					{
+						result?.beds > 0 && 
+						<div className="flex items-center space-x-3">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								width={24}
+								height={24}
+								color={'currentColor'}
+								fill={'none'}
+								className="h-6 w-6"
+							>
+								<path
+									d="M22 17.5H2"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+								<path
+									d="M22 21V16C22 14.1144 22 13.1716 21.4142 12.5858C20.8284 12 19.8856 12 18 12H6C4.11438 12 3.17157 12 2.58579 12.5858C2 13.1716 2 14.1144 2 16V21"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+								<path
+									d="M16 12V10.6178C16 10.1103 15.9085 9.94054 15.4396 9.7405C14.4631 9.32389 13.2778 9 12 9C10.7222 9 9.53688 9.32389 8.5604 9.7405C8.09154 9.94054 8 10.1103 8 10.6178L8 12"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+								<path
+									d="M20 12V7.36057C20 6.66893 20 6.32311 19.8292 5.99653C19.6584 5.66995 19.4151 5.50091 18.9284 5.16283C16.9661 3.79978 14.5772 3 12 3C9.42282 3 7.03391 3.79978 5.07163 5.16283C4.58492 5.50091 4.34157 5.66995 4.17079 5.99653C4 6.32311 4 6.66893 4 7.36057V12"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+							</svg>
+							<span className=" ">
+								{result?.beds} <span className="hidden sm:inline-block">beds</span>
+							</span>
+						</div>
+					}
+					
+					{
+						result?.bathrooms > 0 && 
+						<div className="flex items-center space-x-3">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								width={24}
+								height={24}
+								color={'currentColor'}
+								fill={'none'}
+								className="h-6 w-6"
+							>
+								<path
+									d="M6 20L5 21M18 20L19 21"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+								<path
+									d="M3 12V13C3 16.2998 3 17.9497 4.02513 18.9749C5.05025 20 6.70017 20 10 20H14C17.2998 20 18.9497 20 19.9749 18.9749C21 17.9497 21 16.2998 21 13V12"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+								<path
+									d="M2 12H22"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+								<path
+									d="M4 12V5.5234C4 4.12977 5.12977 3 6.5234 3C7.64166 3 8.62654 3.73598 8.94339 4.80841L9 5"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+								<path
+									d="M8 6L10.5 4"
+									stroke="currentColor"
+									strokeWidth="1.5"
+									strokeLinecap="round"
+								/>
+							</svg>
+							<span className=" ">
+								{result?.bathrooms} <span className="hidden sm:inline-block">baths</span>
+							</span>
+						</div>
+					}
+					
 
 				</div>
 			</div>
