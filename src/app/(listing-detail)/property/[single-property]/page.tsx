@@ -334,7 +334,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							/>
 						</svg>
 						<span className=" ">
-							<span className="hidden sm:inline-block">No. of rooms: </span> {listingDetail?.rooms?.length}
+							<span className="hidden sm:inline-block">No. of rooms: </span> {result?.bedrooms}
 						</span>
 					</div>
 					<div className="flex items-center space-x-3">
