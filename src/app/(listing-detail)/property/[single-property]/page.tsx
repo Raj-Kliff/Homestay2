@@ -810,7 +810,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{attractions?.filter((_: any, i: number) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
-							<span className=" ">{item.name}</span>
+							<span className=" ">{item?.name} ({item?.property_distance})</span>
 						</div>
 					))}
 				</div>
@@ -830,7 +830,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{excursions?.filter((_: any, i: number) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
-							<span className=" ">{item.name}</span>
+							<span className=" ">{item?.name} ({item?.property_distance})</span>
 						</div>
 					))}
 				</div>
