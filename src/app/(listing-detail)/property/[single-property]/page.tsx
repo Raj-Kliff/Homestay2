@@ -275,7 +275,6 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* 2 */}
 				<h2 className="text-2xl flex gap-2 font-semibold sm:text-3xl lg:text-4xl">
 					{result?.name}
-					<StartRating reviewCount={result?.reviews_count} point={result?.avg_rating} />
 				</h2>
 
 				{/* 3 */}
@@ -289,12 +288,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* 4 */}
 				<div className="flex items-center">
 					<Avatar imgUrl={result?.users?.profile_src} hasChecked sizeClass="h-10 w-10" radius="rounded-full" />
-					<span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
+					<div className="flex gap-2 ml-2.5 text-neutral-500 dark:text-neutral-400">
 						Hosted by{' '}
-						<span className="font-medium text-neutral-900 dark:text-neutral-200">
-							{result?.host_name}
+						<span className="flex gap-2 font-medium text-neutral-900 dark:text-neutral-200">
+							{result?.host_name} <StartRating reviewCount={result?.reviews_count} point={result?.avg_rating} />
 						</span>
-					</span>
+					</div>
 				</div>
 
 				{/* 5 */}
@@ -477,7 +476,6 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 						{` About the property's amenities and services`}
 					</span>
 				</div>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
 					{amenities?.Facilities?.filter((_: any, i: any) => i < 12).map((item: any) => (
@@ -554,8 +552,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		)
 	}
 
-	const renderSafetyAmenities = ({ safetyAmenities }: any) => {
-		console.log(safetyAmenities)
+	const renderSafetyAmenities = ({ amenities }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -564,10 +561,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 						{` About the property's safety amenities and services`}
 					</span>
 				</div>
-				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{safetyAmenities?.filter((_: any, i: any) => i < 12).map((item: any) => (
+					{amenities?.SafetyAmenities?.map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item.title}</span>
@@ -651,10 +647,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 
 				{/* info */}
-				<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
-					<h2 className='text-black font-bold'>Description:</h2>
-					<p>description text here</p>
-				</div>
+				{
+					result?.users?.description && 
+					<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
+						<h2 className='text-black font-bold'>Description:</h2>
+						<p>{result?.users?.description}</p>
+					</div>
+				}
 
 				{/* == */}
 				{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
@@ -781,7 +780,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		)
 	}
 
-	const renderSection11 = () => {
+	const renderSection11 = ({description}:any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -789,10 +788,10 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				</div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{Activities_demos.filter((_, i) => i < 12).map((item) => (
-						<div key={item.name} className="flex items-center space-x-3">
+					{description?.guestsactivity?.map((item:any, index:number) => (
+						<div key={index} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
-							<span className=" ">{item.name}</span>
+							<span className=" ">{item}</span>
 						</div>
 					))}
 				</div>
@@ -876,13 +875,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							<span>₹{result?.property_price?.cleaning_fee}</span>
 						</div>
 					} */}
-					{result?.property_price?.security_fee >= 0 &&
+					{result?.property_price?.security_fee > 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Security Fee</span>
 							<span>₹{result?.property_price?.security_fee}</span>
 						</div>
 					}
-					{result?.property_price?.guest_fee >= 0 &&
+					{result?.property_price?.guest_fee > 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Guest Fee</span>
 							<span>₹{result?.property_price?.guest_fee}</span>
@@ -1219,11 +1218,11 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{renderSection7({ result })}
 					{description?.about_place != null && renderSection9()}
 					{renderSection3({ amenities })}
-					{/* {amenities && safetyAmenities.length > 0 && renderSafetyAmenities({safetyAmenities})} */}
+					{amenities?.SafetyAmenities.length > 0 && renderSafetyAmenities({amenities})}
 					{/* {renderSection4()} */}
 					<SectionDateRange />
 					{renderSection10()}
-					{renderSection11()}
+					{description?.guestsactivity?.length > 0 && renderSection11({description})}
 					{attractions?.length > 0 && renderSection12({ attractions })}
 					{excursions?.length > 0 && renderSection13({ excursions })}
 					{renderSection5({ result })}
