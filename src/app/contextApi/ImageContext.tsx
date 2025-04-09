@@ -9,6 +9,8 @@ interface ImageContextType {
   setToken: any;
   loggedUser: any;
   setLoggedUser: any;
+  allProperties: any;
+  setAllProperties: any;
 }
 
 // Create the context
@@ -31,6 +33,7 @@ export const ImageProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const [token, setToken] = useState<String | null>(null)
   const [loggedUser, setLoggedUser] = useState<any>()
+  const [allProperties, setAllProperties] = useState<any>([])
 
   useEffect(() => {
     if (!token && localStorage.getItem('loginToken')) {
@@ -39,7 +42,7 @@ export const ImageProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [])
 
   return (
-    <ImageContext.Provider value={{ imagess, setImagess, token, setToken, loggedUser, setLoggedUser}}>
+    <ImageContext.Provider value={{ imagess, setImagess, token, setToken, loggedUser, setLoggedUser, allProperties, setAllProperties}}>
       {children}
     </ImageContext.Provider>
   );

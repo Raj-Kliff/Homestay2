@@ -1069,7 +1069,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 														}}
 														// disabled={currentActiveRoom.type !== item?.room_type && currentActiveRoom.count == 0}
 													>
-														<option value='0' selected>Select Room</option>
+														<option value='0' selected={currentActiveRoom.type !== item?.room_type}>Select Room</option>
 														{[...Array(item?.total_rooms)].map((_, index) => {
 															const value = index + 1;
 															return (
@@ -1295,7 +1295,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 				{/* SIDEBAR */}
 				<div className="mt-14 hidden flex-grow lg:mt-0 lg:block">
-					{roomPrice > 0 && <div className="sticky top-28">{renderSidebar({ result })}</div>}
+					<div className="sticky top-28">{renderSidebar({ result })}</div>
 				</div>
 			</main>
 		</div>

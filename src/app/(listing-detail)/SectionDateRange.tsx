@@ -5,14 +5,14 @@ import DatePickerCustomDay from "@/components/DatePickerCustomDay";
 
 
 export interface SectionDateRangeProps {
-  propertyDates: any;
-  previousPrice: number; // Default price if date doesn't match
+  propertyDates?: any;
+  previousPrice?: number; // Default price if date doesn't match
   setDaysToStay?: any,
-  startDate: any,
-  setStartDate: any,
-  endDate: any,
-  setEndDate: any,
-  setRoomPrice: any,
+  startDate?: any,
+  setStartDate?: any,
+  endDate?: any,
+  setEndDate?: any,
+  setRoomPrice?: any,
 }
 
 const SectionDateRange: FC<SectionDateRangeProps> = ({ setRoomPrice, propertyDates, previousPrice, setDaysToStay, startDate, setStartDate, endDate, setEndDate }) => {
