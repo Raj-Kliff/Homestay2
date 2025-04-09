@@ -94,7 +94,7 @@ const GuestsInput: FC<GuestsInputProps> = ({ className = 'flex-1' }) => {
 								className="w-full"
 								defaultValue={guestAdultsInputValue}
 								onChange={(value) => handleChangeData(value, 'guestAdults')}
-								max={10}
+								// max={10}
 								min={1}
 								label="Adults"
 								desc="Ages 13 or above"
@@ -103,18 +103,18 @@ const GuestsInput: FC<GuestsInputProps> = ({ className = 'flex-1' }) => {
 								className="mt-6 w-full"
 								defaultValue={guestChildrenInputValue}
 								onChange={(value) => handleChangeData(value, 'guestChildren')}
-								max={4}
+								// max={4}
 								label="Children"
-								desc="Ages 2–12"
+								desc="Ages 7–12"
 							/>
 
 							<NcInputNumber
 								className="mt-6 w-full"
 								defaultValue={guestInfantsInputValue}
 								onChange={(value) => handleChangeData(value, 'guestInfants')}
-								max={4}
-								label="Infants"
-								desc="Ages 0–2"
+								// max={4}
+								label="Child"
+								desc="Ages 0–6"
 							/>
 						</PopoverPanel>
 					</Transition>

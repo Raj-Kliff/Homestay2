@@ -15,21 +15,16 @@ import ClearDataButton from '@/app/(client-components)/(HeroSearchForm)/ClearDat
 
 export interface StayDatesRangeInputProps {
 	className?: string,
-	setDaysToStay?: any
+	setDaysToStay?: any,
+	startDate: any,
+	setStartDate: any,
+	endDate: any,
+	setEndDate: any,
 }
 
 const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
-	className = 'flex-1', setDaysToStay
+	className = 'flex-1', setDaysToStay, startDate, setStartDate, endDate, setEndDate
 }) => {
-	const [startDate, setStartDate] = useState<Date | null>(
-		new Date(),
-	)
-	// const [endDate, setEndDate] = useState<Date | null>(new Date())
-	const [endDate, setEndDate] = useState<Date | null>(() => {
-		const tomorrow = new Date();
-		tomorrow.setDate(tomorrow.getDate() + 1);
-		return tomorrow;
-	  });
 
 	const onChangeDate = (dates: [Date | null, Date | null]) => {
 		const [start, end] = dates

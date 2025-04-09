@@ -41,6 +41,7 @@ import { HiOutlineUsers } from "react-icons/hi2";
 import { FaBaby } from "react-icons/fa";
 import CustomRoomModal from './CustomRoomModal'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
+import PriceCalculator from './PriceCalculator'
 
 export interface ListingStayDetailPageProps { }
 
@@ -57,13 +58,30 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	const [categorizedRooms, setCategorizeRooms] = useState<any>([])
 	const [roomPrice, setRoomPrice] = useState<number>(0)
 	const [selectedRooms, setSelectedRooms] = useState<any>({});
+	const [propertyDates, setPropertyDates] = useState<any>([]);
+	const [currentActiveRoom, setCurrentActiveRoom] = useState<any>({
+		type: '',
+		count: 1,
+	})
+	const [surgedPrice, setSurgedPrice] = useState<any>()
 
-	// Example data for buttons and modals
-	const modalData = [
-		{ id: 1, title: "Modal 1", content: "This is the content of Modal 1." },
-		{ id: 2, title: "Modal 2", content: "This is the content of Modal 2." },
-		{ id: 3, title: "Modal 3", content: "This is the content of Modal 3." },
-	];
+	const getRoomPrice = (currentActiveRoom: any) => {
+		const price = listingDetail?.rooms?.find((room: any) => room?.room_type?.name.toLowerCase() === currentActiveRoom?.toLowerCase())?.room_price
+		return price;
+	}
+
+	const currentroomPrice = getRoomPrice(currentActiveRoom?.type || 'Classic')
+
+	// calender variables 
+	const [startDate, setStartDate] = useState<any>(
+		new Date(),
+	)
+	// const [endDate, setEndDate] = useState<Date | null>(new Date())
+	const [endDate, setEndDate] = useState<Date | null>(() => {
+		const tomorrow = new Date();
+		tomorrow.setDate(tomorrow.getDate() + 1);
+		return tomorrow;
+	});
 
 	const categories = [
 		{
@@ -161,21 +179,21 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		router.push(`${endPoint}/?modal=PHOTO_TOUR_SCROLLABLE` as Route)
 	}
 
-	const handleRoomChange = (roomType:any, pricePerRoom:any, newSelectedRooms:any) => {
+	const handleRoomChange = (roomType: any, pricePerRoom: any, newSelectedRooms: any) => {
 		const prevSelectedRooms = selectedRooms[roomType] || 0;
-	
+
 		// Calculate the price difference
 		const priceDifference = (newSelectedRooms - prevSelectedRooms) * pricePerRoom;
-	
+
 		// Update the state with the new selection
-		setSelectedRooms((prevState:any) => ({
-		  ...prevState,
-		  [roomType]: newSelectedRooms,
+		setSelectedRooms((prevState: any) => ({
+			...prevState,
+			[roomType]: newSelectedRooms,
 		}));
-	
+
 		// Update the total price
-		setRoomPrice((prevTotal:any) => prevTotal + priceDifference);
-	  };
+		setRoomPrice((prevTotal: any) => prevTotal + priceDifference);
+	};
 
 	const calculateTotalFee = () => {
 		// const price = listingDetail?.result?.property_price?.price ?? 0;
@@ -191,9 +209,31 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		setTotalFee(total);
 	}
 
+	// const calculateTotalFee = () => {
+	// 	const guestFee = listingDetail?.result?.property_price?.guest_fee ?? 0;
+	// 	const securityFee = listingDetail?.result?.property_price?.security_fee ?? 0;
+	// 	const totalDays = daysToStay;
+
+	// 	// Loop through each date in the range
+	// 	let totalRoomPrice = 0;
+	// 	let currentDate = new Date(startDate);
+
+	// 	for (let i = 0; i < totalDays; i++) {
+	// 	  const dateStr = currentDate.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+	// 	  const datePrice = propertyDates.find((item: any) => item.date === dateStr)?.price || roomPrice;
+
+	// 	  totalRoomPrice += datePrice;
+	// 	  currentDate.setDate(currentDate.getDate() + 1); // Move to next date
+	// 	}
+
+	// 	const total = totalRoomPrice + guestFee + securityFee;
+	// 	setTotalFee(total);
+	//   };
+
+
 	useEffect(() => {
 		calculateTotalFee()
-	}, [listingDetail, daysToStay, roomPrice])
+	}, [listingDetail, daysToStay, roomPrice, startDate, endDate])
 
 	// ---------------
 	// const [listingDetail, setListingDetail] = useState<any>({})
@@ -209,6 +249,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 			});
 			if (data.status === 'success') {
 				setListingDetail(data.data);
+				setPropertyDates(data?.data?.result?.property_dates || []);
 				const rooms = categorizeRooms(data?.data?.rooms)
 				setCategorizeRooms(rooms)
 				const photos = data.data.result?.property_photos?.map((photo: any) => photo.image_url);
@@ -240,14 +281,14 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		fetchListingDescription()
 	}, [fetchListingDetails, fetchListingDescription])
 
-	
-	const categorizeRooms = (rooms:any) => {
-		const categorized:any = {}
+	// group room of each category seperately 
+	const categorizeRooms = (rooms: any) => {
+		const categorized: any = {}
 
-		for(const room of rooms){
-			const roomType  = room?.room_type?.name;
+		for (const room of rooms) {
+			const roomType = room?.room_type?.name;
 
-			if(!categorized[roomType]){
+			if (!categorized[roomType]) {
 				categorized[roomType] = {
 					room_type: roomType,
 					room_price: room.room_price,
@@ -255,7 +296,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					bathrooms: room.bathrooms,
 					total_rooms: 1
 				}
-			}else{
+			} else {
 				categorized[roomType].total_rooms += 1;
 			}
 		}
@@ -302,7 +343,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* 6 */}
 				<div className="flex items-center justify-between space-x-8 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start xl:space-x-12">
 					{
-						result?.bedrooms > 0 && 
+						result?.bedrooms > 0 &&
 						<div className="flex items-center space-x-3">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -339,9 +380,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							</span>
 						</div>
 					}
-					
+
 					{
-						result?.accommodates > 0 && 
+						result?.accommodates > 0 &&
 						<div className="flex items-center space-x-3">
 							<UsersIcon className="h-6 w-6" />
 							<span className="">
@@ -349,9 +390,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							</span>
 						</div>
 					}
-					
+
 					{
-						result?.beds > 0 && 
+						result?.beds > 0 &&
 						<div className="flex items-center space-x-3">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -394,9 +435,9 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							</span>
 						</div>
 					}
-					
+
 					{
-						result?.bathrooms > 0 && 
+						result?.bathrooms > 0 &&
 						<div className="flex items-center space-x-3">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +485,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							</span>
 						</div>
 					}
-					
+
 
 				</div>
 			</div>
@@ -648,7 +689,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 				{/* info */}
 				{
-					result?.users?.description && 
+					result?.users?.description &&
 					<div className="block space-y-2.5 text-neutral-500 dark:text-neutral-400">
 						<h2 className='text-black font-bold'>Description:</h2>
 						<p>{result?.users?.description}</p>
@@ -780,7 +821,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		)
 	}
 
-	const renderSection11 = ({description}:any) => {
+	const renderSection11 = ({ description }: any) => {
 		return (
 			<div className="listingSection__wrap">
 				<div>
@@ -788,7 +829,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				</div>
 				{/* 6 */}
 				<div className="flex gap-5 flex-wrap">
-					{description?.guestsactivity?.map((item:any, index:number) => (
+					{description?.guestsactivity?.map((item: any, index: number) => (
 						<div key={index} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
 							<span className=" ">{item}</span>
@@ -852,47 +893,52 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					</span>
 					<StartRating point={result?.avg_rating} reviewCount={result?.reviews_count} />
 				</div>
-				
+
 
 				{/* FORM */}
 				<form className="flex flex-col rounded-3xl border border-neutral-200 dark:border-neutral-700">
-					<StayDatesRangeInput setDaysToStay={setDaysToStay} className="z-[11] flex-1" />
+					<StayDatesRangeInput setDaysToStay={setDaysToStay} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} className="z-[11] flex-1" />
 					<div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
 					<GuestsInput className="flex-1" />
 				</form>
 
 				{/* SUM */}
 				{
-				roomPrice !== 0 &&
-				<div className="flex flex-col space-y-4">
-					<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-						<span>₹ {roomPrice} x {daysToStay} night</span>
-						<span>₹ {roomPrice * daysToStay}</span>
-					</div>
-					{/* {result?.property_price?.cleaning_fee >= 0 &&
+					roomPrice !== 0 &&
+					<div className="flex flex-col space-y-4">
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>₹ {roomPrice} x {daysToStay} night</span>
+							<span>₹ {roomPrice * daysToStay}</span>
+						</div>
+						{surgedPrice - (roomPrice * daysToStay) > 0 && 
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>Surge Price</span>
+							<span>₹ {surgedPrice - (roomPrice * daysToStay)}</span>
+						</div>}
+						{/* {result?.property_price?.cleaning_fee >= 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Cleaning Fee</span>
 							<span>₹{result?.property_price?.cleaning_fee}</span>
 						</div>
 					} */}
-					{result?.property_price?.security_fee > 0 &&
-						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-							<span>Security Fee</span>
-							<span>₹{result?.property_price?.security_fee}</span>
+						{/* {result?.property_price?.security_fee > 0 &&
+							<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+								<span>Security Fee</span>
+								<span>₹{result?.property_price?.security_fee}</span>
+							</div>
+						}
+						{result?.property_price?.guest_fee > 0 &&
+							<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+								<span>Guest Fee</span>
+								<span>₹{result?.property_price?.guest_fee}</span>
+							</div>
+						} */}
+						<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
+						<div className="flex justify-between font-semibold">
+							<span>Total</span>
+							<span className='flex'>₹<PriceCalculator startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} /></span>
 						</div>
-					}
-					{result?.property_price?.guest_fee > 0 &&
-						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-							<span>Guest Fee</span>
-							<span>₹{result?.property_price?.guest_fee}</span>
-						</div>
-					}
-					<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
-					<div className="flex justify-between font-semibold">
-						<span>Total</span>
-						<span>₹{totalFee}</span>
 					</div>
-				</div>
 				}
 
 				{/* SUBMIT */}
@@ -902,12 +948,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	}
 
 
-	const renderRoomSection = ({rooms}:any) => {
+	const renderRoomSection = ({ rooms }: any) => {
 		return (
 			<>
 				<div className='listingSection__wrap'>
 					{
-						categorizedRooms?.map((item:any)=>(
+						categorizedRooms?.map((item: any) => (
 							<div className="flex w-full justify-center border-t first:border-t-0" key={item?.room_type}>
 								<div className="w-full">
 									<div className="mt-3 space-y-3">
@@ -918,7 +964,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 												</p>
 												<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
 													<div className="text-center">
-													<svg
+														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															viewBox="0 0 24 24"
 															width={24}
@@ -957,7 +1003,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 														<p>x {item?.beds}</p>
 													</div>
 													<div className="text-center">
-													<svg
+														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															viewBox="0 0 24 24"
 															width={24}
@@ -1010,20 +1056,28 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 													<select
 														id="rooms"
 														className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-														onChange={(e)=>{
-															const selectedRooms = parseInt(e.target.value);
-                        									handleRoomChange(item?.room_type, item?.room_price, selectedRooms);
-														}}		
+														onChange={(e) => {
+															if (parseInt(e.target.value) == 0) {
+																setCurrentActiveRoom({ type: '', count: 1 })
+																setRoomPrice(0)
+															} else {
+																const selectedRooms = parseInt(e.target.value);
+																setCurrentActiveRoom({ type: item?.room_type, count: 0 })
+																// handleRoomChange(item?.room_type, item?.room_price, selectedRooms);
+																setRoomPrice(parseInt(e.target.value) * item?.room_price)
+															}
+														}}
+														// disabled={currentActiveRoom.type !== item?.room_type && currentActiveRoom.count == 0}
 													>
 														<option value='0' selected>Select Room</option>
 														{[...Array(item?.total_rooms)].map((_, index) => {
 															const value = index + 1;
 															return (
 																<option key={value} value={`${value} room`}>
-																{value} Room
+																	{value} Room
 																</option>
 															);
-															})}
+														})}
 													</select>
 												</form>
 											</div>
@@ -1213,16 +1267,25 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* CONTENT */}
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1({ result })}
-					{rooms?.length > 0 && renderRoomSection({rooms})}
+					{rooms?.length > 0 && renderRoomSection({ rooms })}
 					{renderSection2({ description })}
 					{renderSection7({ result })}
 					{description?.about_place != null && renderSection9()}
 					{renderSection3({ amenities })}
-					{amenities?.SafetyAmenities.length > 0 && renderSafetyAmenities({amenities})}
+					{amenities?.SafetyAmenities.length > 0 && renderSafetyAmenities({ amenities })}
 					{/* {renderSection4()} */}
-					<SectionDateRange />
+					<SectionDateRange
+						setRoomPrice={setRoomPrice}
+						propertyDates={result?.property_dates}
+						//  previousPrice={result?.property_price?.price}
+						previousPrice={currentroomPrice}
+						setDaysToStay={setDaysToStay}
+						startDate={startDate}
+						setStartDate={setStartDate}
+						endDate={endDate}
+						setEndDate={setEndDate} />
 					{renderSection10()}
-					{description?.guestsactivity?.length > 0 && renderSection11({description})}
+					{description?.guestsactivity?.length > 0 && renderSection11({ description })}
 					{attractions?.length > 0 && renderSection12({ attractions })}
 					{excursions?.length > 0 && renderSection13({ excursions })}
 					{renderSection5({ result })}
@@ -1232,7 +1295,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 				{/* SIDEBAR */}
 				<div className="mt-14 hidden flex-grow lg:mt-0 lg:block">
-					<div className="sticky top-28">{renderSidebar({ result })}</div>
+					{roomPrice > 0 && <div className="sticky top-28">{renderSidebar({ result })}</div>}
 				</div>
 			</main>
 		</div>

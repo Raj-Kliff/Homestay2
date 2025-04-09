@@ -1,18 +1,70 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import DatePickerCustomHeaderTwoMonth from "@/components/DatePickerCustomHeaderTwoMonth";
 import DatePickerCustomDay from "@/components/DatePickerCustomDay";
 
-const SectionDateRange = () => {
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date("2023/02/06")
-  );
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2023/02/23"));
+
+export interface SectionDateRangeProps {
+  propertyDates: any;
+  previousPrice: number; // Default price if date doesn't match
+  setDaysToStay?: any,
+  startDate: any,
+  setStartDate: any,
+  endDate: any,
+  setEndDate: any,
+  setRoomPrice: any,
+}
+
+const SectionDateRange: FC<SectionDateRangeProps> = ({ setRoomPrice, propertyDates, previousPrice, setDaysToStay, startDate, setStartDate, endDate, setEndDate }) => {
+  // const [startDate, setStartDate] = useState<Date | null>(
+  //   new Date("2023/02/06")
+  // );
+  // const [endDate, setEndDate] = useState<Date | null>(new Date("2023/02/23"));
+  // const onChangeDate = (dates: [Date | null, Date | null]) => {
+  //   const [start, end] = dates;
+  //   setStartDate(start);
+  //   setEndDate(end);
+  // };
+
+  // const [startDate, setStartDate] = useState<Date | null>(
+  //     new Date(),
+  //   )
+  //   // const [endDate, setEndDate] = useState<Date | null>(new Date())
+  //   const [endDate, setEndDate] = useState<Date | null>(() => {
+  //     const tomorrow = new Date();
+  //     tomorrow.setDate(tomorrow.getDate() + 1);
+  //     return tomorrow;
+  //     });
+
+
   const onChangeDate = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
+    const [start, end] = dates
+    setStartDate(start)
+    setEndDate(end)
+  }
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      // Convert startDate and endDate to Date objects
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Check if the dates are valid
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        alert('Invalid date format');
+        return;
+      }
+
+      // Calculate the difference in milliseconds
+      const differenceInTime = end.getTime() - start.getTime();
+
+      // Convert milliseconds to days
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+      // Update the state with the calculated number of days
+      setDaysToStay(differenceInDays);
+    }
+  }, [startDate, endDate]);
 
   const renderSectionCheckIndate = () => {
     return (
@@ -40,9 +92,38 @@ const SectionDateRange = () => {
             renderCustomHeader={(p) => (
               <DatePickerCustomHeaderTwoMonth {...p} />
             )}
-            renderDayContents={(day, date) => (
-              <DatePickerCustomDay dayOfMonth={day} date={date} />
-            )}
+            // renderDayContents={(day, date) => (
+            //   <DatePickerCustomDay dayOfMonth={day} date={date} />
+            // )}
+            renderDayContents={(day: any, date: any) => {
+              // Convert the date to UTC to prevent timezone shifts
+              const utcDate = new Date(date);
+              utcDate.setMinutes(utcDate.getMinutes() - utcDate.getTimezoneOffset()); // Adjust to UTC
+              const dateStr = utcDate.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+
+              const property = propertyDates?.find((item: any) => item.date === dateStr);
+              // const price = property ? property.price : previousPrice;
+              const price =
+                previousPrice !== undefined
+                  ? property
+                    ? previousPrice + (property.price / 100) * previousPrice
+                    : previousPrice
+                  : null;
+              // setRoomPrice(price)
+
+              return (
+                <div className="date-cell">
+                  <DatePickerCustomDay dayOfMonth={day} date={date} />
+                  {price !== null && (
+                    <div className="property-price text-[10px] text-gray-500">
+                      ₹{price}
+                    </div>
+                  )}
+                </div>
+              );
+            }}
+
+
           />
         </div>
       </div>
