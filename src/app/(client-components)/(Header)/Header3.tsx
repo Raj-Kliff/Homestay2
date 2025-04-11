@@ -15,6 +15,8 @@ import { StaySearchFormFields } from '../type'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Navigation from '@/shared/Navigation/Navigation'
 import SwitchDarkMode from '@/shared/SwitchDarkMode'
+import CustomNavbar from '@/components/CustomNavbar'
+import axios from 'axios'
 
 interface Header3Props {
 	className?: string
@@ -25,6 +27,7 @@ if (typeof window !== 'undefined') {
 	WIN_PREV_POSITION = (window as any).pageYOffset
 }
 
+
 const Header3: FC<Header3Props> = ({ className = '' }) => {
 	const headerInnerRef = useRef<HTMLDivElement>(null)
 	//
@@ -32,6 +35,8 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 		useState<StaySearchFormFields | null>()
 	//
 	const [currentTab, setCurrentTab] = useState<SearchTab>('Stays')
+
+	const [menuItem, setMenuItem] = useState<any>([])
 
 	//
 	useOutsideAlerter(headerInnerRef, () => {
@@ -75,6 +80,27 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 		}
 		WIN_PREV_POSITION = currentScrollPos
 	}
+
+	// fetching menu data 
+	const fetchMenuItems = async () => {
+				
+		try {
+		  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/sitemenu`,{
+			headers: {
+			  "x-api-key": process.env.NEXT_PUBLIC_X_API_KEY, 
+			},
+		  })
+		  if (data.status === 'success') {
+		  	setMenuItem(data?.data)
+		  }
+		} catch (error) {
+		  console.error(error)
+		}
+	}
+
+	useEffect(()=>{
+		fetchMenuItems()
+	},[])
 
 	//
 	const renderHeroSearch = () => {
@@ -198,7 +224,8 @@ const Header3: FC<Header3Props> = ({ className = '' }) => {
 				</div>
 			</header>
 			<div className='flex justify-center sticky top-[4.7rem] z-20 bg-white border-b dark:bg-neutral-900 dark:border-b dark:border-neutral-600'>
-				<Navigation/>
+				{/* <Navigation/> */}
+				<CustomNavbar data={menuItem} />
 			</div>
 		</>
 	)

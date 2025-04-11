@@ -2,11 +2,14 @@
 import React, { FC, useEffect, useState } from "react";
 import SectionGridFilterCard from "../SectionGridFilterCard";
 import axios from "axios";
+import { useImages } from "@/app/contextApi/ImageContext";
 
 export interface ListingStayPageProps {}
 
 const ListingStayPage: FC<ListingStayPageProps> = () => {
   const [featuredPlaces, setFeaturedPlaces] = useState([])
+
+
   const fetchFeaturedPlaces = async () => {
 				
     try {

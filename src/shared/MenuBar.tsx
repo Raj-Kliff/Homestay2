@@ -72,7 +72,7 @@ const MenuBar: FC<MenuBarProps> = ({
 	return (
 		<>
 			<button
-				onClick={handleOpenMenu}
+				// onClick={handleOpenMenu}
 				className={`flex items-center justify-center focus:outline-none ${className}`}
 			>
 				<Bars3BottomRightIcon className={iconClassName} />

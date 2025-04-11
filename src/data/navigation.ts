@@ -274,8 +274,8 @@ export const NAVIGATION_DEMO: NavItemType[] = [
 				name: 'North India',
 				type: 'dropdown',
 				children: [
-					{ id: ncNanoId(), href: '/listing-stay', name: 'Chandigarh' },
-					{ id: ncNanoId(), href: '/listing-stay-map', name: 'Delhi' },
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Chandigarh', stayType: "Homestay", state: "Chandigarh" },
+					{ id: ncNanoId(), href: '/listing-stay', name: 'Delhi', stayType: "Homestay", state: "Delhi" },
 					{ id: ncNanoId(), href: '/listing-stay-detail', name: 'Haryana' },
 				],
 			},

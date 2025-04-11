@@ -94,7 +94,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
 
   useEffect(() => { 
     // Extract all internal 'properties' arrays and merge them
-    const internalProperties = data.flatMap((property:any) => property.properties);
+    const internalProperties = data?.flatMap((property:any) => property.properties);
     
     // Update state with the combined internal properties
     setAllInternalProperties(internalProperties);

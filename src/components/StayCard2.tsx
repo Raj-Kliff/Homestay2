@@ -207,7 +207,6 @@ const StayCard2: FC<StayCard2Props> = ({
 		}
 	}, [currentSlug, toggleLike])
 
-	console.log("favouritePorperiteis::", favouriteProperties)
 
 	return (
 		// <div className={`nc-StayCard2 group relative ${className}`}>

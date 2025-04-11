@@ -1,8 +1,10 @@
 'use client'
 
+import { useImages } from '@/app/contextApi/ImageContext'
 import { PathName } from '@/routers/types'
 import { Popover, PopoverPanel, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
+import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -19,10 +21,12 @@ export interface NavItemType {
 	id: string
 	name: string
 	isNew?: boolean
-	href: PathName
+	href: any //PathName
 	targetBlank?: boolean
 	children?: NavItemType[]
 	megaMenu?: MegamenuItem[]
+	stayType?: string,
+	state?: string,
 	type?: 'dropdown' | 'megaMenu' | 'none'
 }
 
@@ -52,6 +56,16 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
 			})
 		})
 	}
+
+	const buildPath = (item: NavItemType) => {
+		if (item.stayType && item.state) {
+		  return `${item.href}/${item.stayType}/${item.state}`
+		}
+		return item.href || '/'
+	  }
+	  
+
+
 
 	// ===================== MENU MEGAMENU =====================
 	const renderMegaMenu = (menu: NavItemType) => {
@@ -237,7 +251,8 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({ menuItem }) => {
 				target={item.targetBlank ? '_blank' : undefined}
 				rel="noopener noreferrer"
 				className="flex items-center rounded-md px-4 py-2 font-normal text-neutral-600 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
-				href={item.href || ''}
+				// href={item.href || ''}
+				href={buildPath(item)}
 			>
 				{item.name}
 				{item.type && (

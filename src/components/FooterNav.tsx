@@ -11,6 +11,7 @@ import MenuBar from "@/shared/MenuBar";
 import isInViewport from "@/utils/isInViewport";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useImages } from "@/app/contextApi/ImageContext";
 
 
 let WIN_PREV_POSITION = 0;
@@ -53,6 +54,7 @@ const FooterNav = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter()
+  const {isOpen, setIsOpen} = useImages()
 
   const showHideHeaderMenu = useCallback(() => {
     let currentScrollPos = window.pageYOffset;
@@ -106,6 +108,27 @@ const FooterNav = () => {
 
   const renderItem = (item: NavItem, index: number) => {
     const isActive = pathname === item.link;
+
+    if (item.name === "Menu"){
+      return (
+        <div
+          key={index}
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex flex-col items-center justify-center text-neutral-500 dark:text-neutral-300/90 ${
+            isActive ? "text-neutral-900 dark:text-neutral-100" : ""
+          }`}
+        >
+          <item.icon className={`w-6 h-6 ${isActive ? "text-red-600" : ""}`} />
+          <span
+            className={`text-[11px] leading-none mt-1 ${
+              isActive ? "text-red-600" : ""
+            }`}
+          >
+            {item.name}
+          </span>
+        </div>
+      )
+    }
 
     if (item.name === "Log in") {
       return (
