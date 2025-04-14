@@ -17,7 +17,7 @@ const CardCategoryBox1: FC<CardCategoryBox1Props> = ({
 	const { count, name, thumbnail, href = '/',city,image } = taxonomy
 	return (
 		<Link
-			href={href}
+			href={`/listing-stay/${city}`}
 			className={`nc-CardCategoryBox1 [ nc-box-has-hover ] [ nc-dark-box-bg-has-hover ] relative flex items-center p-3 sm:p-6 ${className}`}
 		>
 			<Badge

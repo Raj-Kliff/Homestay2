@@ -35,8 +35,10 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	const [currentActiveTab, setCurrentActiveTab] = useState('Homestay')
 
 	function filterListingByTab(tab:any) {
-		return stayListings.filter((item:any) => item.name === tab);
+		return stayListings.filter((item:any) => item.name === tab)
 	}
+
+	
 
 	// const [mergedProperties, setMergedProperties] = useState<any[]>([])
 

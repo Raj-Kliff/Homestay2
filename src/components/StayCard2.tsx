@@ -214,7 +214,7 @@ const StayCard2: FC<StayCard2Props> = ({
 		// 	<Link href={"/listing-stay-detail"}>{renderContent()}</Link>
 		// </div>
 
-		properties?.slice(0, 8).map((item: any, index: any) => (
+		properties?.filter((item:any)=> item.recomended === 1).slice(0, 12).map((item: any, index: any) => (
 			<div className={`nc-StayCard2 group relative ${className}`} key={item?.id}>
 
 				<div className="relative w-full">

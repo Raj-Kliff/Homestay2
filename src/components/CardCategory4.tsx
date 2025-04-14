@@ -13,12 +13,12 @@ const CardCategory4: FC<CardCategory4Props> = ({
 	className = '',
 	taxonomy,
 }) => {
-	const { count, name, href = '/', thumbnail, listingType, cover_photo, property_type_name } = taxonomy
+	const { count, name, href = '/', thumbnail, listingType, cover_photo, property_type_name, slug } = taxonomy
 
 	 
 	return (
 		<Link
-			href={href}
+			href={`/property/${slug}`}
 			className={`nc-CardCategory4 flex flex-col ${className}`}
 			data-nc-id="CardCategory4"
 		>
