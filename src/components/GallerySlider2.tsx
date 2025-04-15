@@ -103,7 +103,7 @@ export default function GallerySlider2({
                                     src={currentImage || ''}
                                     fill
                                     alt="listing card gallery"
-                                    className={`object-cover ${imageClass}`}
+                                    className={`object-fill ${imageClass}`}
                                     onLoad={() => setLoaded(true)}
                                     sizes="(max-width: 1025px) 100vw, 300px"
                                 />

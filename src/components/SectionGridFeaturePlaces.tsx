@@ -33,6 +33,8 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 }) => {
 
 	const [currentActiveTab, setCurrentActiveTab] = useState('Homestay')
+	const [toSlice, setToSlice] = useState<number>(8)
+	const [loading, setLoading] = useState<boolean>(false)
 
 	function filterListingByTab(tab:any) {
 		return stayListings.filter((item:any) => item.name === tab)
@@ -51,6 +53,15 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
  
 	
 	const filteredProducts = filterListingByTab(currentActiveTab);
+
+	const handleShowMore = () => {
+		setLoading(true);
+	  
+		setTimeout(() => {
+		  setToSlice(prev => prev + 8);
+		  setLoading(false);
+		}, 1000); // simulate 1 second loading
+	  };
 	
 	const renderCard = (stay: any) => {
 		let CardName = StayCard
@@ -66,7 +77,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 				CardName = StayCard
 		}
 
-		return <CardName key={stay.id} data={stay} />
+		return <CardName toSlice={toSlice} key={stay.id} data={stay} />
 	}
 
 	return (
@@ -86,9 +97,11 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 				{/* {stayListings.map((stay:any) => renderCard(stay))} */}
 
 			</div>
-			{/* <div className="mt-16 flex items-center justify-center">
-				<ButtonPrimary loading>Show me more</ButtonPrimary>
-			</div> */}
+			{/* Load more button  */}
+            {filteredProducts[0]?.properties?.length > toSlice &&
+			<div className="mt-16 flex items-center justify-center">
+            <ButtonPrimary loading={loading} onClick={handleShowMore} >Show more</ButtonPrimary>
+          </div>}
 		</div>
 	)
 }

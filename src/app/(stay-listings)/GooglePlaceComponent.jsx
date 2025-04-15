@@ -34,7 +34,7 @@ const GooglePlaceComponent = ({setLocation}) => {
             {...getInputProps({
               placeholder: 'Search Places ...',
               className:
-                'location-search-input flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-700 dark:hover:border-neutral-600',
+                'location-search-input flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600',
             })}
           />
           <div className="autocomplete-dropdown-container">

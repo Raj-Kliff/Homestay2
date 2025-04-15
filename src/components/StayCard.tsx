@@ -12,6 +12,7 @@ export interface StayCardProps {
 	className?: string
 	data?: StayDataType
 	size?: 'default' | 'small'
+	toSlice?: number
 }
 
 const DEMO_DATA = DEMO_STAY_LISTINGS[0]

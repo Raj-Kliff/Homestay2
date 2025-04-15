@@ -17,7 +17,7 @@ const CardCategory3: FC<CardCategory3Props> = ({
 
 
 	return (
-		<a href={`/listing-stay/${name}`} className={`nc-CardCategory3 flex flex-col ${className}`}>
+		<a href={`/listing-stay-city/${name}`} className={`nc-CardCategory3 flex flex-col ${className}`}>
 			<div
 				className={`group aspect-h-5 aspect-w-5 relative h-0 w-full flex-shrink-0 overflow-hidden rounded-2xl sm:aspect-h-6`}
 			>

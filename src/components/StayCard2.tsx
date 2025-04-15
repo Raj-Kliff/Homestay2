@@ -16,7 +16,8 @@ import { toast } from 'react-toastify'
 export interface StayCard2Props {
 	className?: string
 	data?: any //StayDataType
-	size?: 'default' | 'small'
+	size?: 'default' | 'small',
+	toSlice?: number,
 }
 
 const DEMO_DATA = DEMO_STAY_LISTINGS[0]
@@ -25,6 +26,7 @@ const StayCard2: FC<StayCard2Props> = ({
 	size = 'default',
 	className = '',
 	data = DEMO_DATA,
+	toSlice,
 }) => {
 	const {
 		galleryImgs,
@@ -174,7 +176,6 @@ const StayCard2: FC<StayCard2Props> = ({
 					toast.success("Removed from favourite property")
 				}
 			}
-
 		} catch (error) {
 			console.log(error)
 		}
@@ -214,7 +215,7 @@ const StayCard2: FC<StayCard2Props> = ({
 		// 	<Link href={"/listing-stay-detail"}>{renderContent()}</Link>
 		// </div>
 
-		properties?.filter((item:any)=> item.recomended === 1).slice(0, 12).map((item: any, index: any) => (
+		properties?.filter((item:any)=> item.recomended === 1).slice(0, toSlice).map((item: any, index: any) => (
 			<div className={`nc-StayCard2 group relative ${className}`} key={item?.id}>
 
 				<div className="relative w-full">

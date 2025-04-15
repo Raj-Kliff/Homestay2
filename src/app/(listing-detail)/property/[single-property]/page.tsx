@@ -42,6 +42,7 @@ import { FaBaby } from "react-icons/fa";
 import CustomRoomModal from './CustomRoomModal'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import PriceCalculator from './PriceCalculator'
+import parse from 'html-react-parser';
 
 export interface ListingStayDetailPageProps { }
 
@@ -499,7 +500,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
 				<div className="text-neutral-600 dark:text-neutral-300">
 					<span>
-						{description?.summary}
+						{description?.summary ? parse(description?.summary) : ''}
 					</span>
 				</div>
 			</div>
@@ -753,7 +754,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					<h2 className="text-2xl font-semibold">How to reach</h2>
 					<div className="text-neutral-600 dark:text-neutral-300">
 						<span className="mt-5 block text-neutral-500 dark:text-neutral-400">
-							{description?.place_is_great_for}
+							{description?.place_is_great_for ? parse(description?.place_is_great_for) : ''}
 						</span>
 					</div>
 				</div>
@@ -800,7 +801,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 				{/* CONTENT */}
 				<div>
-					{description?.about_place}
+					{description?.about_place ? parse(description?.about_place) : ''}
 				</div>
 			</div>
 		)
@@ -814,7 +815,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				{/* CONTENT */}
 				<div>
 					<span className="block text-neutral-600 dark:text-neutral-300">
-						{description?.guest_can_access}
+						{description?.guest_can_access ? parse(description?.guest_can_access) : ''}
 					</span>
 				</div>
 			</div>
@@ -851,7 +852,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{attractions?.filter((_: any, i: number) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
-							<span className=" ">{item?.name} ({item?.property_distance})</span>
+							<span className=" ">{item?.name} ({item?.property_distance} km)</span>
 						</div>
 					))}
 				</div>
@@ -871,7 +872,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{excursions?.filter((_: any, i: number) => i < 12).map((item: any) => (
 						<div key={item.id} className="flex items-center space-x-3">
 							<strong className='text-[1.5rem] text-gray-500'>&bull;</strong>
-							<span className=" ">{item?.name} ({item?.property_distance})</span>
+							<span className=" ">{item?.name} ({item?.property_distance} km)</span>
 						</div>
 					))}
 				</div>

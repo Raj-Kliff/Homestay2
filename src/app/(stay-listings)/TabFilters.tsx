@@ -292,7 +292,7 @@ const TabFilters = () => {
 	const renderCheckInDate = () => {
 		return (
 			<div>
-				<input type="date" value={checkin} onChange={(e)=>setCheckin(e.target.value)} className='flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-700 dark:hover:border-neutral-600' />
+				<input type="date" value={checkin} onChange={(e)=>setCheckin(e.target.value)} className='flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600' />
 				<small className='text-gray-400 ps-3'>Checkin Date</small>
 			</div>
 		)
@@ -301,7 +301,7 @@ const TabFilters = () => {
 	const renderCheckOutDate = () => {
 		return (
 			<div>
-				<input type="date" value={checkout} onChange={(e)=>setCheckout(e.target.value)} className='flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-700 dark:hover:border-neutral-600' />
+				<input type="date" value={checkout} onChange={(e)=>setCheckout(e.target.value)} className='flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-400 focus:border-primary-500 focus:outline-none dark:bg-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-600' />
 				<small className='text-gray-400 ps-3'>Checkout Date</small>
 			</div>
 		)
@@ -424,7 +424,7 @@ const TabFilters = () => {
 				{({ open, close }) => (
 					<>
 						<PopoverButton
-							className={`flex items-center justify-center rounded-full border border-primary-500 bg-primary-50 px-4 py-2 text-sm text-primary-700 focus:outline-none`}
+							className={`flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm text-neutral-700 focus:outline-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white`}
 						>
 							<span>
 								{`₹${convertNumbThousand(
@@ -566,7 +566,7 @@ const TabFilters = () => {
 		return (
 			<div>
 				<div
-					className={`flex cursor-pointer items-center justify-center rounded-full border border-primary-500 bg-primary-50 px-4 py-2 text-sm text-primary-700 focus:outline-none`}
+					className={`flex cursor-pointer items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm text-neutral-700 focus:outline-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white`}
 					onClick={openModalMoreFilter}
 				>
 					<FunnelIcon className="me-2 h-5 w-5" />
@@ -871,7 +871,7 @@ const TabFilters = () => {
 	}
 
 	return (
-		<div className="flex lg:space-x-4">
+		<div className="flex lg:space-x-4 relative">
 			<div className="hidden space-x-4 lg:flex justify-start flex-wrap gap-3">
 				{
 					// renderSearchLocation()

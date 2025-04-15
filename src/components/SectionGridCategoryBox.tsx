@@ -113,7 +113,7 @@ const SectionGridCategoryBox: React.FC<SectionGridCategoryBoxProps> = ({
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const [direction, setDirection] = useState(0)
 	const [numberOfItems, setNumberOfitem] = useState(0)
-	const [itemPerRow, setItemPerRow] = useState(5)
+	const [itemPerRow, setItemPerRow] = useState(4)
 
 	const windowWidth = useWindowSize().width
 	useEffect(() => {

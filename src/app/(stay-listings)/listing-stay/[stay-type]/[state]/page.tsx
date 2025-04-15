@@ -8,9 +8,11 @@ import StayCard2Copy from "@/components/StayCard2Copy";
 import StayCard2 from "@/components/StayCard2";
 import Heading2 from "@/shared/Heading2";
 import SkeletonLoader3 from "@/components/skeleton/SkeletonLoader3";
+import { slice } from "lodash";
+import ButtonPrimary from "@/shared/ButtonPrimary";
 
 export interface ListingStayPageProps { }
-const itemsPerPage = 20;
+const itemsPerPage = 10;
 
 const ListingStayPage: FC<ListingStayPageProps> = () => {
 
@@ -18,76 +20,9 @@ const ListingStayPage: FC<ListingStayPageProps> = () => {
   const [state, setState] = useState<any>()
   const [stayType, setStayType] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
+  const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false)
+  const [toSlice, setToSlice] = useState<number>(8)
 
-
-  // pagination 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const totalPages = Math.ceil(allProperties?.length / itemsPerPage);
-  const currentItems = allProperties?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-
-    const maxPageNumbers = 3; // Limit the number of page numbers displayed
-    const half = Math.floor(maxPageNumbers / 2);
-
-    let startPage = Math.max(1, currentPage - half);
-    let endPage = Math.min(totalPages, currentPage + half);
-
-    if (currentPage <= half) {
-      startPage = 1;
-      endPage = Math.min(maxPageNumbers, totalPages);
-    } else if (currentPage + half >= totalPages) {
-      startPage = Math.max(1, totalPages - maxPageNumbers + 1);
-      endPage = totalPages;
-    }
-
-    if (startPage > 1) {
-      pageNumbers.push(
-        <button key={1} onClick={() => handlePageChange(1)} className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600">
-          1
-        </button>
-      );
-      if (startPage > 2) {
-        pageNumbers.push(<span key="start-ellipsis" className="mx-1 text-gray-500">...</span>);
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${currentPage === i ? "bg-primary-700" : "bg-primary-600"
-            }`}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pageNumbers.push(<span key="end-ellipsis" className="mx-1 text-gray-500">...</span>);
-      }
-      pageNumbers.push(
-        <button
-          key={totalPages}
-          onClick={() => handlePageChange(totalPages)}
-          className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600"
-        >
-          {totalPages}
-        </button>
-      );
-    }
-
-    return pageNumbers;
-  };
-
-  // pagination end 
 
   const location = useLocation()
 
@@ -110,10 +45,14 @@ const ListingStayPage: FC<ListingStayPageProps> = () => {
     }
   }
 
-  console.log("all prperites:::", allProperties)
-  console.log("location::", location)
-  console.log("state", state)
-  console.log("type", stayType)
+  const handleShowMore = () => {
+    setShowMoreLoading(true);
+  
+    setTimeout(() => {
+      setToSlice(prev => prev + 8);
+      setShowMoreLoading(false);
+    }, 1000); // simulate 1 second loading
+  };
 
   useEffect(() => {
     fetchFilteredProperties()
@@ -129,7 +68,17 @@ const ListingStayPage: FC<ListingStayPageProps> = () => {
     }
   }, [location?.pathname])
 
-
+  
+  // convert state name to valid syntax 
+  const renderState = (state: any): string => {
+    if (!state) return "";
+    return state.replace(/%20/g, " ") // Replace %20 with space
+    .split(" ") // Split into words
+    .map((word:any) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+    .join(" ");
+  };
+  
+  
   const hasAnyProperties = allProperties?.some((item: any) => item.properties.length > 0);
 
   if (loading) {
@@ -138,7 +87,7 @@ const ListingStayPage: FC<ListingStayPageProps> = () => {
         className="nc-SectionGridFilterCard container pb-24 lg:pb-28"
         data-nc-id="SectionGridFilterCard"
       >
-        <Heading2 heading={`Stays in ${state || "your location"}`} />
+        <Heading2 heading={`Stays in ${renderState(state) || "your location"}`} />
 
         <SkeletonLoader3 className="h-[300px] rounded-lg" />
 
@@ -152,48 +101,27 @@ const ListingStayPage: FC<ListingStayPageProps> = () => {
       className={`nc-SectionGridFilterCard container pb-24 lg:pb-28`}
       data-nc-id="SectionGridFilterCard"
     >
-      <Heading2 heading={`Stays in ${state}`} />
+      <Heading2 heading={`Stays in ${renderState(state)}`} />
 
       {hasAnyProperties ?
 
         <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {allProperties?.map((stay: any, index: number) => (
-            <StayCard2 key={index} data={stay} />
+            <StayCard2 key={index} toSlice={toSlice} data={stay} />
           ))}
         </div>
 
-        : "No Properties Found"}
+        : ""}
 
-      {/* pagination  */}
-      {
-        hasAnyProperties &&
-        <div className="mt-16 flex items-center justify-center">
-          <div className="flex items-center space-x-2">
-            {/* Previous Button */}
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-            >
-              &larr;
-            </button>
+        {
+          allProperties[0]?.properties?.length === 0 && "No Properties Found"
+        }
 
-            {/* Page Numbers */}
-            {renderPageNumbers()}
-
-            {/* Next Button */}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-            >
-              &rarr;
-            </button>
-          </div>
-        </div>
-      }
+          {/* Load more button  */}
+          {allProperties[0]?.properties?.length > toSlice &&
+            <div className="mt-16 flex items-center justify-center">
+            <ButtonPrimary loading={showMoreLoading} onClick={handleShowMore}>Show more</ButtonPrimary>
+          </div>}
 
     </div>
   )
