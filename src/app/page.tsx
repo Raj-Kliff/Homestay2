@@ -20,6 +20,7 @@ import SkeletonLoader from '@/components/skeleton/SkeletonLoader'
 import SkeletonLoader2 from '@/components/skeleton/SkeletonLoader2'
 import SkeletonLoader3 from '@/components/skeleton/SkeletonLoader3'
 import {LocationContext} from './contextApi/LocationContext'
+import CustomTestimonial from '@/components/CustomTestimonial'
 
 const DEMO_CATS: any = [
 	{
@@ -331,9 +332,10 @@ function PageHome() {
 		  {isLoading ? (
 			<SkeletonLoader className="h-[200px] rounded-lg" />
 		  ) : (
-			<div className="relative pt-8 pb-0" style={{ marginTop: '2rem' }}>
+			<div className="relative py-8" style={{ marginTop: '4rem' }}>
 			  <BackgroundSection />
-			  <SectionClientSay data={testimonials} />
+			  {/* <SectionClientSay data={testimonials} /> */}
+			  <CustomTestimonial data={testimonials} />
 			</div>
 		  )}
 		</div>

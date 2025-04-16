@@ -16,8 +16,8 @@ const CardCategoryBox1: FC<CardCategoryBox1Props> = ({
 }) => {
 	const { count, name, thumbnail, href = '/',city,image } = taxonomy
 	return (
-		<Link
-			href={`/listing-stay/${city}`}
+		<a
+			href={`/listing-stay-map/${city}`}
 			className={`nc-CardCategoryBox1 [ nc-box-has-hover ] [ nc-dark-box-bg-has-hover ] relative flex items-center p-3 sm:p-6 ${className}`}
 		>
 			<Badge
@@ -44,7 +44,7 @@ const CardCategoryBox1: FC<CardCategoryBox1Props> = ({
 					19 minutes drive
 				</span>
 			</div>
-		</Link>
+		</a>
 	)
 }
 

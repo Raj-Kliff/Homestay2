@@ -26,10 +26,15 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
 	className = 'flex-1', setDaysToStay, startDate, setStartDate, endDate, setEndDate
 }) => {
 
-	const onChangeDate = (dates: [Date | null, Date | null]) => {
+	const onChangeDate = (dates: [Date | null, Date | null], closePopover: () => void) => {
 		const [start, end] = dates
 		setStartDate(start)
 		setEndDate(end)
+
+		// Close popover when end date is selected
+		if (start && end) {
+			closePopover()
+		  }
 	}
 
 	useEffect(() => {
@@ -85,7 +90,7 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
 
 	return (
 		<Popover className={`StayDatesRangeInput relative z-10 flex ${className}`}>
-			{({ open }) => (
+			{({ open, close }) => (
 				<>
 					<PopoverButton
 						className={`relative flex flex-1 items-center space-x-3 p-3 focus:outline-none ${
@@ -94,7 +99,7 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
 					>
 						{renderInput()}
 						{startDate && open && (
-							<ClearDataButton onClick={() => onChangeDate([null, null])} />
+							<ClearDataButton onClick={() => onChangeDate([null, null], close)} />
 						)}
 					</PopoverButton>
 
@@ -111,7 +116,8 @@ const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({
 							<div className="overflow-hidden rounded-3xl bg-white p-8 shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-neutral-800">
 								<DatePicker
 									selected={startDate}
-									onChange={onChangeDate}
+									// onChange={onChangeDate}
+									onChange={(dates) => onChangeDate(dates as [Date | null, Date | null], close)}
 									startDate={startDate}
 									endDate={endDate}
 									selectsRange

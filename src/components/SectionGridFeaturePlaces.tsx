@@ -25,7 +25,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	stayListings = DEMO_DATA,
 	gridClass = '',
 	heading = 'Featured places to stay',
-	subHeading = 'Popular places to stay that Homestays recommends for you',
+	subHeading = '',
 	headingIsCenter,
 	// tabs = ['New York', 'Tokyo', 'Paris', 'London'],
 	tabs = ['Homestay', 'Farmstay', 'Second Home', 'Workstation'],

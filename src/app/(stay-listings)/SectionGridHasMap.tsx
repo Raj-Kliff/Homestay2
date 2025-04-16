@@ -12,84 +12,31 @@ import StayCard2 from '@/components/StayCard2'
 import MapContainer from '@/components/MapContainer'
 import { MapIcon } from '@heroicons/react/24/outline'
 import StayCard2Copy from '@/components/StayCard2Copy'
+import ButtonPrimary from '@/shared/ButtonPrimary'
 
 const DEMO_STAYS = DEMO_STAY_LISTINGS.filter((_, i) => i < 12)
 export interface SectionGridHasMapProps {
 	stayListings: any
+	city?: any
 }
 
-const itemsPerPage = 20;
-
-const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings }) => {
+const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings, city }) => {
 	const [currentHoverID, setCurrentHoverID] = useState<string | number>(-1)
 	const [showFullMapFixed, setShowFullMapFixed] = useState(false)
 
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const totalPages = Math.ceil(stayListings?.length / itemsPerPage);
-	const currentItems = stayListings?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-	const handlePageChange = (page: number) => {
-		setCurrentPage(page);
+	const [showMoreLoading, setShowMoreLoading] = useState<boolean>(false)
+	const [toSlice, setToSlice] = useState<number>(6)
+
+	const handleShowMore = () => {
+		setShowMoreLoading(true);
+
+		setTimeout(() => {
+			setToSlice(prev => prev + 6);
+			setShowMoreLoading(false);
+		}, 1000); // simulate 1 second loading
 	};
 
-	// for pagination 
-	const renderPageNumbers = () => {
-		const pageNumbers = [];
-
-		const maxPageNumbers = 3; // Limit the number of page numbers displayed
-		const half = Math.floor(maxPageNumbers / 2);
-
-		let startPage = Math.max(1, currentPage - half);
-		let endPage = Math.min(totalPages, currentPage + half);
-
-		if (currentPage <= half) {
-			startPage = 1;
-			endPage = Math.min(maxPageNumbers, totalPages);
-		} else if (currentPage + half >= totalPages) {
-			startPage = Math.max(1, totalPages - maxPageNumbers + 1);
-			endPage = totalPages;
-		}
-
-		if (startPage > 1) {
-			pageNumbers.push(
-				<button key={1} onClick={() => handlePageChange(1)} className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600">
-					1
-				</button>
-			);
-			if (startPage > 2) {
-				pageNumbers.push(<span key="start-ellipsis" className="mx-1 text-gray-500">...</span>);
-			}
-		}
-
-		for (let i = startPage; i <= endPage; i++) {
-			pageNumbers.push(
-				<button
-					key={i}
-					onClick={() => handlePageChange(i)}
-					className={`mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white ${currentPage === i ? "bg-primary-700" : "bg-primary-600"
-						}`}
-				>
-					{i}
-				</button>
-			);
-		}
-
-		if (endPage < totalPages) {
-			if (endPage < totalPages - 1) {
-				pageNumbers.push(<span key="end-ellipsis" className="mx-1 text-gray-500">...</span>);
-			}
-			pageNumbers.push(
-				<button
-					key={totalPages}
-					onClick={() => handlePageChange(totalPages)}
-					className="mx-1 inline-flex h-11 w-11 items-center justify-center rounded-full text-white bg-primary-600"
-				>
-					{totalPages}
-				</button>
-			);
-		}
-
-		return pageNumbers;
-	};
+	const hasAnyProperties = stayListings?.length > 0;
 
 
 	return (
@@ -97,7 +44,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings }) => {
 			<div className="relative flex min-h-screen">
 				{/* CARDSSSS */}
 				<div className="min-h-screen w-full max-w-[1184px] flex-shrink-0 xl:w-[60%] xl:px-8 2xl:w-[60%]">
-					<Heading2 className="!mb-8" />
+					<Heading2 heading={`Stays in ${city || "your selected location"}`} className="!mb-8" />
 					<div className="mb-8 lg:mb-11">
 						<details className='hidden sm:block'>
 							<summary className='mb-5 border-2 px-4 py-2 rounded-full w-fit'>Filters:</summary>
@@ -107,45 +54,31 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings }) => {
 							<TabFilters />
 						</div>
 					</div>
-					<div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 2xl:gap-x-6">
-						{currentItems.map((item: any) => (
-							<div
-								key={item.id}
-								onMouseEnter={() => setCurrentHoverID((_) => item.id)}
-								onMouseLeave={() => setCurrentHoverID((_) => -1)}
-							>
-								<StayCard2Copy data={item} />
-							</div>
-						))}
-					</div>
-
-					{/* pagination  */}
-					<div className="mt-16 flex items-center justify-center">
-						<div className="flex items-center space-x-2">
-							{/* Previous Button */}
-							<button
-								onClick={() => handlePageChange(currentPage - 1)}
-								disabled={currentPage === 1}
-								className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-									}`}
-							>
-								&larr;
-							</button>
-
-							{/* Page Numbers */}
-							{renderPageNumbers()}
-
-							{/* Next Button */}
-							<button
-								onClick={() => handlePageChange(currentPage + 1)}
-								disabled={currentPage === totalPages}
-								className={`inline-flex h-11 px-3 items-center justify-center border border-gray-400 rounded-full text-gray-700 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-									}`}
-							>
-								&rarr;
-							</button>
+					{
+						hasAnyProperties &&
+						<div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 2xl:gap-x-6">
+							{stayListings?.slice(0, toSlice).map((item: any) => (
+								<div
+									key={item.id}
+									onMouseEnter={() => setCurrentHoverID((_) => item.id)}
+									onMouseLeave={() => setCurrentHoverID((_) => -1)}
+								>
+									<StayCard2Copy data={item} />
+								</div>
+							))}
 						</div>
-					</div>
+
+					}
+
+					{
+						stayListings?.length === 0 && "No Properties Found"
+					}
+
+					{/* Load more button  */}
+					{stayListings?.length > toSlice &&
+						<div className="mt-16 flex items-center justify-center">
+							<ButtonPrimary loading={showMoreLoading} onClick={handleShowMore}>Show more</ButtonPrimary>
+						</div>}
 
 
 				</div>
@@ -176,7 +109,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings }) => {
 						<MapContainer
 							currentHoverID={currentHoverID}
 							DEMO_DATA={DEMO_STAYS}
-							DEMO_DATA2={currentItems}
+							DEMO_DATA2={stayListings}
 							listingType="stay"
 						/>
 					</div>

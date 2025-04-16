@@ -11,6 +11,8 @@ interface PriceCalculatorProps {
   normalFare: number; // Normal price for each day
   propertyDates: PropertyDate[]; // Array of property dates with surged prices
   setSurgedPrice: any;
+  convenienceFee?: any;
+  gst?: any;
 }
 
 const PriceCalculator = ({
@@ -18,7 +20,9 @@ const PriceCalculator = ({
   endDate,
   normalFare,
   propertyDates,
-  setSurgedPrice
+  setSurgedPrice,
+  convenienceFee, 
+  gst
 }: PriceCalculatorProps) => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
@@ -46,14 +50,19 @@ const PriceCalculator = ({
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
-      setTotalPrice(total); // Set the total price after calculating
       setSurgedPrice(total);
+
+      // applying convenienceFee and gst 
+      total = total + ((convenienceFee/100) * total)
+      total = total + ((gst/100) * total)
+
+      setTotalPrice(total); // Set the total price after calculating
     };
 
     calculateTotalPrice();
   }, [startDate, endDate, normalFare, propertyDates]); // Added surgedPrice to dependencies
 
-  return <p>{totalPrice}</p>;
+  return <p>{totalPrice.toFixed(2)}</p>;
 };
 
 export default PriceCalculator;

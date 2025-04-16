@@ -65,6 +65,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 		count: 1,
 	})
 	const [surgedPrice, setSurgedPrice] = useState<any>()
+	const [convenienceFee, setConvenienceFee] = useState<any>()
+	const [gst, setGst] = useState<any>()
 
 	const getRoomPrice = (currentActiveRoom: any) => {
 		const price = listingDetail?.rooms?.find((room: any) => room?.room_type?.name.toLowerCase() === currentActiveRoom?.toLowerCase())?.room_price
@@ -253,6 +255,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				setPropertyDates(data?.data?.result?.property_dates || []);
 				const rooms = categorizeRooms(data?.data?.rooms)
 				setCategorizeRooms(rooms)
+				setConvenienceFee(data?.data?.fixedfees[0]?.convenience)
+				setGst(data?.data?.fixedfees[0]?.gst)
 				const photos = data.data.result?.property_photos?.map((photo: any) => photo.image_url);
 				setImagess(photos || [])
 			}
@@ -260,6 +264,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 			console.error(error);
 		}
 	}, [endPoint])
+
 
 	// propety list description
 	const fetchListingDescription = useCallback(async () => {
@@ -909,13 +914,21 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					<div className="flex flex-col space-y-4">
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>₹ {roomPrice} x {daysToStay} night</span>
-							<span>₹ {roomPrice * daysToStay}</span>
+							<span>₹ {surgedPrice}</span>
 						</div>
-						{surgedPrice - (roomPrice * daysToStay) > 0 && 
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>Convenience Fee ({convenienceFee}%)</span>
+							<span>₹ {((convenienceFee/100)*surgedPrice).toFixed(2)}</span>
+						</div>
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>GST ({gst}%)</span>
+							<span>₹ {((surgedPrice + ((convenienceFee/100)*surgedPrice)) * (gst/100)).toFixed(2)}</span>
+						</div>
+						{/* {surgedPrice - (roomPrice * daysToStay) > 0 && 
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Surge Price</span>
 							<span>₹ {surgedPrice - (roomPrice * daysToStay)}</span>
-						</div>}
+						</div>} */}
 						{/* {result?.property_price?.cleaning_fee >= 0 &&
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Cleaning Fee</span>
@@ -937,7 +950,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 						<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
 						<div className="flex justify-between font-semibold">
 							<span>Total</span>
-							<span className='flex'>₹<PriceCalculator startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} /></span>
+							<span className='flex'>₹<PriceCalculator startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} convenienceFee={convenienceFee} gst={gst} /></span>
 						</div>
 					</div>
 				}
@@ -1212,15 +1225,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	return (
 		<div className="nc-ListingStayDetailPage">
 			{/*  HEADER */}
-			<header className="rounded-md sm:rounded-xl mt-3">
+			<header className="rounded-md mt-3">
 				<div className="relative grid grid-cols-3 gap-1 sm:grid-cols-4 sm:gap-2">
 					<div
-						className="relative col-span-2 row-span-3 cursor-pointer overflow-hidden rounded-md sm:row-span-2 sm:rounded-xl"
+						className="relative col-span-2 row-span-3 cursor-pointer overflow-hidden rounded-md sm:row-span-2 border dark:border-neutral-700"
 						onClick={handleOpenModalImageGallery}
 					>
 						<Image
 							fill
-							className="rounded-md object-cover sm:rounded-xl"
+							className="rounded-md object-cover"
 							src={result?.cover_photo}
 							alt=""
 							sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
@@ -1230,13 +1243,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{result?.property_photos?.filter((_: any, i: any) => i >= 1 && i < 5).map((item: any, index: any) => (
 						<div
 							key={index}
-							className={`relative overflow-hidden rounded-md sm:rounded-xl ${index >= 3 ? 'hidden sm:block' : ''
+							className={`relative overflow-hidden rounded-md border dark:border-neutral-700 ${index >= 3 ? 'hidden sm:block' : ''
 								}`}
 						>
-							<div className="aspect-h-3 aspect-w-4 sm:aspect-h-5 sm:aspect-w-6">
+							<div className="aspect-h-4 aspect-w-6">
 								<Image
 									fill
-									className="rounded-md object-cover sm:rounded-xl"
+									className="rounded-md object-cover"
 									src={item.image_url || ''}
 									alt=""
 									sizes="400px"
@@ -1269,6 +1282,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1({ result })}
 					{rooms?.length > 0 && renderRoomSection({ rooms })}
+					{renderRoomSection1()}
 					{renderSection2({ description })}
 					{renderSection7({ result })}
 					{description?.about_place != null && renderSection9()}
