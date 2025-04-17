@@ -16,10 +16,10 @@ import ClearDataButton from '@/app/(client-components)/(HeroSearchForm)/ClearDat
 export interface StayDatesRangeInputProps {
 	className?: string,
 	setDaysToStay?: any,
-	startDate: any,
-	setStartDate: any,
-	endDate: any,
-	setEndDate: any,
+	startDate?: any,
+	setStartDate?: any,
+	endDate?: any,
+	setEndDate?: any,
 }
 
 const StayDatesRangeInput: FC<StayDatesRangeInputProps> = ({

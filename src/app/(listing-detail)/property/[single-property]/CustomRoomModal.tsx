@@ -10,7 +10,7 @@ const CustomRoomModal: React.FC<CustomRoomModalProps> = ({ isOpen, closeModal, t
   
     return (
       <div className="fixed z-40 inset-0 bg-black bg-opacity-80 flex items-center justify-center h-screen top-[-16px]">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6 relative overflow-y-scroll max-h-[90vh]">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6 relative overflow-y-scroll max-h-[90vh] hide-scrollbar">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">{title}</h2>
           <div className="text-gray-700 mb-4">{children}</div>
           <button

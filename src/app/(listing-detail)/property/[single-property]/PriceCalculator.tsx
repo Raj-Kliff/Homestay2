@@ -13,6 +13,10 @@ interface PriceCalculatorProps {
   setSurgedPrice: any;
   convenienceFee?: any;
   gst?: any;
+  propertyType?: any;
+  daysToStay?: any;
+  workStation?: any;
+  setWorkationDiscount?: any;
 }
 
 const PriceCalculator = ({
@@ -22,7 +26,11 @@ const PriceCalculator = ({
   propertyDates,
   setSurgedPrice,
   convenienceFee, 
-  gst
+  gst,
+  daysToStay,
+  propertyType,
+  workStation,
+  setWorkationDiscount,
 }: PriceCalculatorProps) => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
@@ -50,17 +58,39 @@ const PriceCalculator = ({
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
+      // if(propertyType === 'Workstation'){
+      //   for(const item of workStation){
+      //     if(item?.days === daysToStay){
+      //       setWorkationDiscount(item?.discount)
+      //       const discountPrice = total * ((item?.discount)/100)
+      //       total = total - discountPrice
+      //     }
+      //   }
+      // }
+
+      // Workstation discount
+    if (propertyType === 'Workstation' && Array.isArray(workStation)) {
+      const matched = workStation.find((item: any) => item?.days === daysToStay);
+      if (matched?.discount) {
+        const discountValue = matched.discount;
+        setWorkationDiscount(discountValue); // Update external state
+        total -= total * (discountValue / 100);
+      } else {
+        setWorkationDiscount(0); // Reset if no match
+      }
+    }
+
       setSurgedPrice(total);
 
       // applying convenienceFee and gst 
       total = total + ((convenienceFee/100) * total)
       total = total + ((gst/100) * total)
 
-      setTotalPrice(total); // Set the total price after calculating
+      setTotalPrice(Math.round(total)); // Set the total price after calculating
     };
 
     calculateTotalPrice();
-  }, [startDate, endDate, normalFare, propertyDates]); // Added surgedPrice to dependencies
+  }, [startDate, endDate, normalFare, propertyDates, workStation, daysToStay, propertyType, convenienceFee, gst]); // Added surgedPrice to dependencies
 
   return <p>{totalPrice.toFixed(2)}</p>;
 };

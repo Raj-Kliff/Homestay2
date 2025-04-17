@@ -10,31 +10,53 @@ import DatePickerCustomDay from "./DatePickerCustomDay";
 
 interface ModalSelectDateProps {
   renderChildren?: (p: { openModal: () => void }) => React.ReactNode;
+  setDaysToStay?: (days: number) => void;
+  startDate: Date | null;
+  setStartDate: (date: Date | null) => void;
+  endDate: Date | null;
+  setEndDate: (date: Date | null) => void;
 }
 
-const ModalSelectDate: FC<ModalSelectDateProps> = ({ renderChildren }) => {
+const ModalSelectDate: FC<ModalSelectDateProps> = ({
+  renderChildren,
+  setDaysToStay,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}) => {
   const [showModal, setShowModal] = useState(false);
 
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date("2023/02/06")
-  );
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2023/02/23"));
-
-  const onChangeDate = (dates: [Date | null, Date | null]) => {
+  const onChangeDate = (
+    dates: [Date | null, Date | null],
+    closeModalCallback?: () => void
+  ) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+
+    // Automatically close modal when both dates are selected
+    if (start && end && closeModalCallback) {
+      closeModalCallback();
+    }
   };
 
-  // FOR RESET ALL DATA WHEN CLICK CLEAR BUTTON
-  //
-  function closeModal() {
-    setShowModal(false);
-  }
+  useEffect(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
 
-  function openModal() {
-    setShowModal(true);
-  }
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) return;
+
+      const diff = end.getTime() - start.getTime();
+      const days = diff / (1000 * 3600 * 24);
+
+      setDaysToStay?.(days);
+    }
+  }, [startDate, endDate, setDaysToStay]);
+
+  const closeModal = () => setShowModal(false);
+  const openModal = () => setShowModal(true);
 
   const renderButtonOpenModal = () => {
     return renderChildren ? (
@@ -64,7 +86,7 @@ const ModalSelectDate: FC<ModalSelectDateProps> = ({ renderChildren }) => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-52"
               >
-                <Dialog.Panel className="relative h-full overflow-hidden flex-1 flex flex-col justify-between ">
+                <Dialog.Panel className="relative h-full overflow-hidden flex-1 flex flex-col justify-between">
                   <>
                     <div className="absolute left-4 top-4">
                       <button
@@ -78,16 +100,21 @@ const ModalSelectDate: FC<ModalSelectDateProps> = ({ renderChildren }) => {
                     <div className="flex-1 pt-12 p-1 flex flex-col overflow-auto">
                       <div className="flex-1 flex flex-col bg-white dark:bg-neutral-800">
                         <div className="flex-1 flex flex-col transition-opacity animate-[myblur_0.4s_ease-in-out] overflow-auto">
-                          <div className="p-5 ">
+                          <div className="p-5">
                             <span className="block font-semibold text-xl sm:text-2xl">
                               {` When's your trip?`}
                             </span>
                           </div>
-                          <div className="flex-1 relative flex z-10 ">
-                            <div className="overflow-hidden rounded-3xl ">
+                          <div className="flex-1 relative flex z-10">
+                            <div className="overflow-hidden rounded-3xl">
                               <DatePicker
                                 selected={startDate}
-                                onChange={onChangeDate}
+                                onChange={(dates) =>
+                                  onChangeDate(
+                                    dates as [Date | null, Date | null],
+                                    closeModal
+                                  )
+                                }
                                 startDate={startDate}
                                 endDate={endDate}
                                 selectsRange
@@ -113,17 +140,13 @@ const ModalSelectDate: FC<ModalSelectDateProps> = ({ renderChildren }) => {
                       <button
                         type="button"
                         className="underline font-semibold flex-shrink-0"
-                        onClick={() => {
-                          onChangeDate([null, null]);
-                        }}
+                        onClick={() => onChangeDate([null, null])}
                       >
                         Clear dates
                       </button>
                       <ButtonPrimary
                         sizeClass="px-6 py-3 !rounded-xl"
-                        onClick={() => {
-                          closeModal();
-                        }}
+                        onClick={closeModal}
                       >
                         Save
                       </ButtonPrimary>

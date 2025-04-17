@@ -43,6 +43,9 @@ import CustomRoomModal from './CustomRoomModal'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import PriceCalculator from './PriceCalculator'
 import parse from 'html-react-parser';
+import GallerySlider3 from '@/components/GallerySlider3'
+import ModalSelectDate from '@/components/ModalSelectDate'
+import ModalReserveMobile from '../../(components)/ModalReserveMobile'
 
 export interface ListingStayDetailPageProps { }
 
@@ -67,6 +70,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	const [surgedPrice, setSurgedPrice] = useState<any>()
 	const [convenienceFee, setConvenienceFee] = useState<any>()
 	const [gst, setGst] = useState<any>()
+	const [workationDiscount, setWorkationDiscount] = useState<any>(0)
 
 	const getRoomPrice = (currentActiveRoom: any) => {
 		const price = listingDetail?.rooms?.find((room: any) => room?.room_type?.name.toLowerCase() === currentActiveRoom?.toLowerCase())?.room_price
@@ -163,6 +167,17 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 			],
 		},
 	]
+
+	function getImageUrlsBySpaceType(spaceType: any) {
+		return listingDetail?.result?.property_photos?.filter((photo: any) => photo.space_type === spaceType)
+			.map((photo: any) => photo.image_url);
+	}
+	function getImageMessageBySpaceType(spaceType: any) {
+		return listingDetail?.result?.property_photos?.filter((photo: any) => photo.space_type === spaceType)
+			.map((photo: any) => photo.message);
+	}
+
+	console.log(getImageUrlsBySpaceType(2))
 
 
 	const thisPathname = usePathname()
@@ -300,6 +315,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					room_price: room.room_price,
 					beds: room.beds,
 					bathrooms: room.bathrooms,
+					space_type: room?.space_type,
 					total_rooms: 1
 				}
 			} else {
@@ -887,7 +903,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 	const renderSidebar = ({ result }: any) => {
 		return (
-			<div className="listingSectionSidebar__wrap shadow-xl">
+			<div className="listingSectionSidebar__wrap shadow-xl mt-[6rem] sm:mt-0">
 				{/* PRICE */}
 				<div className="flex justify-between">
 					<span className="text-xl font-semibold">
@@ -913,16 +929,22 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					roomPrice !== 0 &&
 					<div className="flex flex-col space-y-4">
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
-							<span>₹ {roomPrice} x {daysToStay} night</span>
-							<span>₹ {surgedPrice}</span>
+							<span>
+								<div>₹ {roomPrice} x {daysToStay} night</div>
+								{ workationDiscount > 0 && <div className='text-xs text-red-500'>{`Discount: ${workationDiscount}%`}</div>}
+							</span>
+							<span>
+								<div>₹ {surgedPrice}</div>
+								{ workationDiscount > 0 && <span className='text-xs line-through'>₹ {roomPrice * daysToStay}</span>}
+							</span>
 						</div>
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Convenience Fee ({convenienceFee}%)</span>
-							<span>₹ {((convenienceFee/100)*surgedPrice).toFixed(2)}</span>
+							<span>₹ {((convenienceFee / 100) * surgedPrice).toFixed(2)}</span>
 						</div>
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>GST ({gst}%)</span>
-							<span>₹ {((surgedPrice + ((convenienceFee/100)*surgedPrice)) * (gst/100)).toFixed(2)}</span>
+							<span>₹ {((surgedPrice + ((convenienceFee / 100) * surgedPrice)) * (gst / 100)).toFixed(2)}</span>
 						</div>
 						{/* {surgedPrice - (roomPrice * daysToStay) > 0 && 
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
@@ -950,13 +972,59 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 						<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
 						<div className="flex justify-between font-semibold">
 							<span>Total</span>
-							<span className='flex'>₹<PriceCalculator startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} convenienceFee={convenienceFee} gst={gst} /></span>
+							<span className='flex'>₹<PriceCalculator setWorkationDiscount={setWorkationDiscount} propertyType={listingDetail?.result?.property_type?.name} daysToStay={daysToStay} workStation={listingDetail?.WorkStation} startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} convenienceFee={convenienceFee} gst={gst} /></span>
 						</div>
 					</div>
 				}
 
 				{/* SUBMIT */}
 				<ButtonPrimary href={'/checkout'}>Reserve</ButtonPrimary>
+			</div>
+		)
+	}
+
+	const renderMobileSidebar = () => {
+		return (
+			<div className="fixed inset-x-0 bottom-0 z-40 block border-t border-neutral-200 bg-white py-2 dark:border-neutral-600 dark:bg-neutral-800 sm:py-3 lg:hidden">
+				<div className="container flex items-center justify-between">
+					<div className="">
+						<span className="block text-md font-semibold">
+							₹{roomPrice}
+							<span className="ml-1 text-sm font-normal text-neutral-500 dark:text-neutral-400">
+								/night
+							</span>
+						</span>
+						<div className='flex gap-2'>
+						<ModalSelectDate
+							setDaysToStay={setDaysToStay} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate}
+							renderChildren={({ openModal }) => (
+								<span
+									onClick={openModal}
+									className="block text-xs font-medium underline"
+								>
+									{/* start-end */}
+									{startDate && endDate
+										? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+										: "Select dates"}
+								</span>
+							)}
+						/>
+						<a className="ml-1 text-xs font-normal text-neutral-500 dark:text-neutral-400 text-orange-500 underline" href='#sidebarr'> View Detail</a>
+						</div>
+					</div>
+					<div>
+					<ModalReserveMobile
+						renderChildren={({ openModal }) => (
+							<ButtonPrimary
+								sizeClass="px-5 sm:px-7 py-3 !rounded-2xl"
+								onClick={openModal}
+							>
+								Reserve
+							</ButtonPrimary>
+						)}
+					/>
+					</div>
+				</div>
 			</div>
 		)
 	}
@@ -969,135 +1037,171 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					{
 						categorizedRooms?.map((item: any) => (
 							<div className="flex w-full justify-center border-t first:border-t-0" key={item?.room_type}>
-								<div className="w-full">
-									<div className="mt-3 space-y-3">
-										<div className="flex items-start justify-between">
-											<div>
-												<p className="text-xl font-bold">
-													{item?.room_type}
-												</p>
-												<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
-													<div className="text-center">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															viewBox="0 0 24 24"
-															width={24}
-															height={24}
-															color={'currentColor'}
-															fill={'none'}
-															className="h-6 w-6"
-														>
-															<path
-																d="M22 17.5H2"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-																strokeLinejoin="round"
-															/>
-															<path
-																d="M22 21V16C22 14.1144 22 13.1716 21.4142 12.5858C20.8284 12 19.8856 12 18 12H6C4.11438 12 3.17157 12 2.58579 12.5858C2 13.1716 2 14.1144 2 16V21"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-																strokeLinejoin="round"
-															/>
-															<path
-																d="M16 12V10.6178C16 10.1103 15.9085 9.94054 15.4396 9.7405C14.4631 9.32389 13.2778 9 12 9C10.7222 9 9.53688 9.32389 8.5604 9.7405C8.09154 9.94054 8 10.1103 8 10.6178L8 12"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-															/>
-															<path
-																d="M20 12V7.36057C20 6.66893 20 6.32311 19.8292 5.99653C19.6584 5.66995 19.4151 5.50091 18.9284 5.16283C16.9661 3.79978 14.5772 3 12 3C9.42282 3 7.03391 3.79978 5.07163 5.16283C4.58492 5.50091 4.34157 5.66995 4.17079 5.99653C4 6.32311 4 6.66893 4 7.36057V12"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-															/>
-														</svg>
-														<p>x {item?.beds}</p>
-													</div>
-													<div className="text-center">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															viewBox="0 0 24 24"
-															width={24}
-															height={24}
-															color={'currentColor'}
-															fill={'none'}
-															className="h-6 w-6"
-														>
-															<path
-																d="M6 20L5 21M18 20L19 21"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-															/>
-															<path
-																d="M3 12V13C3 16.2998 3 17.9497 4.02513 18.9749C5.05025 20 6.70017 20 10 20H14C17.2998 20 18.9497 20 19.9749 18.9749C21 17.9497 21 16.2998 21 13V12"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-																strokeLinejoin="round"
-															/>
-															<path
-																d="M2 12H22"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-															/>
-															<path
-																d="M4 12V5.5234C4 4.12977 5.12977 3 6.5234 3C7.64166 3 8.62654 3.73598 8.94339 4.80841L9 5"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-															/>
-															<path
-																d="M8 6L10.5 4"
-																stroke="currentColor"
-																strokeWidth="1.5"
-																strokeLinecap="round"
-															/>
-														</svg>
-														<p>x 1 ({item?.bathrooms})</p>
+
+								<div className="nc-StayCard2 grid grid-cols-1 sm:grid-cols-3 gap-5 group relative w-full border-t border-neutral-200 dark:border-neutral-800 pt-5">
+									{getImageUrlsBySpaceType(item?.space_type).length > 0 &&
+										<div className="relative w-full">
+											<GallerySlider3
+												uniqueID="StayCard2_sampleID"
+												ratioClass="aspect-w-6 aspect-h-4"
+												galleryImgs={getImageUrlsBySpaceType(item?.space_type)}
+												galleryImgsMsg={getImageMessageBySpaceType(item?.space_type)}
+												imageClass="rounded-lg"
+												href="javascript:void(0)"
+											/>
+											<div className='mt-2' onClick={() => setActiveModal(item?.space_type)}>
+												<Badge name={`${getImageUrlsBySpaceType(item?.space_type).length} Photos →`} color="red" className='cursor-pointer' />
+											</div>
+										</div>}
+
+									<div className='col-span-2'>
+										<div className="mt-3 space-y-3">
+
+											<div className="flex items-start justify-between">
+												<div>
+													<p className="text-lg font-bold">
+														{item?.room_type}
+													</p>
+													<div className="flex items-center justify-between space-x-5 mt-3 text-sm text-neutral-700 dark:text-neutral-300 xl:justify-start">
+														<div className="text-center">
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 24 24"
+																width={24}
+																height={24}
+																color={'currentColor'}
+																fill={'none'}
+																className="h-6 w-6"
+															>
+																<path
+																	d="M22 17.5H2"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																/>
+																<path
+																	d="M22 21V16C22 14.1144 22 13.1716 21.4142 12.5858C20.8284 12 19.8856 12 18 12H6C4.11438 12 3.17157 12 2.58579 12.5858C2 13.1716 2 14.1144 2 16V21"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																/>
+																<path
+																	d="M16 12V10.6178C16 10.1103 15.9085 9.94054 15.4396 9.7405C14.4631 9.32389 13.2778 9 12 9C10.7222 9 9.53688 9.32389 8.5604 9.7405C8.09154 9.94054 8 10.1103 8 10.6178L8 12"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																/>
+																<path
+																	d="M20 12V7.36057C20 6.66893 20 6.32311 19.8292 5.99653C19.6584 5.66995 19.4151 5.50091 18.9284 5.16283C16.9661 3.79978 14.5772 3 12 3C9.42282 3 7.03391 3.79978 5.07163 5.16283C4.58492 5.50091 4.34157 5.66995 4.17079 5.99653C4 6.32311 4 6.66893 4 7.36057V12"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																/>
+															</svg>
+															<p>x {item?.beds}</p>
+														</div>
+														<div className="text-center">
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 24 24"
+																width={24}
+																height={24}
+																color={'currentColor'}
+																fill={'none'}
+																className="h-6 w-6"
+															>
+																<path
+																	d="M6 20L5 21M18 20L19 21"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																/>
+																<path
+																	d="M3 12V13C3 16.2998 3 17.9497 4.02513 18.9749C5.05025 20 6.70017 20 10 20H14C17.2998 20 18.9497 20 19.9749 18.9749C21 17.9497 21 16.2998 21 13V12"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																/>
+																<path
+																	d="M2 12H22"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																/>
+																<path
+																	d="M4 12V5.5234C4 4.12977 5.12977 3 6.5234 3C7.64166 3 8.62654 3.73598 8.94339 4.80841L9 5"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																/>
+																<path
+																	d="M8 6L10.5 4"
+																	stroke="currentColor"
+																	strokeWidth="1.5"
+																	strokeLinecap="round"
+																/>
+															</svg>
+															<p>x 1</p>
+														</div>
 													</div>
 												</div>
-											</div>
-											<div className="flex items-start flex-col">
-												<p className="text-base font-semibold">
-													₹{item?.room_price} <span className="text-sm text-neutral-500 dark:text-neutral-400">/1 nights</span>
-												</p>
-												<form>
-													<select
-														id="rooms"
-														className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-														onChange={(e) => {
-															if (parseInt(e.target.value) == 0) {
-																setCurrentActiveRoom({ type: '', count: 1 })
-																setRoomPrice(0)
-															} else {
-																const selectedRooms = parseInt(e.target.value);
-																setCurrentActiveRoom({ type: item?.room_type, count: 0 })
-																// handleRoomChange(item?.room_type, item?.room_price, selectedRooms);
-																setRoomPrice(parseInt(e.target.value) * item?.room_price)
-															}
-														}}
+												<div className="flex items-start flex-col">
+													<p className="text-base font-semibold">
+														₹{item?.room_price} <span className="text-sm text-neutral-500 dark:text-neutral-400">/1 nights</span>
+													</p>
+													<form>
+														<select
+															id="rooms"
+															className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+															onChange={(e) => {
+																if (parseInt(e.target.value) == 0) {
+																	setCurrentActiveRoom({ type: '', count: 1 })
+																	setRoomPrice(0)
+																} else {
+																	const selectedRooms = parseInt(e.target.value);
+																	setCurrentActiveRoom({ type: item?.room_type, count: 0 })
+																	// handleRoomChange(item?.room_type, item?.room_price, selectedRooms);
+																	setRoomPrice(parseInt(e.target.value) * item?.room_price)
+																}
+															}}
 														// disabled={currentActiveRoom.type !== item?.room_type && currentActiveRoom.count == 0}
-													>
-														<option value='0' selected={currentActiveRoom.type !== item?.room_type}>Select Room</option>
-														{[...Array(item?.total_rooms)].map((_, index) => {
-															const value = index + 1;
-															return (
-																<option key={value} value={`${value} room`}>
-																	{value} Room
-																</option>
-															);
-														})}
-													</select>
-												</form>
+														>
+															<option value='0' selected={currentActiveRoom.type !== item?.room_type}>Select Room</option>
+															{[...Array(item?.total_rooms)].map((_, index) => {
+																const value = index + 1;
+																return (
+																	<option key={value} value={`${value} room`}>
+																		{value} Room
+																	</option>
+																);
+															})}
+														</select>
+													</form>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+
+								{/* room modal image gallery  */}
+								<CustomRoomModal
+									key={item?.room_type}
+									isOpen={activeModal === item?.space_type}
+									closeModal={() => setActiveModal(null)}
+									title={`${item?.room_type} Room`}
+								>
+									<GallerySlider3
+										uniqueID="StayCard2_sampleID"
+										ratioClass="aspect-w-6 aspect-h-4"
+										galleryImgs={getImageUrlsBySpaceType(item?.space_type)}
+										galleryImgsMsg={getImageMessageBySpaceType(item?.space_type)}
+										imageClass="rounded-lg"
+										href="javascript:void(0)"
+									/>
+								</CustomRoomModal>
 							</div>
 						))
 					}
@@ -1282,7 +1386,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				<div className="w-full space-y-8 lg:w-3/5 lg:space-y-10 lg:pr-10 xl:w-2/3">
 					{renderSection1({ result })}
 					{rooms?.length > 0 && renderRoomSection({ rooms })}
-					{renderRoomSection1()}
+					{/* {renderRoomSection1()} */}
 					{renderSection2({ description })}
 					{renderSection7({ result })}
 					{description?.about_place != null && renderSection9()}
@@ -1309,8 +1413,13 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 				</div>
 
 				{/* SIDEBAR */}
-				<div className="mt-14 hidden flex-grow lg:mt-0 lg:block">
+				<div className="mt-14 flex-grow lg:mt-0 lg:block" id='sidebarr'>
 					<div className="sticky top-28">{renderSidebar({ result })}</div>
+				</div>
+
+				{/* mobile sidebar  */}
+				<div>
+					{renderMobileSidebar()}
 				</div>
 			</main>
 		</div>

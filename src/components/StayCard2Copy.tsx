@@ -220,7 +220,7 @@ const StayCard2Copy: FC<StayCard2Props> = ({
 			<div className="relative w-full">
 				<GallerySlider2
 					uniqueID={`StayCard2_${id}`}
-					ratioClass="aspect-w-12 aspect-h-11"
+					ratioClass="aspect-w-6 aspect-h-4"
 					galleryImgs={data?.property_photos}
 					imageClass="rounded-lg"
 					href={`/property/${data?.slug}`}
