@@ -15,8 +15,6 @@ const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
   const [allInternalProperties, setAllInternalProperties] = useState<any[]>([]);
   const [city, setCity] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false)
-  
-
 
   const location = useLocation();
 
@@ -57,6 +55,15 @@ const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
         }
     }, [location?.pathname]);
 
+    // convert state name to valid syntax 
+      const renderCity = (city: any): string => {
+        if (!city) return "";
+        return city.replace(/%20/g, " ") // Replace %20 with space
+        .split(" ") // Split into words
+        .map((word:any) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+        .join(" ");
+      };
+
 
     if (loading) {
         return (
@@ -64,7 +71,7 @@ const ListingStayMapPage: FC<ListingStayMapPageProps> = ({}) => {
                 className="nc-SectionGridFilterCard container pb-24 lg:pb-28"
                 data-nc-id="SectionGridFilterCard"
             >
-                <Heading2 heading={`Stays in ${city || "your location"}`} />
+                <Heading2 heading={`Stays in ${renderCity(city)}` || 'your location'} />
 
                 <SkeletonLoader3 className="h-[300px] rounded-lg" />
 

@@ -17,6 +17,8 @@ interface PriceCalculatorProps {
   daysToStay?: any;
   workStation?: any;
   setWorkationDiscount?: any;
+  extraGuestPrice?: any;
+  extraGuest?: any;
 }
 
 const PriceCalculator = ({
@@ -31,6 +33,7 @@ const PriceCalculator = ({
   propertyType,
   workStation,
   setWorkationDiscount,
+  extraGuestPrice, extraGuest
 }: PriceCalculatorProps) => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
@@ -56,6 +59,12 @@ const PriceCalculator = ({
 
         // Move to the next day
         currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      if(extraGuest > 0){
+        const extraGuestFee = (extraGuest * extraGuestPrice)
+        console.log("extrea gesut fee::" , extraGuestFee)
+        total += extraGuestFee
       }
 
       // if(propertyType === 'Workstation'){
@@ -90,7 +99,7 @@ const PriceCalculator = ({
     };
 
     calculateTotalPrice();
-  }, [startDate, endDate, normalFare, propertyDates, workStation, daysToStay, propertyType, convenienceFee, gst]); // Added surgedPrice to dependencies
+  }, [startDate, endDate, normalFare, propertyDates, workStation, daysToStay, propertyType, convenienceFee, gst, extraGuest, extraGuestPrice]); // Added surgedPrice to dependencies
 
   return <p>{totalPrice.toFixed(2)}</p>;
 };

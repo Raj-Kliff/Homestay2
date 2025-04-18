@@ -28,7 +28,7 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	subHeading = '',
 	headingIsCenter,
 	// tabs = ['New York', 'Tokyo', 'Paris', 'London'],
-	tabs = ['Homestay', 'Farmstay', 'Second Home', 'Workstation'],
+	tabs = ['Homestay', 'Farmstay', 'Second Home', 'Workstation', 'Apartment'],
 	cardType = 'card2',
 }) => {
 
@@ -36,11 +36,11 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	const [toSlice, setToSlice] = useState<number>(8)
 	const [loading, setLoading] = useState<boolean>(false)
 
-	function filterListingByTab(tab:any) {
-		return stayListings.filter((item:any) => item.name === tab)
+	function filterListingByTab(tab: any) {
+		return stayListings.filter((item: any) => item.name === tab)
 	}
 
-	
+
 
 	// const [mergedProperties, setMergedProperties] = useState<any[]>([])
 
@@ -50,19 +50,32 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	// setMergedProperties(allProperties)
 	// },[])
 
- 
-	
+	const [uniqueCategories, setUniqueCategories] = useState<string[]>([]);
+
+	useEffect(() => {
+		const categorySet = new Set<string>();
+
+		stayListings.forEach((category: any) => {
+			if (category.name) {
+				categorySet.add(category.name);
+			}
+		});
+
+		setUniqueCategories(Array.from(categorySet));
+	}, [stayListings]);
+
+
 	const filteredProducts = filterListingByTab(currentActiveTab);
 
 	const handleShowMore = () => {
 		setLoading(true);
-	  
+
 		setTimeout(() => {
-		  setToSlice(prev => prev + 8);
-		  setLoading(false);
+			setToSlice(prev => prev + 8);
+			setLoading(false);
 		}, 1000); // simulate 1 second loading
-	  };
-	
+	};
+
 	const renderCard = (stay: any) => {
 		let CardName = StayCard
 		switch (cardType) {
@@ -81,11 +94,12 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 	}
 
 	return (
-		<div className="nc-SectionGridFeaturePlaces relative" style={{marginTop:'4rem'}}>
+		<div className="nc-SectionGridFeaturePlaces relative" style={{ marginTop: '4rem' }}>
 			<HeaderFilter
 				tabActive={'Homestay'}
 				subHeading={subHeading}
-				tabs={tabs}
+				// tabs={tabs}
+				tabs={uniqueCategories}
 				heading={heading}
 				setCurrentActiveTab={setCurrentActiveTab}
 			/>
@@ -93,15 +107,15 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
 				className={`grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4 ${gridClass}`}
 			>
 
-				{filteredProducts.map((stay:any) => renderCard(stay))}
+				{filteredProducts.map((stay: any) => renderCard(stay))}
 				{/* {stayListings.map((stay:any) => renderCard(stay))} */}
 
 			</div>
 			{/* Load more button  */}
-            {filteredProducts[0]?.properties?.length > toSlice &&
-			<div className="mt-16 flex items-center justify-center">
-            <ButtonPrimary loading={loading} onClick={handleShowMore} >Show more</ButtonPrimary>
-          </div>}
+			{filteredProducts[0]?.properties?.length > toSlice &&
+				<div className="mt-16 flex items-center justify-center">
+					<ButtonPrimary loading={loading} onClick={handleShowMore} >Show more</ButtonPrimary>
+				</div>}
 		</div>
 	)
 }

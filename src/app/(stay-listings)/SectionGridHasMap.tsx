@@ -36,6 +36,16 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings, city }) =
 		}, 1000); // simulate 1 second loading
 	};
 
+	// convert state name to valid syntax 
+	const renderCity = (city: any): string => {
+        if (!city) return "";
+        return city.replace(/%20/g, " ") // Replace %20 with space
+        .split(" ") // Split into words
+        .map((word:any) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+        .join(" ");
+      };
+
+
 	const hasAnyProperties = stayListings?.length > 0;
 
 
@@ -44,7 +54,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = ({ stayListings, city }) =
 			<div className="relative flex min-h-screen">
 				{/* CARDSSSS */}
 				<div className="min-h-screen w-full max-w-[1184px] flex-shrink-0 xl:w-[60%] xl:px-8 2xl:w-[60%]">
-					<Heading2 heading={`Stays in ${city || "your selected location"}`} className="!mb-8" />
+					<Heading2 heading={`Stays in ${renderCity(city)}` || 'your location'} />
 					<div className="mb-8 lg:mb-11">
 						<details className='hidden sm:block'>
 							<summary className='mb-5 border-2 px-4 py-2 rounded-full w-fit'>Filters:</summary>

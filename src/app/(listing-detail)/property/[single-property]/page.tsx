@@ -46,6 +46,7 @@ import parse from 'html-react-parser';
 import GallerySlider3 from '@/components/GallerySlider3'
 import ModalSelectDate from '@/components/ModalSelectDate'
 import ModalReserveMobile from '../../(components)/ModalReserveMobile'
+import { setPriority } from 'node:os'
 
 export interface ListingStayDetailPageProps { }
 
@@ -66,11 +67,20 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 	const [currentActiveRoom, setCurrentActiveRoom] = useState<any>({
 		type: '',
 		count: 1,
+		accommodates: 0,
+		guest_fee: 0,
+		price: 0
 	})
 	const [surgedPrice, setSurgedPrice] = useState<any>()
 	const [convenienceFee, setConvenienceFee] = useState<any>()
 	const [gst, setGst] = useState<any>()
 	const [workationDiscount, setWorkationDiscount] = useState<any>(0)
+	const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(0)
+	const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0)
+	const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0)
+	const [extraGuest, setExtraGuest] = useState<any>(0)
+	const [guestLimitExceed, setGuestLimitExceed] = useState<boolean>(false)
+	const [numberOfRoomSelected, setNumberOfRoomSelected] = useState<any>(0)
 
 	const getRoomPrice = (currentActiveRoom: any) => {
 		const price = listingDetail?.rooms?.find((room: any) => room?.room_type?.name.toLowerCase() === currentActiveRoom?.toLowerCase())?.room_price
@@ -316,6 +326,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					beds: room.beds,
 					bathrooms: room.bathrooms,
 					space_type: room?.space_type,
+					accommodates: room?.accommodates,
+					guest_fee: room?.room_pricing[0]?.guest_fee,
 					total_rooms: 1
 				}
 			} else {
@@ -325,6 +337,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 
 		return Object.values(categorized);
 	}
+
 
 	const renderSection1 = ({ result }: any) => {
 		return (
@@ -916,13 +929,31 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					<StartRating point={result?.avg_rating} reviewCount={result?.reviews_count} />
 				</div>
 
+				{guestLimitExceed && <span className='text-red-500 text-sm'>Limit exceed! Kindly add more rooms or select extra guest</span>}
 
 				{/* FORM */}
 				<form className="flex flex-col rounded-3xl border border-neutral-200 dark:border-neutral-700">
 					<StayDatesRangeInput setDaysToStay={setDaysToStay} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} className="z-[11] flex-1" />
 					<div className="w-full border-b border-neutral-200 dark:border-neutral-700"></div>
-					<GuestsInput className="flex-1" />
+					<GuestsInput setNumberOfRoomSelected={setNumberOfRoomSelected} numberOfRoomSelected={numberOfRoomSelected} guestLimitExceed={guestLimitExceed} setGuestLimitExceed={setGuestLimitExceed} currentActiveRoom={currentActiveRoom} guestAdultsInputValue={guestAdultsInputValue} guestChildrenInputValue={guestChildrenInputValue} guestInfantsInputValue={guestInfantsInputValue} setGuestAdultsInputValue={setGuestAdultsInputValue} setGuestChildrenInputValue={setGuestChildrenInputValue} setGuestInfantsInputValue={setGuestInfantsInputValue} className="flex-1" />
 				</form>
+
+				{/* extra guest  */}
+				<div className='flex justify-between items-center'>
+					<div>
+						<p>Add Extra Guest</p>
+						<p className='text-sm'>{currentActiveRoom?.guest_fee > 0 && (`(₹${currentActiveRoom?.guest_fee}/person)`)}</p>
+					</div>
+					<select
+						id="rooms"
+						className="bg-gray-50 w-full max-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+						onChange={(e)=>{setExtraGuest(e.target.value), setGuestLimitExceed(false)}}
+					>
+						<option value='0'>Select</option>
+						<option value='1'>1</option>
+						<option value='2'>2</option>
+					</select>
+				</div>
 
 				{/* SUM */}
 				{
@@ -930,14 +961,20 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 					<div className="flex flex-col space-y-4">
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>
-								<div>₹ {roomPrice} x {daysToStay} night</div>
-								{ workationDiscount > 0 && <div className='text-xs text-red-500'>{`Discount: ${workationDiscount}%`}</div>}
+								{/* <div>₹ {roomPrice} x {daysToStay} night</div> */}
+								<div>₹ {currentroomPrice}<span className='text-xs'>/night</span>  ({numberOfRoomSelected} <span className='text-xs'>room</span> x {daysToStay} <span className='text-xs'>day</span>)</div>
+								{workationDiscount > 0 && <div className='text-xs text-red-500'>{`Discount: ${workationDiscount}%`}</div>}
 							</span>
 							<span>
-								<div>₹ {surgedPrice}</div>
-								{ workationDiscount > 0 && <span className='text-xs line-through'>₹ {roomPrice * daysToStay}</span>}
+								<div>₹ {surgedPrice - (extraGuest * currentActiveRoom?.guest_fee)}</div>
+								{workationDiscount > 0 && <span className='text-xs line-through'>₹ {roomPrice * daysToStay}</span>}
 							</span>
 						</div>
+						{extraGuest > 0 &&
+						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
+							<span>Extra Guest ({extraGuest} x ₹{currentActiveRoom?.guest_fee})</span>
+							<span>₹ {extraGuest * currentActiveRoom?.guest_fee}</span>
+						</div>}
 						<div className="flex justify-between text-neutral-600 dark:text-neutral-300">
 							<span>Convenience Fee ({convenienceFee}%)</span>
 							<span>₹ {((convenienceFee / 100) * surgedPrice).toFixed(2)}</span>
@@ -972,7 +1009,7 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 						<div className="border-b border-neutral-200 dark:border-neutral-700"></div>
 						<div className="flex justify-between font-semibold">
 							<span>Total</span>
-							<span className='flex'>₹<PriceCalculator setWorkationDiscount={setWorkationDiscount} propertyType={listingDetail?.result?.property_type?.name} daysToStay={daysToStay} workStation={listingDetail?.WorkStation} startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} convenienceFee={convenienceFee} gst={gst} /></span>
+							<span className='flex'>₹<PriceCalculator extraGuest={extraGuest} extraGuestPrice={currentActiveRoom?.guest_fee} setWorkationDiscount={setWorkationDiscount} propertyType={listingDetail?.result?.property_type?.name} daysToStay={daysToStay} workStation={listingDetail?.WorkStation} startDate={startDate} endDate={endDate} normalFare={roomPrice} propertyDates={propertyDates} setSurgedPrice={setSurgedPrice} convenienceFee={convenienceFee} gst={gst} /></span>
 						</div>
 					</div>
 				}
@@ -995,34 +1032,34 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 							</span>
 						</span>
 						<div className='flex gap-2'>
-						<ModalSelectDate
-							setDaysToStay={setDaysToStay} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate}
-							renderChildren={({ openModal }) => (
-								<span
-									onClick={openModal}
-									className="block text-xs font-medium underline"
-								>
-									{/* start-end */}
-									{startDate && endDate
-										? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
-										: "Select dates"}
-								</span>
-							)}
-						/>
-						<a className="ml-1 text-xs font-normal text-neutral-500 dark:text-neutral-400 text-orange-500 underline" href='#sidebarr'> View Detail</a>
+							<ModalSelectDate
+								setDaysToStay={setDaysToStay} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate}
+								renderChildren={({ openModal }) => (
+									<span
+										onClick={openModal}
+										className="block text-xs font-medium underline"
+									>
+										{/* start-end */}
+										{startDate && endDate
+											? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+											: "Select dates"}
+									</span>
+								)}
+							/>
+							<a className="ml-1 text-xs font-normal text-neutral-500 dark:text-neutral-400 text-orange-500 underline" href='#sidebarr'> View Detail</a>
 						</div>
 					</div>
 					<div>
-					<ModalReserveMobile
-						renderChildren={({ openModal }) => (
-							<ButtonPrimary
-								sizeClass="px-5 sm:px-7 py-3 !rounded-2xl"
-								onClick={openModal}
-							>
-								Reserve
-							</ButtonPrimary>
-						)}
-					/>
+						<ModalReserveMobile
+							renderChildren={({ openModal }) => (
+								<ButtonPrimary
+									sizeClass="px-5 sm:px-7 py-3 !rounded-2xl"
+									onClick={openModal}
+								>
+									Reserve
+								</ButtonPrimary>
+							)}
+						/>
 					</div>
 				</div>
 			</div>
@@ -1158,13 +1195,15 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({ }) => {
 															className="bg-gray-50 w-full min-w-[9rem] my-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#111827] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 															onChange={(e) => {
 																if (parseInt(e.target.value) == 0) {
-																	setCurrentActiveRoom({ type: '', count: 1 })
+																	setCurrentActiveRoom({ type: '', count: 1, accomodates: 0, guestFee: 0 })
 																	setRoomPrice(0)
+																	setNumberOfRoomSelected(0)
 																} else {
 																	const selectedRooms = parseInt(e.target.value);
-																	setCurrentActiveRoom({ type: item?.room_type, count: 0 })
+																	setCurrentActiveRoom({ type: item?.room_type, count: 0, accommodates: item?.accommodates, guest_fee: item?.guest_fee })
 																	// handleRoomChange(item?.room_type, item?.room_price, selectedRooms);
 																	setRoomPrice(parseInt(e.target.value) * item?.room_price)
+																	setNumberOfRoomSelected(parseInt(e.target.value))
 																}
 															}}
 														// disabled={currentActiveRoom.type !== item?.room_type && currentActiveRoom.count == 0}

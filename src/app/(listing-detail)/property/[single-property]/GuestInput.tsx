@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Fragment, FC, useState } from 'react'
+import React, { Fragment, FC, useState, useEffect } from 'react'
 import {
 	Popover,
 	PopoverButton,
@@ -13,13 +13,24 @@ import ClearDataButton from '@/app/(client-components)/(HeroSearchForm)/ClearDat
 import { GuestsObject } from '@/app/(client-components)/type'
 
 export interface GuestsInputProps {
-	className?: string
+	className?: string;
+	guestAdultsInputValue?: any;
+	guestChildrenInputValue?: any;
+	guestInfantsInputValue?: any;
+	setGuestAdultsInputValue?: any;
+	setGuestChildrenInputValue?: any;
+	setGuestInfantsInputValue?: any;
+	currentActiveRoom?: any;
+	guestLimitExceed?: any;
+	setGuestLimitExceed?: any;
+	numberOfRoomSelected?: any;
+	setNumberOfRoomSelected?: any;
 }
 
-const GuestsInput: FC<GuestsInputProps> = ({ className = 'flex-1' }) => {
-	const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(0)
-	const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0)
-	const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0)
+const GuestsInput: FC<GuestsInputProps> = ({ className = 'flex-1',setNumberOfRoomSelected, numberOfRoomSelected, guestLimitExceed, setGuestLimitExceed, currentActiveRoom, guestAdultsInputValue, guestChildrenInputValue, guestInfantsInputValue, setGuestAdultsInputValue, setGuestChildrenInputValue, setGuestInfantsInputValue }) => {
+	// const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(0)
+	// const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0)
+	// const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0)
 
 	const handleChangeData = (value: number, type: keyof GuestsObject) => {
 		let newValue = {
@@ -41,8 +52,15 @@ const GuestsInput: FC<GuestsInputProps> = ({ className = 'flex-1' }) => {
 		}
 	}
 
-	const totalGuests =
-		guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue
+	const totalGuests = guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue
+
+	useEffect(()=>{
+		if((guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue) > (numberOfRoomSelected * currentActiveRoom?.accommodates)){
+			setGuestLimitExceed(true)
+		}else{
+			setGuestLimitExceed(false)
+		}
+	},[guestInfantsInputValue, guestAdultsInputValue, guestChildrenInputValue, numberOfRoomSelected])
 
 	return (
 		<Popover className={`relative flex ${className}`}>

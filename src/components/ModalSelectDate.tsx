@@ -11,10 +11,10 @@ import DatePickerCustomDay from "./DatePickerCustomDay";
 interface ModalSelectDateProps {
   renderChildren?: (p: { openModal: () => void }) => React.ReactNode;
   setDaysToStay?: (days: number) => void;
-  startDate: Date | null;
-  setStartDate: (date: Date | null) => void;
-  endDate: Date | null;
-  setEndDate: (date: Date | null) => void;
+  startDate?: Date | null;
+  setStartDate?: (date: Date | null) => void;
+  endDate?: Date | null;
+  setEndDate?: (date: Date | null) => void;
 }
 
 const ModalSelectDate: FC<ModalSelectDateProps> = ({
@@ -32,8 +32,10 @@ const ModalSelectDate: FC<ModalSelectDateProps> = ({
     closeModalCallback?: () => void
   ) => {
     const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
+    // setStartDate(start);
+    // setEndDate(end);
+    if (setStartDate) setStartDate(start);
+    if (setEndDate) setEndDate(end);
 
     // Automatically close modal when both dates are selected
     if (start && end && closeModalCallback) {
